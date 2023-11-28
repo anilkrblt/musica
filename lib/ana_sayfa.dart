@@ -41,7 +41,7 @@ class SpotifyService {
       final data = jsonDecode(response.body);
       return data['tracks']['items']; // API'nin döndürdüğü şarkı listesi.
     } else {
-      throw Exception('Lütfen bir müzik ya da sanatçı giriniz...');
+      throw Exception('Lütfen bir müzik ya da sanatçı giriniz....');
     }
   }
 
