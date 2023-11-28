@@ -95,7 +95,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Ana Sayfa'),
+        backgroundColor: renk(),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -110,34 +110,106 @@ class _AnaSayfaState extends State<AnaSayfa> {
               controller: _searchController,
               onSubmitted: (value) => _searchTracks(),
               decoration: const InputDecoration(
-                border: OutlineInputBorder(),
+                fillColor: Colors.white,
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
                 hintText: 'Müzik ya da sanatçı ara',
               ),
             ),
           ),
         ),
       ),
-      body: ListView.builder(
-        itemCount: _trackNames.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(_trackNames[index]),
-          );
-        },
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color.fromARGB(255, 109, 75, 231), // En koyu renk
+              Color.fromARGB(255, 176, 162, 230), // Beyaz renk (geçiş sonu)
+            ],
+          ),
+        ),
+        child: ListView.builder(
+          itemCount: _trackNames.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.all(10),
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: renk()),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Color.fromARGB(255, 109, 75, 231), // En koyu renk
+                      Color.fromARGB(
+                          255, 176, 162, 230), // Beyaz renk (geçiş sonu)
+                    ],
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
+                child: ListTile(
+                  title: Text(
+                    _trackNames[index],
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  leading: Text(
+                    'Resim',
+                  ),
+                  subtitle: Text('Sanatcı + muzik suresi',
+                      style: TextStyle(color: Colors.white)),
+                  trailing: Icon(Icons.favorite_outline),
+                ),
+              ),
+            );
+          },
+        ),
       ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             IconButton(
-              icon: const Icon(Icons.supervised_user_circle),
+              padding: EdgeInsets.only(right: 50),
+              icon: const Icon(
+                Icons.home_outlined,
+                size: 30,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, '/ProfilSayfasi');
+              },
+            ),
+            IconButton(
+              padding: EdgeInsets.only(right: 50),
+              icon: const Icon(
+                Icons.favorite_border_outlined,
+                size: 30,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, '/ProfilSayfasi');
+              },
+            ),
+            IconButton(
+              icon: const Icon(
+                Icons.person_outlined,
+                size: 30,
+                color: Colors.white,
+              ),
               onPressed: () {
                 Navigator.pushNamed(context, '/ProfilSayfasi');
               },
             ),
           ],
         ),
+        color: renk(),
       ),
     );
   }
+
+  Color renk() => Color.fromARGB(255, 83, 62, 158);
 }
