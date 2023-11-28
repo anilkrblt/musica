@@ -28,7 +28,8 @@ class SpotifyService {
       throw Exception('Access token could not be retrieved');
     }
   }
-    Future<List<dynamic>> searchTrack(String query) async {
+
+  Future<List<dynamic>> searchTrack(String query) async {
     final accessToken = await _getAccessToken();
     final response = await http.get(
       Uri.parse('$_baseUrl/search?q=$query&type=track'),
@@ -41,10 +42,9 @@ class SpotifyService {
       final data = jsonDecode(response.body);
       return data['tracks']['items']; // API'nin döndürdüğü şarkı listesi.
     } else {
-      throw Exception('Lütfen bir müzik ya da sanatçı giriniz....');
+      throw Exception('Lütfen bir müzik ya da sanatçı giriniz.....');
     }
   }
-
 }
 
 class AnaSayfa extends StatefulWidget {
@@ -58,36 +58,39 @@ class _AnaSayfaState extends State<AnaSayfa> {
   final TextEditingController _searchController = TextEditingController();
   List<String> _trackNames = [];
 
-Future<void> _searchTracks() async {
-  final spotifyService = SpotifyService(); // SpotifyService nesnesi oluşturuldu.
+  Future<void> _searchTracks() async {
+    final spotifyService =
+        SpotifyService(); // SpotifyService nesnesi oluşturuldu.
 
-  try {
-    final query = _searchController.text;
-    final results = await spotifyService.searchTrack(query); // spotifyService nesnesi kullanılarak arama yapılıyor.
-    setState(() {
-      _trackNames = results.map((track) => track['name'].toString()).toList();
-    });
-  } catch (e) {
-    if (!mounted) return;
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Error'),
-          content: Text(e.toString()),
-          actions: [
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+    try {
+      final query = _searchController.text;
+      final results = await spotifyService.searchTrack(
+          query); // spotifyService nesnesi kullanılarak arama yapılıyor.
+      setState(() {
+        _trackNames = results.map((track) => track['name'].toString()).toList();
+      });
+    } catch (e) {
+      if (!mounted) return;
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: Text(e.toString()),
+            actions: [
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
-}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
