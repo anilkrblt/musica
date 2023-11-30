@@ -5,6 +5,7 @@ import 'package:musica/alt_sayfalar/favoriler_p.dart';
 import 'package:musica/alt_sayfalar/son_dinlenenler_p.dart';
 import 'package:musica/alt_sayfalar/tum_sarkilar_p.dart';
 import 'package:musica/ana_sayfa.dart';
+import 'package:musica/arama_sayfasi.dart';
 import 'package:musica/modeller/login_screen.dart';
 import 'package:musica/modeller/register_screen.dart';
 import 'package:musica/profil_sayfasi.dart';
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const LoginScreen(),
+        '/AramaSayfasi':(context) => const Arama_Sayfasi(),
         '/RegisterScreen':(context) =>  const RegisterScreen(),
         '/AnaSayfa':(context) => const AnaSayfa(),
         '/ProfilSayfasi':(context) => const ProfilSayfasi(),

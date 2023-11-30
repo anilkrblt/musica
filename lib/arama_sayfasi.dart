@@ -47,14 +47,14 @@ class SpotifyService {
   }
 }
 
-class AnaSayfa extends StatefulWidget {
-  const AnaSayfa({super.key});
+class Arama_Sayfasi extends StatefulWidget {
+  const Arama_Sayfasi({super.key});
 
   @override
-  State<AnaSayfa> createState() => _AnaSayfaState();
+  State<Arama_Sayfasi> createState() => _Arama_SayfasiState();
 }
 
-class _AnaSayfaState extends State<AnaSayfa> {
+class _Arama_SayfasiState extends State<Arama_Sayfasi> {
   final TextEditingController _searchController = TextEditingController();
   List<Map<String, dynamic>> _tracks = []; // Şarkı bilgilerini tutan liste
 
@@ -96,6 +96,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
         },
       );
     }
+ 
   }
 
   String _formatDuration(Duration duration) {
@@ -109,69 +110,80 @@ class _AnaSayfaState extends State<AnaSayfa> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: renk(),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: _searchTracks,
-            ),
-          ],
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(kToolbarHeight),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: InkWell(
-                onTap: () {
-                  Navigator.pushNamed(
-                      context, '/AramaSayfasi'); // Sayfa yönlendirme
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Color.fromARGB(255, 109, 75, 231), // En koyu renk
-                        Color.fromARGB(
-                            255, 176, 162, 230), // Beyaz renk (geçiş sonu)
-                      ],
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Row(
-                      children: [
-                        Icon(Icons.search, color: Colors.grey),
-                        SizedBox(width: 10),
-                        Text('Müzik ya da sanatçı ara',
-                            style: TextStyle(color: Colors.grey))
-                      ],
-                    ),
-                  ),
+        backgroundColor: renk(),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: _searchTracks,
+          ),
+        ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(kToolbarHeight),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              onSubmitted: (value) => _searchTracks(),
+              decoration: const InputDecoration(
+                fillColor: Colors.white,
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
+                hintText: 'Müzik ya da sanatçı ara',
               ),
             ),
-          )),
-      body: Container(
-        height: 200, // Liste için yükseklik belirleyin.
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: 10, // Örnek için liste öğe sayısı.
-          itemBuilder: (context, index) {
-            return Container(
-
-              width: 160, // Her liste öğesi için genişlik belirleyin.
-              child: Card(
-                
-                color: Colors.blue,
-                child: ElevatedButton(
-                  child: Text('adsadsa'),
-                  onPressed: () => Text('dsadas'),),
-              ),
-            );
-          },
+          ),
         ),
       ),
+      body:  Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color.fromARGB(255, 109, 75, 231), // En koyu renk
+            Color.fromARGB(255, 176, 162, 230), // Beyaz renk (geçiş sonu)
+          ],
+        ),
+      ),
+      child: ListView.builder(
+        itemCount: _tracks.length,
+        itemBuilder: (context, index) {
+          final track = _tracks[index];
+          return Padding(
+            padding: const EdgeInsets.all(10),
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: renk()),
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color.fromARGB(255, 109, 75, 231), // En koyu renk
+                    Color.fromARGB(
+                        255, 176, 162, 230), // Beyaz renk (geçiş sonu)
+                  ],
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
+              child: ListTile(
+                title: Text(
+                  track['name'], // Şarkı adı
+                  style: TextStyle(color: Colors.white),
+                ),
+                subtitle: Text(
+                  '${track['artist']} - ${track['duration']}', // Sanatçı adı ve süre
+                  style: TextStyle(color: Colors.white),
+                ),
+                leading: Image.network(track['image']), // Albüm resmi
+                trailing: Icon(Icons.favorite_outline),
+              ),
+            ),
+          );
+        },
+      ),
+    ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -216,4 +228,5 @@ class _AnaSayfaState extends State<AnaSayfa> {
   }
 
   Color renk() => Color.fromARGB(255, 83, 62, 158);
+
 }
