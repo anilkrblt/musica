@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:musica/ana_sayfa.dart';
+
 // SpotifyService classınızı buraya ekleyin veya ayrı bir dosyada tutun ve burada import edin.
 class SpotifyService {
   final String _clientId = 'd9b578117ffc4b9fbf1f5553a7a72051';
@@ -96,7 +98,6 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
         },
       );
     }
- 
   }
 
   String _formatDuration(Duration duration) {
@@ -111,12 +112,6 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: renk(),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: _searchTracks,
-          ),
-        ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight),
           child: Padding(
@@ -136,54 +131,36 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
           ),
         ),
       ),
-      body:  Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color.fromARGB(255, 109, 75, 231), // En koyu renk
-            Color.fromARGB(255, 176, 162, 230), // Beyaz renk (geçiş sonu)
-          ],
+      body: Container(
+        decoration: genelTema(),
+        child: ListView.builder(
+          itemCount: _tracks.length,
+          itemBuilder: (context, index) {
+            final track = _tracks[index];
+            return Padding(
+              padding: const EdgeInsets.all(10),
+              child: Container(
+                decoration: genelTema(),
+                child: ListTile(
+                  title: Text(
+                    track['name'], // Şarkı adı
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  subtitle: Text(
+                    '${track['artist']} - ${track['duration']}', // Sanatçı adı ve süre
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  leading: Image.network(track['image']), // Albüm resmi
+                  trailing: Icon(Icons.favorite_outline),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/PlayMusic');
+                  },
+                ),
+              ),
+            );
+          },
         ),
       ),
-      child: ListView.builder(
-        itemCount: _tracks.length,
-        itemBuilder: (context, index) {
-          final track = _tracks[index];
-          return Padding(
-            padding: const EdgeInsets.all(10),
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: renk()),
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color.fromARGB(255, 109, 75, 231), // En koyu renk
-                    Color.fromARGB(
-                        255, 176, 162, 230), // Beyaz renk (geçiş sonu)
-                  ],
-                ),
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-              ),
-              child: ListTile(
-                title: Text(
-                  track['name'], // Şarkı adı
-                  style: TextStyle(color: Colors.white),
-                ),
-                subtitle: Text(
-                  '${track['artist']} - ${track['duration']}', // Sanatçı adı ve süre
-                  style: TextStyle(color: Colors.white),
-                ),
-                leading: Image.network(track['image']), // Albüm resmi
-                trailing: Icon(Icons.favorite_outline),
-              ),
-            ),
-          );
-        },
-      ),
-    ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -226,7 +203,4 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
       ),
     );
   }
-
-  Color renk() => Color.fromARGB(255, 83, 62, 158);
-
 }

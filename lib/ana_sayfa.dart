@@ -1,178 +1,83 @@
+// ignore_for_file: sort_child_properties_last
+
 import 'package:flutter/material.dart';
+
 // ignore: depend_on_referenced_packages
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
 // SpotifyService classınızı buraya ekleyin veya ayrı bir dosyada tutun ve burada import edin.
-class SpotifyService {
-  final String _clientId = 'd9b578117ffc4b9fbf1f5553a7a72051';
-  final String _clientSecret = '50032f2b81ee4d46b8cbfc31d9fc5816';
-  final String _baseUrl = 'https://api.spotify.com/v1';
-
-  Future<String> _getAccessToken() async {
-    final response = await http.post(
-      Uri.parse('https://accounts.spotify.com/api/token'),
-      headers: {
-        'Authorization':
-            'Basic ${base64Encode(utf8.encode('$_clientId:$_clientSecret'))}',
-      },
-      body: {
-        'grant_type': 'client_credentials',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      return data['access_token'];
-    } else {
-      throw Exception('Access token could not be retrieved');
-    }
-  }
-
-  Future<List<dynamic>> searchTrack(String query) async {
-    final accessToken = await _getAccessToken();
-    final response = await http.get(
-      Uri.parse('$_baseUrl/search?q=$query&type=track'),
-      headers: {
-        'Authorization': 'Bearer $accessToken',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      return data['tracks']['items']; // API'nin döndürdüğü şarkı listesi.
-    } else {
-      throw Exception('Hata!!!');
-    }
-  }
-}
-
 class AnaSayfa extends StatefulWidget {
   const AnaSayfa({super.key});
-
   @override
   State<AnaSayfa> createState() => _AnaSayfaState();
 }
 
 class _AnaSayfaState extends State<AnaSayfa> {
-  final TextEditingController _searchController = TextEditingController();
-  List<Map<String, dynamic>> _tracks = []; // Şarkı bilgilerini tutan liste
-
-  Future<void> _searchTracks() async {
-    final spotifyService =
-        SpotifyService(); // SpotifyService nesnesi oluşturuldu.
-
-    try {
-      final query = _searchController.text;
-      final results = await spotifyService.searchTrack(query);
-      setState(() {
-        _tracks = results.map((track) {
-          return {
-            'name': track['name'],
-            'artist': track['artists'][0]['name'],
-            'image': track['album']['images'][0]['url'],
-            'duration':
-                _formatDuration(Duration(milliseconds: track['duration_ms'])),
-          };
-        }).toList();
-      });
-    } catch (e) {
-      if (!mounted) return;
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Error'),
-            content: Text(e.toString()),
-            actions: [
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
-  }
-
-  String _formatDuration(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, '0');
-    final minutes = twoDigits(duration.inMinutes.remainder(60));
-    final seconds = twoDigits(duration.inSeconds.remainder(60));
-    return '$minutes:$seconds';
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: renk(),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: _searchTracks,
-            ),
-          ],
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(kToolbarHeight),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: InkWell(
-                onTap: () {
-                  Navigator.pushNamed(
-                      context, '/AramaSayfasi'); // Sayfa yönlendirme
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Color.fromARGB(255, 109, 75, 231), // En koyu renk
-                        Color.fromARGB(
-                            255, 176, 162, 230), // Beyaz renk (geçiş sonu)
-                      ],
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Row(
-                      children: [
-                        Icon(Icons.search, color: Colors.grey),
-                        SizedBox(width: 10),
-                        Text('Müzik ya da sanatçı ara',
-                            style: TextStyle(color: Colors.grey))
-                      ],
-                    ),
-                  ),
+        title: Center(child: Text('Bozuka')),
+        leading: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CircleAvatar(
+              radius: 50, // Dairenin yarıçapını ayarlar
+              backgroundImage: NetworkImage(
+                  'https://upload.wikimedia.org/wikipedia/tr/8/83/DarthVader.JPG'),
+            )),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search),
+            color: Colors.white,
+            onPressed: () => Navigator.pushNamed(context, '/AramaSayfasi'),
+          ),
+        ],
+        backgroundColor: renk(),
+      ),
+      body: Stack(children: [
+        Container(
+          decoration: genelTema(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 250,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 5, // Örnek için liste öğe sayısı.
+
+                  itemBuilder: (context, index) {
+                    return Container(
+                      width: 200,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.zero, // Padding'i kaldır
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          backgroundColor: Colors
+                              .transparent, // Düğme arka planını saydam yap
+                          elevation: 0, // Gölgeyi kaldır
+                        ),
+                        child: ClipRRect(
+                          borderRadius:
+                              BorderRadius.circular(20), // Resmi yuvarlat
+                          child: Image.network(
+                            'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Stainer.jpg/640px-Stainer.jpg',
+                            fit: BoxFit
+                                .cover, // Resmi tamamen kaplayacak şekilde ayarla
+                          ),
+                        ),
+                        onPressed: () => {}, // Boş bir fonksiyon
+                      ),
+                    );
+                  },
                 ),
               ),
-            ),
-          )),
-      body: Container(
-        height: 200, // Liste için yükseklik belirleyin.
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: 10, // Örnek için liste öğe sayısı.
-          itemBuilder: (context, index) {
-            return Container(
-
-              width: 160, // Her liste öğesi için genişlik belirleyin.
-              child: Card(
-                
-                color: Colors.blue,
-                child: ElevatedButton(
-                  child: Text('adsadsa'),
-                  onPressed: () => Text('dsadas'),),
-              ),
-            );
-          },
+            ],
+          ),
         ),
-      ),
+      ]),
       bottomNavigationBar: BottomAppBar(
+        color: renk(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -210,10 +115,19 @@ class _AnaSayfaState extends State<AnaSayfa> {
             ),
           ],
         ),
-        color: renk(),
       ),
     );
   }
-
-  Color renk() => Color.fromARGB(255, 83, 62, 158);
 }
+
+Color renk() => Color.fromARGB(255, 101, 3, 54);
+BoxDecoration genelTema() => const BoxDecoration(
+      gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          Color.fromARGB(255, 8, 0, 0), // En koyu renk
+          Color.fromARGB(255, 175, 22, 124), // Beyaz renk (geçiş sonu)
+        ],
+      ),
+    );

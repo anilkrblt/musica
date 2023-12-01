@@ -15,31 +15,30 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   final _userCrud = UserCRUD(DatabaseHelper.instance); // DatabaseHelper örneği
 
- void _login() async {
-  final username = _usernameController.text;
-  final password = _passwordController.text;
-  final isValidUser = await _userCrud.verifyUser(username, password);
+  void _login() async {
+    final username = _usernameController.text;
+    final password = _passwordController.text;
+    final isValidUser = await _userCrud.verifyUser(username, password);
 
-  if (!mounted) return; // Widget ağaçtan kaldırıldıysa, işlemi durdur.
+    if (!mounted) return; // Widget ağaçtan kaldırıldıysa, işlemi durdur.
 
-  if (isValidUser) {
-    // Kullanıcı girişi başarılı, ana sayfaya yönlendir
-    Navigator.pushNamed(context, '/AnaSayfa');
-  } else {
-    final isUserExists = await _userCrud.isUserExists(username);
-    
-    if (!mounted) return; // İkinci bir kontrol daha
-    
-    final errorMessage =
-        isUserExists ? 'Şifre geçersiz' : 'Kullanıcı adı bulunamadı';
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(errorMessage),
-      ),
-    );
+    if (isValidUser) {
+      // Kullanıcı girişi başarılı, ana sayfaya yönlendir
+      Navigator.pushReplacementNamed(context, '/AnaSayfa');
+    } else {
+      final isUserExists = await _userCrud.isUserExists(username);
+
+      if (!mounted) return; // İkinci bir kontrol daha
+
+      final errorMessage =
+          isUserExists ? 'Şifre geçersiz' : 'Kullanıcı adı bulunamadı';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage),
+        ),
+      );
+    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
