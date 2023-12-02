@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+import 'package:audioplayers/audioplayers.dart';
 import 'package:musica/ana_sayfa.dart';
 
 // SpotifyService classınızı buraya ekleyin veya ayrı bir dosyada tutun ve burada import edin.
@@ -58,6 +58,7 @@ class Arama_Sayfasi extends StatefulWidget {
 
 class _Arama_SayfasiState extends State<Arama_Sayfasi> {
   final TextEditingController _searchController = TextEditingController();
+  final AudioPlayer audioPlayer = AudioPlayer();
   List<Map<String, dynamic>> _tracks = []; // Şarkı bilgilerini tutan liste
 
   Future<void> _searchTracks() async {
@@ -69,12 +70,19 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
       final results = await spotifyService.searchTrack(query);
       setState(() {
         _tracks = results.map((track) {
+          var previewUrl = track['preview_url'];
+          // Preview URL varsa kullan, yoksa null değer ata
+          if (previewUrl == null || previewUrl.isEmpty) {
+            previewUrl = null;
+          }
+
           return {
             'name': track['name'],
             'artist': track['artists'][0]['name'],
             'image': track['album']['images'][0]['url'],
             'duration':
                 _formatDuration(Duration(milliseconds: track['duration_ms'])),
+            'previewUrl': previewUrl, // Preview URL bilgisini ekleyin
           };
         }).toList();
       });
@@ -105,6 +113,34 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
     final minutes = twoDigits(duration.inMinutes.remainder(60));
     final seconds = twoDigits(duration.inSeconds.remainder(60));
     return '$minutes:$seconds';
+  }
+
+  void _playPreview(String previewUrl) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Müzik Önizlemesi'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text('Şimdi oynatılıyor...'),
+            // Burada AudioPlayer widget'ını yerleştirin
+          ],
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: Text('Kapat'),
+            onPressed: () {
+              audioPlayer.stop();
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
+    );
+    if (previewUrl != null && previewUrl.isNotEmpty) {
+      audioPlayer.play(UrlSource(previewUrl));
+    }
   }
 
   @override
@@ -151,9 +187,16 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
                     style: TextStyle(color: Colors.white),
                   ),
                   leading: Image.network(track['image']), // Albüm resmi
-                  trailing: Icon(Icons.favorite_outline),
+                  trailing: favoriEkle(),
                   onTap: () {
                     Navigator.pushNamed(context, '/PlayMusic');
+                  },
+                  onLongPress: () {
+                    if (track['previewUrl'] == null) {
+                      textYaz();
+                    } else {
+                      _playPreview(track['previewUrl']);
+                    }
                   },
                 ),
               ),
@@ -173,7 +216,7 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
                 color: Colors.white,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/ProfilSayfasi');
+                Navigator.pushNamed(context, '/AnaSayfa');
               },
             ),
             IconButton(
@@ -203,4 +246,12 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
       ),
     );
   }
+
+  Icon favoriEkle() {
+    // if user liked
+    //
+    return Icon(Icons.favorite_outline);
+  }
+
+  void textYaz() {}
 }
