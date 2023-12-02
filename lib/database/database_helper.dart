@@ -26,8 +26,15 @@ class DatabaseHelper {
   Future<Database> _initDB(String filePath) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
-    return await openDatabase(path, version: 1, onCreate: _createDB);
+    return await openDatabase(path, version: 2, onCreate: _createDB, onUpgrade: _onUpgrade); // version 2 olarak güncellendi
+
   }
+  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+  if (oldVersion < 2) {
+    await db.execute('ALTER TABLE songs ADD COLUMN is_favorite INTEGER DEFAULT 0');
+  }
+}
+
 
  Future _createDB(Database db, int version) async {
   const idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
@@ -48,12 +55,13 @@ class DatabaseHelper {
   // Song tablosunu oluştur
   await db.execute('''
     CREATE TABLE songs (
-      id $idType,
-      title $textType,
-      artist $textType,
-      album $textType,
-      duration $integerType,
-      genre $textType
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      artist TEXT NOT NULL,
+      album TEXT NOT NULL,
+      duration INTEGER NOT NULL,
+      genre TEXT NOT NULL,
+      is_favorite INTEGER NOT NULL DEFAULT 0  // Burada is_favorite sütunu eklendi
     );
   ''');
 

@@ -77,6 +77,7 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
           }
 
           return {
+            'id': track['id'],
             'name': track['name'],
             'artist': track['artists'][0]['name'],
             'image': track['album']['images'][0]['url'],
@@ -143,6 +144,19 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
     }
   }
 
+  Set<String> _favoriSarkilar = {}; // Favori şarkıların ID'lerini saklar
+
+  // ignore: unused_element
+  void _favoriDegistir(String trackId) {
+    setState(() {
+      if (_favoriSarkilar.contains(trackId)) {
+        _favoriSarkilar.remove(trackId);
+      } else {
+        _favoriSarkilar.add(trackId);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -187,7 +201,25 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
                     style: TextStyle(color: Colors.white),
                   ),
                   leading: Image.network(track['image']), // Albüm resmi
-                  trailing: favoriEkle(),
+                  trailing: IconButton(
+                    icon: Icon(
+                      _favoriSarkilar.contains(track['id'])
+                          ? Icons.favorite
+                          : Icons.favorite_border,
+                      color: _favoriSarkilar.contains(track['id'])
+                          ? Colors.red
+                          : null,
+                    ),
+                    onPressed: () {
+                      if (track.containsKey('id') && track['id'] != null) {
+                        _favoriDegistir(track['id']);
+                      } else {
+                        // 'id' yok ya da null ise burada uygun bir işlem yapın
+                        print('Track data: $track');
+
+                      }
+                    },
+                  ),
                   onTap: () {
                     Navigator.pushNamed(context, '/PlayMusic');
                   },
@@ -227,7 +259,7 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
                 color: Colors.white,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/ProfilSayfasi');
+                Navigator.pushNamed(context, '/Favoriler');
               },
             ),
             IconButton(
@@ -245,12 +277,6 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
         color: renk(),
       ),
     );
-  }
-
-  Icon favoriEkle() {
-    // if user liked
-    //
-    return Icon(Icons.favorite_outline);
   }
 
   void textYaz() {}
