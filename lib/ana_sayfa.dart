@@ -123,11 +123,11 @@ class _AnaSayfaState extends State<AnaSayfa> {
 Color renk() => Color.fromARGB(255, 101, 3, 54);
 BoxDecoration genelTema() => const BoxDecoration(
       gradient: LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
         colors: [
-          Color.fromARGB(255, 8, 0, 0), // En koyu renk
-          Color.fromARGB(255, 175, 22, 124), // Beyaz renk (geçiş sonu)
+          Color.fromARGB(255, 255, 183, 206),// En koyu renk
+          Color.fromARGB(255, 101, 3, 54), // Beyaz renk (geçiş sonu)
         ],
       ),
     );
