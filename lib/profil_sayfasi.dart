@@ -36,7 +36,6 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
                         children: [
                           Text(
                             "İsim", style: TextStyle(color: Colors.white,fontSize: 30),
-
                           ),
                           Text(
                             "Kullanıcı adı", style: TextStyle(color: Colors.white,fontSize: 15),
@@ -97,6 +96,4 @@ BoxDecoration genelTema3() => const BoxDecoration(
     ],
   ),
 );
-
-
 Color beyaz() => Color.fromARGB(255, 255, 255, 255);
