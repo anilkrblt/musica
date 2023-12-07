@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 
 class TumSarkilarSayfasi extends StatefulWidget {
   const TumSarkilarSayfasi({super.key});
@@ -8,48 +9,44 @@ class TumSarkilarSayfasi extends StatefulWidget {
 }
 
 class _TumSarkilarSayfasiState extends State<TumSarkilarSayfasi> {
-    final SearchController controller = SearchController();
+  List<String> _fileNames = [];
+
+  Future<void> _pickFiles() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true);
+
+    if (result != null) {
+      setState(() {
+        _fileNames = result.paths.map((path) => path!.split('/').last).toList();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        primary: true,
-        slivers: <Widget>[
-          SliverAppBar(
-            title: const Text('Şarkılarım'),
-            actions: [
-              SearchAnchor(
-                  searchController: controller,
-                  builder: (BuildContext context, SearchController controller) {
-                    return IconButton(
-                      icon: const Icon(Icons.search),
-                      onPressed: () {
-                        controller.openView();
-                      },
-                    );
-                  },
-                  suggestionsBuilder:
-                      (BuildContext context, SearchController controller) {
-                    return List<ListTile>.generate(5, (int index) {
-                      final String item = 'item $index';
-                      return ListTile(
-                        title: Text(item),
-                        onTap: () {
-                          setState(() {
-                            controller.closeView(item);
-                          });
-                        },
-                      );
-                    });
-                  }),
-              Center(
-                child: controller.text.isEmpty
-                    ? const Text('No item selected')
-                    : Text('Selected item: ${controller.value.text}'),
+      appBar: AppBar(
+        title: const Text('Şarkılarım'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: _pickFiles,
+              child: const Text('Dosya Seç'),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: _fileNames.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(_fileNames[index]),
+                  );
+                },
               ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -115,15 +115,17 @@ class _PlayMusicState extends State<PlayMusic> {
                Navigator.pushNamed(context, '/ProfilSayfasi');
              },
            ),
-           IconButton(
-             icon: const Icon(
-               Icons.downloading_outlined,
-               size: 35,
-               color: Colors.white,
+           Expanded(
+             child: IconButton(
+               icon: const Icon(
+                 Icons.downloading_outlined,
+                 size: 35,
+                 color: Colors.white,
+               ),
+               onPressed: () {
+                 Navigator.pushNamed(context, '/ProfilSayfasi');
+               },
              ),
-             onPressed: () {
-               Navigator.pushNamed(context, '/ProfilSayfasi');
-             },
            ),
          ],
        ),
