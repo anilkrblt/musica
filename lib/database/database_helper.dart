@@ -61,7 +61,7 @@ class DatabaseHelper {
       album TEXT NOT NULL,
       duration INTEGER NOT NULL,
       genre TEXT NOT NULL,
-      is_favorite INTEGER NOT NULL DEFAULT 0  // Burada is_favorite sütunu eklendi
+      is_favorite INTEGER NOT NULL DEFAULT 0  
     );
   ''');
 
