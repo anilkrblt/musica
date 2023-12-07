@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'ana_sayfa.dart';
+
 class ProfilSayfasi extends StatefulWidget {
   const ProfilSayfasi({super.key});
 
@@ -11,68 +13,87 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        // ignore: prefer_const_literals_to_create_immutables
-        children: [
-          const ListTile(
-            leading: CircleAvatar(
-              radius: 45,
-              backgroundColor: Colors.amber,
-              child: Center(
-                  child: Text(
-                'User Profile Image',
-                style: TextStyle(fontSize: 10),
-              )),
-            ),
-            title: Text('UserName'),
-            subtitle: Text('Username or something like'),
+
+        body: Container(
+          padding: EdgeInsets.only(top: 2),
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          decoration: genelTema3(),
+          child: Column(
+            children: [
+              Container(
+                margin: EdgeInsets.only(top: 80, left: 50),
+                child: Row(
+                  children: [  CircleAvatar(
+                    radius: 60,
+                    backgroundImage: NetworkImage(
+                      'https://upload.wikimedia.org/wikipedia/tr/8/83/DarthVader.JPG',
+                    ),
+                  ),
+                    Container(
+                      margin: EdgeInsets.only(left: 55, bottom: 20),
+                      child: Column(
+                        children: [
+                          Text(
+                            "İsim", style: TextStyle(color: Colors.white,fontSize: 30),
+                          ),
+                          Text(
+                            "Kullanıcı adı", style: TextStyle(color: Colors.white,fontSize: 15),
+
+                          ),
+                        ],
+                      ),
+                    ),
+
+                  ],
+                ),
+              ),
+              Center(
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 35, horizontal: 25),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Elemanları simetrik olarak düzenler
+                    children: [
+                      Column(
+                        children: [
+                          Text("Takip edilen", style: TextStyle(fontSize: 20, color: beyaz()),),
+                          Text("31", style: TextStyle(fontSize: 35, color: beyaz(), fontWeight: FontWeight.bold),),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text("Takipçi", style: TextStyle(fontSize: 20, color: beyaz()),),
+                          Text("24", style: TextStyle(fontSize: 35, color: beyaz(), fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text("Beğeniler", style: TextStyle(fontSize: 20, color: beyaz()),),
+                          Text("255", style: TextStyle(fontSize: 35, color: beyaz(), fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              )
+
+            ],
           ),
-          ListTile(
-            leading: const Icon(Icons.music_note),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            title: const Text('Tüm Şarkılar'),
-            subtitle: const Text('İndirilen müzik miktarı'),
-            onTap: () {
-              Navigator.pushNamed(context, '/TumSarkilar');
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.queue_music_outlined),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            title: const Text('Çalma listeleri'),
-            subtitle: const Text('Çalma listesi miktarı'),
-            onTap: () {
-              Navigator.pushNamed(context, '/CalmaListesi');
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.favorite),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            title: const Text('Favoriler'),
-            subtitle: const Text('Favori miktarı'),
-            onTap: () {
-              Navigator.pushNamed(context, '/Favoriler');
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.watch_later_outlined),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            title: const Text('Son dinlenenler'),
-            subtitle: const Text('Son 1 hafta dinlenen farklı müzik miktarı'),
-            onTap: () {
-              Navigator.pushNamed(context, '/SonDinlenenler');
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.settings),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            title: const Text('Ayarlar'),
-            onTap: () {
-              Navigator.pushNamed(context, '/Ayarlar');
-            },
-          ),
-        ],
-      ),
+        )
     );
   }
 }
+
+BoxDecoration genelTema3() => const BoxDecoration(
+  gradient: LinearGradient(
+    end: Alignment.bottomLeft,
+    begin: Alignment.centerRight,
+    tileMode: TileMode.mirror,
+
+    colors: [
+      Color.fromARGB(255, 50, 29, 112),// En koyu renk
+      Color.fromARGB(255, 203, 109, 46), // Beyaz renk (geçiş sonu)
+    ],
+  ),
+);
+Color beyaz() => Color.fromARGB(255, 255, 255, 255);

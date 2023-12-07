@@ -1,6 +1,7 @@
 // ignore_for_file: sort_child_properties_last
 
 import 'package:flutter/material.dart';
+import 'package:musica/profil_sayfasi.dart';
 
 // ignore: depend_on_referenced_packages
 // SpotifyService classınızı buraya ekleyin veya ayrı bir dosyada tutun ve burada import edin.
@@ -17,12 +18,20 @@ class _AnaSayfaState extends State<AnaSayfa> {
       appBar: AppBar(
         title: Center(child: Text('Bozuka')),
         leading: Padding(
-            padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
+          child: InkWell(
+            onTap: () {
+              Navigator.push(context,MaterialPageRoute(builder: (context) => ProfilSayfasi()));
+            },
             child: CircleAvatar(
-              radius: 50, // Dairenin yarıçapını ayarlar
+              radius: 50,
               backgroundImage: NetworkImage(
-                  'https://upload.wikimedia.org/wikipedia/tr/8/83/DarthVader.JPG'),
-            )),
+                'https://upload.wikimedia.org/wikipedia/tr/8/83/DarthVader.JPG',
+              ),
+            ),
+          ),
+        ),
+
         actions: [
           IconButton(
             icon: Icon(Icons.search),
