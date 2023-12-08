@@ -28,6 +28,7 @@ class _FavorilerState extends State<Favoriler> {
       });
     } catch (e) {
       // Hata yönetimi için bir şeyler yapın
+      // ignore: avoid_print
       print('Veritabanı hatası: $e');
     }
   }

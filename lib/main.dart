@@ -8,13 +8,19 @@ import 'package:musica/ana_sayfa.dart';
 import 'package:musica/arama_sayfasi.dart';
 import 'package:musica/modeller/login_screen.dart';
 import 'package:musica/modeller/register_screen.dart';
-import 'package:musica/play_music_sayfasi.dart';
 import 'package:musica/profil_sayfasi.dart';
 
 void main() => runApp(const MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +28,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-          '/': (context) => const LoginScreen(),
-        '/PlayMusic':(context) => const PlayMusic(),
+        '/': (context) => const LoginScreen(),
+
         '/AramaSayfasi':(context) => const Arama_Sayfasi(),
         '/RegisterScreen':(context) =>  const RegisterScreen(),
         '/AnaSayfa':(context) => const AnaSayfa(),
@@ -37,3 +43,5 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+

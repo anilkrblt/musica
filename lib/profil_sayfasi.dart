@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'ana_sayfa.dart';
 
 class ProfilSayfasi extends StatefulWidget {
   const ProfilSayfasi({super.key});
@@ -15,24 +14,24 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
     return Scaffold(
 
         body: Container(
-          padding: EdgeInsets.only(top: 2),
+          padding: const EdgeInsets.only(top: 2),
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           decoration: genelTema3(),
           child: Column(
             children: [
               Container(
-                margin: EdgeInsets.only(top: 80, left: 50),
+                margin: const EdgeInsets.only(top: 80, left: 50),
                 child: Row(
-                  children: [  CircleAvatar(
+                  children: [  const CircleAvatar(
                     radius: 60,
                     backgroundImage: NetworkImage(
                       'https://upload.wikimedia.org/wikipedia/tr/8/83/DarthVader.JPG',
                     ),
                   ),
                     Container(
-                      margin: EdgeInsets.only(left: 55, bottom: 20),
-                      child: Column(
+                      margin: const EdgeInsets.only(left: 55, bottom: 20),
+                      child: const Column(
                         children: [
                           Text(
                             "İsim", style: TextStyle(color: Colors.white,fontSize: 30),
@@ -50,7 +49,7 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
               ),
               Center(
                 child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 35, horizontal: 25),
+                  margin: const EdgeInsets.symmetric(vertical: 35, horizontal: 25),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Elemanları simetrik olarak düzenler
                     children: [
@@ -96,4 +95,4 @@ BoxDecoration genelTema3() => const BoxDecoration(
     ],
   ),
 );
-Color beyaz() => Color.fromARGB(255, 255, 255, 255);
+Color beyaz() => const Color.fromARGB(255, 255, 255, 255);

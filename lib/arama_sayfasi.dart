@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:musica/ana_sayfa.dart';
+import 'package:musica/play_music_sayfasi.dart';
+//to do karman çorman koda bir parça düzen çikolatalı düzen
 
 // SpotifyService classınızı buraya ekleyin veya ayrı bir dosyada tutun ve burada import edin.
 class SpotifyService {
@@ -49,6 +51,7 @@ class SpotifyService {
   }
 }
 
+// ignore: camel_case_types
 class Arama_Sayfasi extends StatefulWidget {
   const Arama_Sayfasi({super.key});
 
@@ -56,10 +59,13 @@ class Arama_Sayfasi extends StatefulWidget {
   State<Arama_Sayfasi> createState() => _Arama_SayfasiState();
 }
 
+// ignore: camel_case_types
 class _Arama_SayfasiState extends State<Arama_Sayfasi> {
   final TextEditingController _searchController = TextEditingController();
   final AudioPlayer audioPlayer = AudioPlayer();
-  List<Map<String, dynamic>> _tracks = []; // Şarkı bilgilerini tutan liste
+  List<Map<String, dynamic>> _tracks = [];
+  
+
 
   Future<void> _searchTracks() async {
     final spotifyService =
@@ -120,8 +126,8 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Müzik Önizlemesi'),
-        content: Column(
+        title: const Text('Müzik Önizlemesi'),
+        content: const Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text('Şimdi oynatılıyor...'),
@@ -130,7 +136,7 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
         ),
         actions: <Widget>[
           TextButton(
-            child: Text('Kapat'),
+            child: const Text('Kapat'),
             onPressed: () {
               audioPlayer.stop();
               Navigator.of(context).pop();
@@ -139,12 +145,12 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
         ],
       ),
     );
-    if (previewUrl != null && previewUrl.isNotEmpty) {
+    if (previewUrl.isNotEmpty) {
       audioPlayer.play(UrlSource(previewUrl));
     }
   }
 
-  Set<String> _favoriSarkilar = {}; // Favori şarkıların ID'lerini saklar
+  final Set<String> _favoriSarkilar = {}; // Favori şarkıların ID'lerini saklar
 
   // ignore: unused_element
   void _favoriDegistir(String trackId) {
@@ -194,11 +200,11 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
                 child: ListTile(
                   title: Text(
                     track['name'], // Şarkı adı
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                   ),
                   subtitle: Text(
                     '${track['artist']} - ${track['duration']}', // Sanatçı adı ve süre
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                   ),
                   leading: Image.network(track['image']), // Albüm resmi
                   trailing: IconButton(
@@ -215,13 +221,23 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
                         _favoriDegistir(track['id']);
                       } else {
                         // 'id' yok ya da null ise burada uygun bir işlem yapın
+                        // ignore: avoid_print
                         print('Track data: $track');
-
                       }
                     },
                   ),
                   onTap: () {
-                    Navigator.pushNamed(context, '/PlayMusic');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PlayMusic(
+                            sarkiAd: track['name'],
+                            sanatciAd: track['artist'],
+                            sure: track['duration'],
+                            sarkUrl: track['previewUrl'],
+                            image: track['image'],
+                          )),
+                    );
                   },
                   onLongPress: () {
                     if (track['previewUrl'] == null) {
@@ -236,12 +252,13 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
           },
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
+      bottomNavigationBar:BottomAppBar(
+        color: renk(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             IconButton(
-              padding: EdgeInsets.only(right: 50),
+              padding: const EdgeInsets.only(right: 50),
               icon: const Icon(
                 Icons.home_outlined,
                 size: 30,
@@ -252,7 +269,7 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
               },
             ),
             IconButton(
-              padding: EdgeInsets.only(right: 50),
+              padding: const EdgeInsets.only(right: 50),
               icon: const Icon(
                 Icons.favorite_border_outlined,
                 size: 30,
@@ -274,7 +291,6 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
             ),
           ],
         ),
-        color: renk(),
       ),
     );
   }
