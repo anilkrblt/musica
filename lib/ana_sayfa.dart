@@ -55,13 +55,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
             children: [
               Container(
                 margin:EdgeInsets.only(bottom: 20),
-                child: Text("Merhaba kullanıcıadı", style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-                  textAlign: TextAlign.left,
-                ),
+                child: ZamanMetni(name: "kullaniciadi",)
               ),
               Container(
                 margin: EdgeInsets.only(bottom: 20),
@@ -214,3 +208,34 @@ class NowPlayingBar extends StatelessWidget {
   }
 }
 
+class ZamanMetni extends StatelessWidget {
+  final String name;
+
+  ZamanMetni({required this.name});
+
+  String getGreeting() {
+    DateTime now = DateTime.now();
+    int hour = now.hour;
+
+    if (hour < 12) {
+      return 'Günaydın $name';
+    } else if (hour < 18) {
+      return 'İyi günler $name';
+    } else {
+      return 'İyi geceler $name';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      getGreeting(),
+        style: TextStyle(
+          fontSize: 25,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+        textAlign: TextAlign.left,
+    );
+  }
+}
