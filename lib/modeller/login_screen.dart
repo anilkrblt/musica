@@ -15,6 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   final _userCrud = UserCRUD(DatabaseHelper.instance); // DatabaseHelper örneği
 
+
   void _login() async {
     final username = _usernameController.text;
     final password = _passwordController.text;
@@ -64,6 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             ElevatedButton(
                 onPressed: () {
+
                   Navigator.popAndPushNamed(context, '/RegisterScreen');
                 },
                 child: const Text('Kaydol')),
@@ -73,3 +75,4 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+

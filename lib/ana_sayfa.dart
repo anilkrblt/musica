@@ -1,6 +1,7 @@
 // ignore_for_file: sort_child_properties_last
 
 import 'package:flutter/material.dart';
+import 'package:musica/arama_sayfasi.dart';
 import 'package:musica/profil_sayfasi.dart';
 
 // ignore: depend_on_referenced_packages
@@ -13,6 +14,7 @@ class AnaSayfa extends StatefulWidget {
 
 class _AnaSayfaState extends State<AnaSayfa> {
   bool isPlaying = false;
+  final TextEditingController _searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,16 +44,49 @@ class _AnaSayfaState extends State<AnaSayfa> {
             onPressed: () => Navigator.pushNamed(context, '/AramaSayfasi'),
           ),
         ],
-        backgroundColor: renk(),
+        backgroundColor: Color.fromARGB(255, 117, 23, 239),
       ),
       body: Stack(children: [
         Container(
+          padding: EdgeInsets.all(20),
           decoration: genelTema(),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              Container(
+                margin:EdgeInsets.only(bottom: 20),
+                child: Text("Merhaba kullanıcıadı", style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 20),
+                child: GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/AramaSayfasi');
+                    },
+                    child: AbsorbPointer(
+                      absorbing: true, // AbsorbPointer'ı true olarak ayarlayarak dokunma etkisizleştirilir.
+                      child: TextField(
+                        controller: _searchController,
+                        decoration: const InputDecoration(
+                          fillColor: Colors.white,
+                          filled: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          hintText: 'Müzik ya da sanatçı ara',
+                        ),
+                      ),
+                    ),
+                  )
+              ),
               SizedBox(
-                height: 250,
+                height: 150,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: 5, // Örnek için liste öğe sayısı.
@@ -71,7 +106,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                         ),
                         child: ClipRRect(
                           borderRadius:
-                              BorderRadius.circular(20), // Resmi yuvarlat
+                          BorderRadius.circular(20), // Resmi yuvarlat
                           child: Image.network(
                             'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Stainer.jpg/640px-Stainer.jpg',
                             fit: BoxFit
@@ -89,10 +124,12 @@ class _AnaSayfaState extends State<AnaSayfa> {
         ),
       ]),
       bottomNavigationBar: BottomAppBar(
-        color: renk(),
+        color: Color.fromARGB(255, 117, 23, 239),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+
+
             IconButton(
               padding: const EdgeInsets.only(right: 50),
               icon: const Icon(
@@ -125,6 +162,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                 Navigator.pushNamed(context, '/ProfilSayfasi');
               },
             ),
+
           ],
         ),
       ),
@@ -138,13 +176,15 @@ BoxDecoration genelTema() => const BoxDecoration(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
         colors: [
-          Color.fromARGB(255, 255, 183, 206), // En koyu renk
-          Color.fromARGB(255, 101, 3, 54), // Beyaz renk (geçiş sonu)
+          Color.fromARGB(255, 117, 23, 239), // En koyu renk
+          Color.fromARGB(255, 169, 158, 255), /// Beyaz renk (geçiş sonu)
         ],
       ),
     );
 class NowPlayingBar extends StatelessWidget {
   const NowPlayingBar({super.key});
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -154,6 +194,7 @@ class NowPlayingBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+
           IconButton(
             icon: const Icon(Icons.play_arrow),
             onPressed: () {
@@ -172,3 +213,4 @@ class NowPlayingBar extends StatelessWidget {
     );
   }
 }
+

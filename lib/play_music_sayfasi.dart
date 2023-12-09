@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:musica/modeller/login_screen.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:musica/ana_sayfa.dart';
@@ -137,7 +138,7 @@ class _PlayMusicState extends State<PlayMusic> {
                     slider(),
                     Text(
                       //buraya alternetif çözüm bul
-                      '${_formatDuration(_sliderValue)}                                                   ${_formatDuration(_maxSliderValue)}',
+                      '${_formatDuration(_sliderValue)}                                               ${_formatDuration(_maxSliderValue)}',
                       style:
                           const TextStyle(fontSize: 20, color: Colors.white60),
                     ),
@@ -238,6 +239,7 @@ class Ileri extends StatelessWidget {
         color: Colors.white,
       ),
       onPressed: () {
+        
         Navigator.pushNamed(context, '/ProfilSayfasi');
       },
     );
