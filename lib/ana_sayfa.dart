@@ -15,12 +15,9 @@ class AnaSayfa extends StatefulWidget {
 }
 
 class _AnaSayfaState extends State<AnaSayfa> {
-
-
-  List<String> turListesi=["Pop","Rap","Rock","Jazz","Türkü"];
+  List<String> turListesi = ["Pop", "Rap", "Rock", "Jazz", "Türkü"];
   bool isPlaying = false;
   final TextEditingController _searchController = TextEditingController();
-
 
   @override
   Widget build(BuildContext context) {
@@ -44,13 +41,13 @@ class _AnaSayfaState extends State<AnaSayfa> {
             ),
           ),
         ),
-        actions: [
+        /* actions: [
           IconButton(
             icon: const Icon(Icons.search),
             color: Colors.white,
             onPressed: () => Navigator.pushNamed(context, '/AramaSayfasi'),
           ),
-        ],
+        ],*/
         backgroundColor: Color.fromARGB(255, 117, 23, 239),
       ),
       body: Stack(children: [
@@ -61,17 +58,19 @@ class _AnaSayfaState extends State<AnaSayfa> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                margin:EdgeInsets.only(bottom: 20),
-                child: ZamanMetni(name: widget.username,)
-              ),
+                  margin: EdgeInsets.only(bottom: 20),
+                  child: ZamanMetni(
+                    name: widget.username,
+                  )),
               Container(
-                margin: EdgeInsets.only(bottom: 20),
-                child: GestureDetector(
+                  margin: EdgeInsets.only(bottom: 20),
+                  child: GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, '/AramaSayfasi');
                     },
                     child: AbsorbPointer(
-                      absorbing: true, // AbsorbPointer'ı true olarak ayarlayarak dokunma etkisizleştirilir.
+                      absorbing:
+                          true, // AbsorbPointer'ı true olarak ayarlayarak dokunma etkisizleştirilir.
                       child: TextField(
                         controller: _searchController,
                         decoration: const InputDecoration(
@@ -82,13 +81,10 @@ class _AnaSayfaState extends State<AnaSayfa> {
                           ),
                           hintText: 'Müzik ya da sanatçı ara',
                           prefixIcon: Icon(Icons.search),
-
-
                         ),
                       ),
                     ),
-                  )
-              ),
+                  )),
               SizedBox(
                 height: 150,
                 child: Stack(
@@ -102,21 +98,21 @@ class _AnaSayfaState extends State<AnaSayfa> {
                           width: 200,
                           child: Stack(
                             alignment: Alignment.bottomCenter,
-
                             children: [
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   padding: EdgeInsets.zero, // Padding'i kaldır
                                   shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20)),
                                   ),
                                   backgroundColor: Colors
                                       .transparent, // Düğme arka planını saydam yap
                                   elevation: 0, // Gölgeyi kaldır
                                 ),
                                 child: ClipRRect(
-                                  borderRadius:
-                                  BorderRadius.circular(20), // Resmi yuvarlat
+                                  borderRadius: BorderRadius.circular(
+                                      20), // Resmi yuvarlat
                                   child: Image.network(
                                     'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Stainer.jpg/640px-Stainer.jpg',
                                     fit: BoxFit
@@ -126,59 +122,63 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                 onPressed: () => {}, // Boş bir fonksiyon
                               ),
                               Positioned(
-                                  child: Card(
-                                    child: Padding(
+                                child: Card(
+                                  child: Padding(
                                     padding: const EdgeInsets.all(4.0),
                                     child: Padding(
-                                      padding: const EdgeInsets.only(left:8.0),
+                                      padding: const EdgeInsets.only(left: 8.0),
                                       child: Row(
-
                                         children: [
                                           Expanded(
                                             flex: 7,
                                             child: Center(
-                                              child: Text(turListesi[index], style: TextStyle(
-                                                  color: renk2(),
-                                                  fontSize: 25,
-                                                  fontWeight: FontWeight.w900),),
+                                              child: Text(
+                                                turListesi[index],
+                                                style: TextStyle(
+                                                    color: renk2(),
+                                                    fontSize: 25,
+                                                    fontWeight:
+                                                        FontWeight.w900),
+                                              ),
                                             ),
                                           ),
-                                          Expanded(flex:3,
-                                              child: Icon(Icons.play_circle, color: renk2(), size: 33,)),
+                                          Expanded(
+                                              flex: 3,
+                                              child: Icon(
+                                                Icons.play_circle,
+                                                color: renk2(),
+                                                size: 33,
+                                              )),
                                         ],
-                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
                                       ),
                                     ),
                                   ),
-                                    color: Colors.white70.withOpacity(0.8),
-                                  ),
+                                  color: Colors.white70.withOpacity(0.8),
+                                ),
                                 width: 150,
                                 height: 50,
                                 bottom: 10,
                                 left: 25,
-
                               ),
                             ],
                           ),
                         );
                       },
                     ),
-
                   ],
                 ),
               ),
             ],
           ),
         ),
-
       ]),
       bottomNavigationBar: BottomAppBar(
         color: Color.fromARGB(255, 117, 23, 239),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-
-
             IconButton(
               padding: const EdgeInsets.only(right: 50),
               icon: const Icon(
@@ -187,7 +187,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                 color: Colors.white,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/ProfilSayfasi');
+                //Navigator.pushNamed(context, '/ProfilSayfasi');
               },
             ),
             IconButton(
@@ -198,7 +198,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                 color: Colors.white,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/ProfilSayfasi');
+                Navigator.pushNamed(context, '/Favoriler');
               },
             ),
             IconButton(
@@ -211,7 +211,6 @@ class _AnaSayfaState extends State<AnaSayfa> {
                 Navigator.pushNamed(context, '/ProfilSayfasi');
               },
             ),
-
           ],
         ),
       ),
@@ -226,14 +225,15 @@ BoxDecoration genelTema() => const BoxDecoration(
         end: Alignment.bottomCenter,
         colors: [
           Color.fromARGB(255, 117, 23, 239), // En koyu renk
-          Color.fromARGB(255, 169, 158, 255), /// Beyaz renk (geçiş sonu)
+          Color.fromARGB(255, 169, 158, 255),
+
+          /// Beyaz renk (geçiş sonu)
         ],
       ),
     );
+
 class NowPlayingBar extends StatelessWidget {
   const NowPlayingBar({super.key});
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -243,7 +243,6 @@ class NowPlayingBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-
           IconButton(
             icon: const Icon(Icons.play_arrow),
             onPressed: () {
@@ -285,12 +284,12 @@ class ZamanMetni extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       getGreeting(),
-        style: TextStyle(
-          fontSize: 25,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
-        textAlign: TextAlign.left,
+      style: TextStyle(
+        fontSize: 25,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
+      textAlign: TextAlign.left,
     );
   }
 }

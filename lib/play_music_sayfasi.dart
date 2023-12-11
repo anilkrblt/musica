@@ -114,7 +114,24 @@ class _PlayMusicState extends State<PlayMusic> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Expanded(flex: 6, child: Image.network(sarkiImage)),
+            Expanded(
+              flex: 6,
+              child: ShaderMask(
+                shaderCallback: (Rect bounds) {
+                  return LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    colors: [Colors.transparent, Colors.black],
+                    stops: [0.0, 1.0],
+                  ).createShader(bounds);
+                },
+                blendMode: BlendMode.dstIn,
+                child: Image.network(
+                  sarkiImage,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
             Expanded(
               flex: 1,
               child: Padding(
@@ -131,7 +148,8 @@ class _PlayMusicState extends State<PlayMusic> {
                 ),
               ),
             ),
-            Expanded( flex: 3,
+            Expanded(
+              flex: 3,
               child: Center(
                 child: Container(
                   width: 350,
@@ -143,8 +161,8 @@ class _PlayMusicState extends State<PlayMusic> {
                       Text(
                         //buraya alternetif çözüm bul
                         '${_formatDuration(_sliderValue)}                                               ${_formatDuration(_maxSliderValue)}',
-                        style:
-                            const TextStyle(fontSize: 20, color: Colors.white60),
+                        style: const TextStyle(
+                            fontSize: 20, color: Colors.white60),
                       ),
                       Expanded(
                         child: Row(
