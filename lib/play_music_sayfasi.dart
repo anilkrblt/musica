@@ -114,60 +114,65 @@ class _PlayMusicState extends State<PlayMusic> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Expanded(child: Image.network(sarkiImage)),
-            Padding(
-              padding: const EdgeInsets.only(left: 15),
-              child: ListTile(
-                title: Text(sarkiAdi,
-                    style: const TextStyle(
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white)),
-                subtitle: Text(sanatciAdi,
-                    style:
-                        const TextStyle(fontSize: 20, color: Colors.white60)),
+            Expanded(flex: 6, child: Image.network(sarkiImage)),
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: ListTile(
+                  title: Text(sarkiAdi,
+                      style: const TextStyle(
+                          fontSize: 35,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white)),
+                  subtitle: Text(sanatciAdi,
+                      style:
+                          const TextStyle(fontSize: 20, color: Colors.white60)),
+                ),
               ),
             ),
-            Center(
-              child: Container(
-                width: 350,
-                height: 150,
-                margin: const EdgeInsets.only(top: 25),
-                child: Column(
-                  children: [
-                    slider(),
-                    Text(
-                      //buraya alternetif çözüm bul
-                      '${_formatDuration(_sliderValue)}                                               ${_formatDuration(_maxSliderValue)}',
-                      style:
-                          const TextStyle(fontSize: 20, color: Colors.white60),
-                    ),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Geri(),
-                          IconButton(
-                            icon: Icon(
-                              _isPlaying
-                                  ? Icons.pause_circle_outline
-                                  : Icons.play_circle_outline_outlined,
-                              size: 70,
-                              color: _isPlaying ? Colors.white : Colors.white,
-                            ),
-                            onPressed: () {
-                              if (_isPlaying) {
-                                _durdur();
-                              } else {
-                                _oynat();
-                              }
-                            },
-                          ),
-                          const Ileri(),
-                        ],
+            Expanded( flex: 3,
+              child: Center(
+                child: Container(
+                  width: 350,
+                  height: 150,
+                  margin: const EdgeInsets.only(top: 25),
+                  child: Column(
+                    children: [
+                      slider(),
+                      Text(
+                        //buraya alternetif çözüm bul
+                        '${_formatDuration(_sliderValue)}                                               ${_formatDuration(_maxSliderValue)}',
+                        style:
+                            const TextStyle(fontSize: 20, color: Colors.white60),
                       ),
-                    ),
-                  ],
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            const Geri(),
+                            IconButton(
+                              icon: Icon(
+                                _isPlaying
+                                    ? Icons.pause_circle_outline
+                                    : Icons.play_circle_outline_outlined,
+                                size: 70,
+                                color: _isPlaying ? Colors.white : Colors.white,
+                              ),
+                              onPressed: () {
+                                if (_isPlaying) {
+                                  _durdur();
+                                } else {
+                                  _oynat();
+                                }
+                              },
+                            ),
+                            const Ileri(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
