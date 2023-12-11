@@ -84,7 +84,7 @@ class _PlayMusicState extends State<PlayMusic> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 255, 183, 206),
+        backgroundColor: renk2(),
         leading: IconButton(
           icon: Icon(
             Icons.keyboard_arrow_left,
@@ -176,7 +176,7 @@ class _PlayMusicState extends State<PlayMusic> {
       ),
       bottomNavigationBar: BottomAppBar(
         padding: const EdgeInsets.only(left: 50, right: 50),
-        color: renk(),
+        color: renk2(),
         child: Row(
           children: [
             IconButton(
@@ -239,7 +239,6 @@ class Ileri extends StatelessWidget {
         color: Colors.white,
       ),
       onPressed: () {
-        
         Navigator.pushNamed(context, '/ProfilSayfasi');
       },
     );
@@ -278,3 +277,4 @@ BoxDecoration genelTema2() => const BoxDecoration(
         end: Alignment.bottomCenter,
       ),
     );
+Color renk2() => const Color.fromARGB(255, 117, 23, 239);

@@ -64,8 +64,6 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
   final TextEditingController _searchController = TextEditingController();
   final AudioPlayer audioPlayer = AudioPlayer();
   List<Map<String, dynamic>> _tracks = [];
-  
-
 
   Future<void> _searchTracks() async {
     final spotifyService =
@@ -167,7 +165,7 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: renk(),
+        backgroundColor: renk2(),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight),
           child: Padding(
@@ -233,12 +231,12 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => PlayMusic(
-                            sarkiAd: track['name'],
-                            sanatciAd: track['artist'],
-                            sure: track['duration'],
-                            sarkUrl: track['previewUrl'],
-                            image: track['image'],
-                          )),
+                                sarkiAd: track['name'],
+                                sanatciAd: track['artist'],
+                                sure: track['duration'],
+                                sarkUrl: track['previewUrl'],
+                                image: track['image'],
+                              )),
                     );
                   },
                   onLongPress: () {
@@ -254,8 +252,8 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
           },
         ),
       ),
-      bottomNavigationBar:BottomAppBar(
-        color: renk(),
+      bottomNavigationBar: BottomAppBar(
+        color: renk2(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -297,13 +295,5 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
     );
   }
 
-
-
   void textYaz() {}
 }
-
-
-
-
-
-
