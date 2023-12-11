@@ -171,11 +171,13 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
+
               autofocus: true,
               controller: _searchController, // Bu satırı ekleyin
               focusNode: FocusNode(),
               onSubmitted: (value) => _searchTracks(),
               decoration: const InputDecoration(
+                prefixIcon: Icon(Icons.search),
                 fillColor: Colors.white,
                 filled: true,
                 border: OutlineInputBorder(

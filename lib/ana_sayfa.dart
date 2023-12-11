@@ -8,15 +8,20 @@ import 'package:musica/profil_sayfasi.dart';
 // ignore: depend_on_referenced_packages
 // SpotifyService classınızı buraya ekleyin veya ayrı bir dosyada tutun ve burada import edin.
 class AnaSayfa extends StatefulWidget {
-  const AnaSayfa({super.key});
+  final String username;
+  const AnaSayfa({super.key, required this.username});
   @override
   State<AnaSayfa> createState() => _AnaSayfaState();
 }
 
 class _AnaSayfaState extends State<AnaSayfa> {
+
+
   List<String> turListesi=["Pop","Rap","Rock","Jazz","Türkü"];
   bool isPlaying = false;
   final TextEditingController _searchController = TextEditingController();
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +62,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
             children: [
               Container(
                 margin:EdgeInsets.only(bottom: 20),
-                child: ZamanMetni(name: "kullaniciadi",)
+                child: ZamanMetni(name: widget.username,)
               ),
               Container(
                 margin: EdgeInsets.only(bottom: 20),

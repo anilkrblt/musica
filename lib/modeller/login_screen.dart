@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musica/ana_sayfa.dart';
 import 'package:musica/database/database_helper.dart';
 import 'package:musica/database/user_crud.dart';
 
@@ -25,7 +26,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (isValidUser) {
       // Kullanıcı girişi başarılı, ana sayfaya yönlendir
-      Navigator.pushReplacementNamed(context, '/AnaSayfa');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AnaSayfa(username: username),
+        ),
+      );
+
     } else {
       final isUserExists = await _userCrud.isUserExists(username);
 
