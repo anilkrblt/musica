@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:musica/arama_sayfasi.dart';
+import 'package:musica/play_music_sayfasi.dart';
 import 'package:musica/profil_sayfasi.dart';
 
 // ignore: depend_on_referenced_packages
@@ -13,6 +14,7 @@ class AnaSayfa extends StatefulWidget {
 }
 
 class _AnaSayfaState extends State<AnaSayfa> {
+  List<String> turListesi=["Pop","Rap","Rock","Jazz","Türkü"];
   bool isPlaying = false;
   final TextEditingController _searchController = TextEditingController();
   @override
@@ -74,6 +76,9 @@ class _AnaSayfaState extends State<AnaSayfa> {
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                           ),
                           hintText: 'Müzik ya da sanatçı ara',
+                          prefixIcon: Icon(Icons.search),
+
+
                         ),
                       ),
                     ),
@@ -81,41 +86,86 @@ class _AnaSayfaState extends State<AnaSayfa> {
               ),
               SizedBox(
                 height: 150,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 5, // Örnek için liste öğe sayısı.
+                child: Stack(
+                  children: [
+                    ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 5, // Örnek için liste öğe sayısı.
 
-                  itemBuilder: (context, index) {
-                    return SizedBox(
-                      width: 200,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.zero, // Padding'i kaldır
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                      itemBuilder: (context, index) {
+                        return SizedBox(
+                          width: 200,
+                          child: Stack(
+                            alignment: Alignment.bottomCenter,
+
+                            children: [
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.zero, // Padding'i kaldır
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                  ),
+                                  backgroundColor: Colors
+                                      .transparent, // Düğme arka planını saydam yap
+                                  elevation: 0, // Gölgeyi kaldır
+                                ),
+                                child: ClipRRect(
+                                  borderRadius:
+                                  BorderRadius.circular(20), // Resmi yuvarlat
+                                  child: Image.network(
+                                    'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Stainer.jpg/640px-Stainer.jpg',
+                                    fit: BoxFit
+                                        .cover, // Resmi tamamen kaplayacak şekilde ayarla
+                                  ),
+                                ),
+                                onPressed: () => {}, // Boş bir fonksiyon
+                              ),
+                              Positioned(
+                                  child: Card(
+                                    child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left:8.0),
+                                      child: Row(
+
+                                        children: [
+                                          Expanded(
+                                            flex: 7,
+                                            child: Center(
+                                              child: Text(turListesi[index], style: TextStyle(
+                                                  color: renk2(),
+                                                  fontSize: 25,
+                                                  fontWeight: FontWeight.w900),),
+                                            ),
+                                          ),
+                                          Expanded(flex:3,
+                                              child: Icon(Icons.play_circle, color: renk2(), size: 33,)),
+                                        ],
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      ),
+                                    ),
+                                  ),
+                                    color: Colors.white70.withOpacity(0.8),
+                                  ),
+                                width: 150,
+                                height: 50,
+                                bottom: 10,
+                                left: 25,
+
+                              ),
+                            ],
                           ),
-                          backgroundColor: Colors
-                              .transparent, // Düğme arka planını saydam yap
-                          elevation: 0, // Gölgeyi kaldır
-                        ),
-                        child: ClipRRect(
-                          borderRadius:
-                          BorderRadius.circular(20), // Resmi yuvarlat
-                          child: Image.network(
-                            'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Stainer.jpg/640px-Stainer.jpg',
-                            fit: BoxFit
-                                .cover, // Resmi tamamen kaplayacak şekilde ayarla
-                          ),
-                        ),
-                        onPressed: () => {}, // Boş bir fonksiyon
-                      ),
-                    );
-                  },
+                        );
+                      },
+                    ),
+
+                  ],
                 ),
               ),
             ],
           ),
         ),
+
       ]),
       bottomNavigationBar: BottomAppBar(
         color: Color.fromARGB(255, 117, 23, 239),
@@ -127,7 +177,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
             IconButton(
               padding: const EdgeInsets.only(right: 50),
               icon: const Icon(
-                Icons.home_outlined,
+                Icons.home_sharp,
                 size: 30,
                 color: Colors.white,
               ),
