@@ -198,7 +198,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                 color: Colors.white,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/Favoriler');
+                Navigator.pushNamed(context, '/CalmaListesi');
               },
             ),
             IconButton(

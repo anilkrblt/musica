@@ -13,7 +13,7 @@ class PlayMusic extends StatefulWidget {
   final String sure;
   final String sarkUrl;
   final String image;
-  const PlayMusic(
+  PlayMusic(
       {required this.sarkiAd,
       required this.sanatciAd,
       required this.sure,
@@ -34,8 +34,9 @@ class _PlayMusicState extends State<PlayMusic> {
   late String sarkiImage;
   late double _maxSliderValue;
   late AudioPlayer audioPlayer;
-  Color? dominantColor;
-  late PaletteGenerator paletteGenerator;
+  Color dominantColor = Colors.blue;
+  late PaletteGenerator _generator;
+  BoxDecoration? bd;
   @override
   void initState() {
     super.initState();
@@ -46,7 +47,34 @@ class _PlayMusicState extends State<PlayMusic> {
     sarkiUrl = widget.sarkUrl;
     sarkiImage = widget.image;
     _maxSliderValue = double.tryParse(sarkiSuresi) ?? 0.0;
+    arkaPlanRengi();
   }
+  //Future<BoxDecoration> genelTema2() =>  arkaPlanRengi();
+Future<BoxDecoration> arkaPlanRengi() async {
+
+    _generator = await PaletteGenerator.fromImageProvider((NetworkImage(
+      sarkiUrl
+    )));
+    print(_generator.toString() + "----------------------------------------- hata");
+    dominantColor = _generator.dominantColor!.color;
+    Color vibrantColor = _generator.vibrantColor!.color;
+    setState(() {
+      bd = BoxDecoration(
+          gradient: LinearGradient(
+          colors: [dominantColor,Colors.blue],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+      ));
+    });
+return BoxDecoration(
+  gradient: LinearGradient(
+    colors: [dominantColor,Colors.blue],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+  ),
+);
+}
+
 
   void _oynat() async {
     await audioPlayer.play(UrlSource(widget.sarkUrl));
@@ -110,9 +138,10 @@ class _PlayMusicState extends State<PlayMusic> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        decoration: genelTema(),
+        decoration: bd,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
+
           children: [
             Expanded(
               flex: 6,
@@ -293,11 +322,5 @@ String _formatDuration(double value) {
   return '${duration.inMinutes.remainder(60)}:${(duration.inSeconds.remainder(60)).toString().padLeft(2, '0')}';
 }
 
-BoxDecoration genelTema2() => const BoxDecoration(
-      gradient: LinearGradient(
-        colors: [Colors.blue, Colors.black],
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-      ),
-    );
+
 Color renk2() => const Color.fromARGB(255, 117, 23, 239);
