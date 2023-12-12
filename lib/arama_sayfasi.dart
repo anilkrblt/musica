@@ -69,6 +69,8 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
   List<Map<String, dynamic>> _tracks = [];
 
   Future<void> _searchTracks() async {
+    aramaGecmisi.add(_searchController.text); //TextEditingController()
+    print(aramaGecmisi);
     final spotifyService =
         SpotifyService(); // SpotifyService nesnesi oluşturuldu.
 
@@ -189,6 +191,7 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
     });
   }
 
+  List<String> aramaGecmisi=[];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
