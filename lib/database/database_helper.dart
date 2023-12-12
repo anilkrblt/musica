@@ -1,4 +1,3 @@
-
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'user_crud.dart';
@@ -15,6 +14,15 @@ class DatabaseHelper {
   DatabaseHelper._init() {
     userCRUD = UserCRUD(this);
     songCRUD = SongCRUD(this);
+    //deleteDb();
+  }
+
+  Future<void> deleteDb() async {
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, 'musicApp.db');
+
+    // Veritabanını sil
+    await deleteDatabase(path);
   }
 
   Future<Database> get database async {
@@ -26,23 +34,36 @@ class DatabaseHelper {
   Future<Database> _initDB(String filePath) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
-    return await openDatabase(path, version: 2, onCreate: _createDB, onUpgrade: _onUpgrade); // version 2 olarak güncellendi
-
+    return await openDatabase(path,
+        version: 2,
+        onCreate: _createDB,
+        onUpgrade: _onUpgrade); // version 2 olarak güncellendi
   }
+
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
-  if (oldVersion < 2) {
-    await db.execute('ALTER TABLE songs ADD COLUMN is_favorite INTEGER DEFAULT 0');
+    if (oldVersion < 2) {
+      // 'is_favorite' sütununu kontrol edin ve ekleyin
+      var table = await db.rawQuery("PRAGMA table_info(songs)");
+      var exists = table.any((row) => row['name'] == 'is_favorite');
+      if (!exists) {
+        await db.execute(
+            'ALTER TABLE songs ADD COLUMN is_favorite INTEGER DEFAULT 0');
+      }
+    }
+    if (oldVersion < 3) {
+      // 'image' sütununu ekleyin
+      await db.execute('ALTER TABLE songs ADD COLUMN image TEXT');
+    }
+    // Diğer sütun güncellemeleri için benzer ifadeler ekleyebilirsiniz.
   }
-}
 
+  Future _createDB(Database db, int version) async {
+    const idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
+    const textType = 'TEXT NOT NULL';
+    const integerType = 'INTEGER NOT NULL';
 
- Future _createDB(Database db, int version) async {
-  const idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
-  const textType = 'TEXT NOT NULL';
-  const integerType = 'INTEGER NOT NULL';
-
-  // User tablosunu oluştur
-  await db.execute('''
+    // User tablosunu oluştur
+    await db.execute('''
     CREATE TABLE users (
       id $idType,
       first_name $textType,
@@ -52,21 +73,22 @@ class DatabaseHelper {
     );
   ''');
 
-  // Song tablosunu oluştur
-  await db.execute('''
-    CREATE TABLE songs (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      title TEXT NOT NULL,
-      artist TEXT NOT NULL,
-      album TEXT NOT NULL,
-      duration INTEGER NOT NULL,
-      genre TEXT NOT NULL,
-      is_favorite INTEGER NOT NULL DEFAULT 0  
-    );
-  ''');
+    // Song tablosunu oluştur
+    await db.execute('''
+  CREATE TABLE songs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    spotify_id TEXT,
+    title TEXT NOT NULL,
+    artist TEXT NOT NULL,
+    album TEXT,
+    duration INTEGER,
+    image TEXT, 
+    is_favorite INTEGER NOT NULL DEFAULT 0
+  );
+''');
 
-  // Playlist tablosunu oluştur
-  await db.execute('''
+    // Playlist tablosunu oluştur
+    await db.execute('''
     CREATE TABLE playlists (
       id $idType,
       user_id $integerType,
@@ -75,8 +97,8 @@ class DatabaseHelper {
     );
   ''');
 
-  // PlaylistSongs ilişkisel tablosunu oluştur
-  await db.execute('''
+    // PlaylistSongs ilişkisel tablosunu oluştur
+    await db.execute('''
     CREATE TABLE playlist_songs (
       playlist_id $integerType,
       song_id $integerType,
@@ -85,8 +107,8 @@ class DatabaseHelper {
     );
   ''');
 
-  // Favorites tablosunu oluştur
-  await db.execute('''
+    // Favorites tablosunu oluştur
+    await db.execute('''
     CREATE TABLE favorites (
       user_id $integerType,
       song_id $integerType,
@@ -95,8 +117,8 @@ class DatabaseHelper {
     );
   ''');
 
-  // Settings tablosunu oluştur
-  await db.execute('''
+    // Settings tablosunu oluştur
+    await db.execute('''
     CREATE TABLE settings (
       user_id $integerType,
       setting_key $textType,
@@ -104,7 +126,7 @@ class DatabaseHelper {
       FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
     );
   ''');
-}
+  }
 
   // Ana DatabaseHelper sınıfında CRUD işlemleri yok artık, bunlar ilgili CRUD sınıflarına taşındı.
 

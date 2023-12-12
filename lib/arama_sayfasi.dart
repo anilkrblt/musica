@@ -4,7 +4,10 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:musica/ana_sayfa.dart';
+import 'package:musica/database/database_helper.dart';
+import 'package:musica/database/song_crud.dart';
 import 'package:musica/play_music_sayfasi.dart';
+import 'package:sqflite/sqflite.dart';
 //to do karman çorman koda bir parça düzen çikolatalı düzen
 
 // SpotifyService classınızı buraya ekleyin veya ayrı bir dosyada tutun ve burada import edin.
@@ -148,15 +151,40 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
     }
   }
 
-  final Set<String> _favoriSarkilar = {}; // Favori şarkıların ID'lerini saklar
+  @override
+  void initState() {
+    super.initState();
+    _loadFavoriSarkilar();
+  }
 
-  // ignore: unused_element
-  void _favoriDegistir(String trackId) {
+  late Set<String> _favoriSarkilar = {}; // Favori şarkıların Spotify_ID'lerini saklar
+
+  Future<void> _loadFavoriSarkilar() async {
+    final songCRUD = SongCRUD(DatabaseHelper.instance);
+    final favoriSarkilar = await songCRUD.getFavoriteSongs();
+    print("Favori Şarkılar: $favoriSarkilar"); // Bu satırı ekleyin
+
+    setState(() {
+      _favoriSarkilar =
+          favoriSarkilar.map((sarki) => sarki['spotify_id'].toString()).toSet();
+    });
+  }
+
+  void _favoriDegistir(Map<String, dynamic> track) async {
+    final songCRUD = SongCRUD(DatabaseHelper.instance);
+    final trackId = track['id'];
+    print('favori degistir icinde trackID $trackId'); // buradaki track id aslında spotify_id
     setState(() {
       if (_favoriSarkilar.contains(trackId)) {
         _favoriSarkilar.remove(trackId);
+
+        // Şarkıyı favorilerden çıkar
+        songCRUD.addOrUpdateSong(track, false);
       } else {
         _favoriSarkilar.add(trackId);
+        // Şarkıyı favorilere ekle
+        songCRUD.addOrUpdateSong(track, true);
+        print('favorilere eklendi');
       }
     });
   }
@@ -171,7 +199,6 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
-
               autofocus: true,
               controller: _searchController, // Bu satırı ekleyin
               focusNode: FocusNode(),
@@ -219,8 +246,10 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
                           : null,
                     ),
                     onPressed: () {
-                      if (track.containsKey('id') && track['id'] != null) {
-                        _favoriDegistir(track['id']);
+                      if (track.containsKey('id') &&
+                          track['id'] != null) {
+                        
+                        _favoriDegistir(track);
                       } else {
                         // 'id' yok ya da null ise burada uygun bir işlem yapın
                         // ignore: avoid_print
