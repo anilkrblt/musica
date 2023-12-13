@@ -66,6 +66,7 @@ class SongCRUD {
         'album': song['album'],
         'duration': song['duration'],
         'image': song['image'],
+        'sarkiUrl': song['previewUrl'],
         'is_favorite': isFavorite ? 1 : 0,
       };
       await db.insert('songs', newSong);

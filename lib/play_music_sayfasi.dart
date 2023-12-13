@@ -34,9 +34,10 @@ class _PlayMusicState extends State<PlayMusic> {
   late String sarkiImage;
   late double _maxSliderValue;
   late AudioPlayer audioPlayer;
-  Color dominantColor = Colors.blue;
+  Color dominantColor = Colors.blue; //başlangıçta hata vermesin diye değer atadım
+  Color vibrantColor = Colors.blue;
   late PaletteGenerator _generator;
-  BoxDecoration? bd;
+  static BoxDecoration? bd;
   @override
   void initState() {
     super.initState();
@@ -49,32 +50,22 @@ class _PlayMusicState extends State<PlayMusic> {
     _maxSliderValue = double.tryParse(sarkiSuresi) ?? 0.0;
     arkaPlanRengi();
   }
-  //Future<BoxDecoration> genelTema2() =>  arkaPlanRengi();
-Future<BoxDecoration> arkaPlanRengi() async {
 
-    _generator = await PaletteGenerator.fromImageProvider((NetworkImage(
-      sarkiUrl
-    )));
-    print(_generator.toString() + "----------------------------------------- hata");
+  //Future<BoxDecoration> genelTema2() =>  arkaPlanRengi();
+  void arkaPlanRengi() async {
+    _generator =
+        await PaletteGenerator.fromImageProvider((NetworkImage(sarkiImage)));
     dominantColor = _generator.dominantColor!.color;
-    Color vibrantColor = _generator.vibrantColor!.color;
+    vibrantColor = _generator.vibrantColor!.color;
     setState(() {
       bd = BoxDecoration(
           gradient: LinearGradient(
-          colors: [dominantColor,Colors.blue],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
+        colors: [dominantColor, vibrantColor],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
       ));
     });
-return BoxDecoration(
-  gradient: LinearGradient(
-    colors: [dominantColor,Colors.blue],
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-  ),
-);
-}
-
+  }
 
   void _oynat() async {
     await audioPlayer.play(UrlSource(widget.sarkUrl));
@@ -112,7 +103,7 @@ return BoxDecoration(
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: renk2(),
+        backgroundColor: dominantColor,
         leading: IconButton(
           icon: Icon(
             Icons.keyboard_arrow_left,
@@ -141,7 +132,6 @@ return BoxDecoration(
         decoration: bd,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
-
           children: [
             Expanded(
               flex: 6,
@@ -228,7 +218,7 @@ return BoxDecoration(
       ),
       bottomNavigationBar: BottomAppBar(
         padding: const EdgeInsets.only(left: 50, right: 50),
-        color: renk2(),
+        color: vibrantColor,
         child: Row(
           children: [
             IconButton(
@@ -321,6 +311,5 @@ String _formatDuration(double value) {
   final duration = Duration(seconds: value.round());
   return '${duration.inMinutes.remainder(60)}:${(duration.inSeconds.remainder(60)).toString().padLeft(2, '0')}';
 }
-
 
 Color renk2() => const Color.fromARGB(255, 117, 23, 239);

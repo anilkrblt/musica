@@ -83,6 +83,7 @@ class DatabaseHelper {
     album TEXT,
     duration INTEGER,
     image TEXT, 
+    sarkiUrl TEXT,
     is_favorite INTEGER NOT NULL DEFAULT 0
   );
 ''');

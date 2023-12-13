@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musica/database/song_crud.dart';
 import 'package:musica/database/database_helper.dart';
+import 'package:musica/play_music_sayfasi.dart';
 
 class Favoriler extends StatefulWidget {
   const Favoriler({super.key});
@@ -31,18 +32,18 @@ class _FavorilerState extends State<Favoriler> {
     }
   }
 
- void _favoriKaldir(Map<String, dynamic> track) async {
-  final songCRUD = SongCRUD(DatabaseHelper.instance);
-  final trackId = track['spotify_id']; 
+  void _favoriKaldir(Map<String, dynamic> track) async {
+    final songCRUD = SongCRUD(DatabaseHelper.instance);
+    final trackId = track['spotify_id'];
 
-  if (_favoriSarkilar.any((sarki) => sarki['spotify_id'] == trackId)) {
-    setState(() {
-      _favoriSarkilar = List.from(_favoriSarkilar)..removeWhere((sarki) => sarki['spotify_id'] == trackId);
-    });
-    await songCRUD.addOrUpdateSong(track, false); 
+    if (_favoriSarkilar.any((sarki) => sarki['spotify_id'] == trackId)) {
+      setState(() {
+        _favoriSarkilar = List.from(_favoriSarkilar)
+          ..removeWhere((sarki) => sarki['spotify_id'] == trackId);
+      });
+      await songCRUD.addOrUpdateSong(track, false);
+    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -56,13 +57,26 @@ class _FavorilerState extends State<Favoriler> {
               itemBuilder: (context, index) {
                 final sarki = _favoriSarkilar[index];
                 return Dismissible(
-                  key: ValueKey(index),// Her öğe için benzersiz bir anahtar
+                  key: ValueKey(index), // Her öğe için benzersiz bir anahtar
                   onDismissed: (direction) {
                     _favoriKaldir(sarki);
                   },
                   background:
                       Container(color: Colors.red), // Kaydırma arka planı
                   child: ListTile(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PlayMusic(
+                                  sarkiAd: sarki['title'],
+                                  sanatciAd: sarki['artist'],
+                                  sure: sarki['duration'].toString(),
+                                  sarkUrl: sarki['sarkiUrl'].toString(),
+                                  image: sarki['image'],
+                                )),
+                      );
+                    },
                     title: Text(sarki['title'] ?? 'Başlıksız'),
                     subtitle: Text(sarki['artist'] ?? 'Sanatçı Bilinmiyor'),
                     leading: sarki['image'] != null
