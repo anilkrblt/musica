@@ -1,8 +1,12 @@
+import 'dart:ffi';
+
 import 'package:audioplayers/audioplayers.dart';
+import 'package:marquee/marquee.dart';
 import 'package:musica/modeller/login_screen.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:musica/ana_sayfa.dart';
+import 'package:path/path.dart';
 
 //ilk çaldıgında şarkının sliderının hareket etmemesi ve toplam süresinin gözükmemesi hatası giderilecek
 //karman çorman şu koda bir tutam düzen
@@ -34,7 +38,8 @@ class _PlayMusicState extends State<PlayMusic> {
   late String sarkiImage;
   late double _maxSliderValue;
   late AudioPlayer audioPlayer;
-  Color dominantColor = Colors.blue; //başlangıçta hata vermesin diye değer atadım
+  Color dominantColor =
+      Colors.blue; //başlangıçta hata vermesin diye değer atadım
   Color vibrantColor = Colors.blue;
   late PaletteGenerator _generator;
   static BoxDecoration? bd;
@@ -47,11 +52,10 @@ class _PlayMusicState extends State<PlayMusic> {
     sarkiSuresi = widget.sure;
     sarkiUrl = widget.sarkUrl;
     sarkiImage = widget.image;
-    _maxSliderValue = double.tryParse(sarkiSuresi) ?? 0.0;
+    _maxSliderValue = _maxValueBul(sarkiSuresi) ?? 0.0;
     arkaPlanRengi();
   }
 
-  //Future<BoxDecoration> genelTema2() =>  arkaPlanRengi();
   void arkaPlanRengi() async {
     _generator =
         await PaletteGenerator.fromImageProvider((NetworkImage(sarkiImage)));
@@ -137,7 +141,7 @@ class _PlayMusicState extends State<PlayMusic> {
               flex: 6,
               child: ShaderMask(
                 shaderCallback: (Rect bounds) {
-                  return LinearGradient(
+                  return const LinearGradient(
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
                     colors: [Colors.transparent, Colors.black],
@@ -156,11 +160,18 @@ class _PlayMusicState extends State<PlayMusic> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 15),
                 child: ListTile(
-                  title: Text(sarkiAdi,
-                      style: const TextStyle(
-                          fontSize: 35,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white)),
+                  title: sarkiAdi.length < 10
+                      ? Text(sarkiAdi,
+                          style: const TextStyle(
+                              fontSize: 35,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white))
+                      : Marquee(
+                          text: sarkiAdi,
+                          style: const TextStyle(
+                              fontSize: 35,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white)),
                   subtitle: Text(sanatciAdi,
                       style:
                           const TextStyle(fontSize: 20, color: Colors.white60)),
@@ -264,6 +275,14 @@ class _PlayMusicState extends State<PlayMusic> {
         });
       },
     );
+  }
+
+  double _maxValueBul(String sarkiSuresi) {
+    double toplamSure = 0.0;
+    List<String> saatDakikaSaniye = sarkiSuresi.split(':');
+    toplamSure = toplamSure + double.tryParse(saatDakikaSaniye[0])! * 60;
+    toplamSure = toplamSure + double.tryParse(saatDakikaSaniye[1])!;
+    return toplamSure;
   }
 }
 
