@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:musica/ana_sayfa.dart';
 import 'package:musica/database/database_helper.dart';
 import 'package:musica/database/user_crud.dart';
+import 'package:musica/profil_sayfasi.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -52,30 +53,49 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Giriş Yap')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: Container(
+        decoration: genelTema(),
+
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+
             TextField(
               controller: _usernameController,
-              decoration: const InputDecoration(labelText: 'Kullanıcı Adı'),
+              decoration: const InputDecoration(labelText: 'Kullanıcı adı', filled: true,
+                fillColor: Colors.white, ),
+
             ),
             TextField(
               controller: _passwordController,
-              decoration: const InputDecoration(labelText: 'Şifre'),
-              obscureText: true,
+              decoration: const InputDecoration(labelText: 'Şifre', filled: true,
+                fillColor: Colors.white,),obscureText: true,
             ),
+
             ElevatedButton(
               onPressed: _login,
               child: const Text('Giriş Yap'),
             ),
-            ElevatedButton(
-                onPressed: () {
 
-                  Navigator.popAndPushNamed(context, '/RegisterScreen');
-                },
-                child: const Text('Kaydol')),
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: ElevatedButton(
+                onPressed: (){},
+                child: const Text('Şifremi Unuttum'),
+              ),
+            ),
+            Row(
+              children: [
+                Text("Hesabın yok mu? ", style: TextStyle(color:beyaz()),),
+                TextButton(
+                    onPressed: () {
+
+                      Navigator.popAndPushNamed(context, '/RegisterScreen');
+                    },
+                    child: Text('Kaydol' ,
+                      style: TextStyle(color:beyaz()),), ),
+              ],
+            ),
           ],
         ),
       ),

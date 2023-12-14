@@ -1,8 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:musica/ana_sayfa.dart';
 import 'package:musica/database/database_helper.dart';
 import 'package:musica/database/user_crud.dart';
+import 'package:musica/play_music_sayfasi.dart';
+import 'package:musica/profil_sayfasi.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -61,26 +64,59 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Kayıt Ol')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _usernameController,
-              decoration: const InputDecoration(labelText: 'Kullanıcı Adı'),
-            ),
-            TextField(
-              controller: _passwordController,
-              decoration: const InputDecoration(labelText: 'Şifre'),
-              obscureText: true,
-            ),
-            ElevatedButton(
-              onPressed: _register,
-              child: const Text('Kayıt Ol'),
-            ),
-          ],
+      appBar: AppBar(backgroundColor: renk2()),
+      body: Container(decoration: genelTema(),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+
+            children: [
+              //Expanded(flex: 2 ,child: SizedBox(height: 50,)),
+
+              Expanded( flex: 10,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      child: Text("Kaydol", style: TextStyle(color: beyaz(), fontWeight:FontWeight.w900, fontSize: 33 ),
+                      ),
+                      margin: EdgeInsets.only(left: 20, bottom: 50 ),
+                    ),
+                    TextField(
+                      controller: _usernameController,
+                      decoration: const InputDecoration(labelText: 'Kullanıcı adı', filled: true,
+                          fillColor: Colors.white, border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                        ), ),
+
+
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 25,bottom: 20),
+                      child: TextField(
+
+                        controller: _passwordController,
+                        decoration: const InputDecoration(labelText: 'Şifre', filled: true,  border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                        ),
+                          fillColor: Colors.white, ),
+                        obscureText: true,
+                      ),
+                    ),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: _register,
+                        child: const Text('Kaydol'),
+
+                      ),
+                    ),
+                    ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
