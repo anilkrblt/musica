@@ -57,6 +57,7 @@ class _FavorilerState extends State<Favoriler> {
               itemBuilder: (context, index) {
                 final sarki = _favoriSarkilar[index];
                 return Dismissible(
+                  
                   key: ValueKey(index), // Her öğe için benzersiz bir anahtar
                   onDismissed: (direction) {
                     _favoriKaldir(sarki);
