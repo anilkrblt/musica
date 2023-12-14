@@ -10,6 +10,8 @@ import 'package:musica/modeller/login_screen.dart';
 import 'package:musica/modeller/register_screen.dart';
 import 'package:musica/profil_sayfasi.dart';
 
+import 'modeller/account.dart';
+
 void main() => runApp(const MyApp());
 
 class MyApp extends StatefulWidget {
@@ -28,8 +30,8 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => const LoginScreen(),
-
+        '/': (context) => const Giris(),
+        '/LoginScreen':(context) => const LoginScreen(),
         '/AramaSayfasi':(context) => const Arama_Sayfasi(),
         '/RegisterScreen':(context) =>  const RegisterScreen(),
         //'/AnaSayfa':(context) => const AnaSayfa(username: ),

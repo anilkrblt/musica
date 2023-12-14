@@ -71,16 +71,30 @@ class _AnaSayfaState extends State<AnaSayfa> {
                     child: AbsorbPointer(
                       absorbing:
                           true, // AbsorbPointer'ı true olarak ayarlayarak dokunma etkisizleştirilir.
-                      child: TextField(
-                        controller: _searchController,
-                        decoration: const InputDecoration(
-                          fillColor: Colors.white,
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: renk2(),
+                              spreadRadius: 25, // Gölgeli alanın genişliği
+                              blurRadius: 10, // Gölgeli alanın bulanıklığı
+                              //offset: Offset(0),
+
+                            )
+                          ]
+                        ),
+                        child: TextField(
+
+                          controller: _searchController,
+                          decoration: const InputDecoration(
+                            fillColor: Colors.white,
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(20)),
+                            ),
+                            hintText: 'Müzik ya da sanatçı ara',
+                            prefixIcon: Icon(Icons.search),
                           ),
-                          hintText: 'Müzik ya da sanatçı ara',
-                          prefixIcon: Icon(Icons.search),
                         ),
                       ),
                     ),
