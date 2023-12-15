@@ -41,23 +41,20 @@ class _GirisState extends State<Giris> {
                       child: Column(
                         children: [
                           Text("Hemen katıl.",style:TextStyle(color: beyaz(), fontSize: 20, fontWeight: FontWeight.w700),),
-                          Container(
-                            margin: EdgeInsets.only(top: 5),
-                            child: ElevatedButton(onPressed: (){
+                          ElevatedButton(onPressed: (){
 
-                              Navigator.pushNamed(context, '/RegisterScreen');
-                              }, child: Padding(
-                              padding: const EdgeInsets.all(17.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
+                            Navigator.pushNamed(context, '/RegisterScreen');
+                            }, child: Padding(
+                            padding: const EdgeInsets.all(17.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
 
-                                  Icon(Icons.person_add_alt_1_rounded),
-                                  Text("Hesap oluştur",style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),),
-                                ],
-                              ),
-                            )),
-                          ),
+                                Icon(Icons.person_add_alt_1_rounded),
+                                Text("Hesap oluştur",style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),),
+                              ],
+                            ),
+                          )),
                         ],
                       ),
                     ),
