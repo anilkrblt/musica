@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:musica/arama_sayfasi.dart';
+import 'package:musica/modeller/music_tur_playlist.dart';
 import 'package:musica/modeller/song_model.dart';
 import 'package:musica/play_music_sayfasi.dart';
 import 'package:musica/profil_sayfasi.dart';
@@ -112,6 +113,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                             alignment: Alignment.bottomCenter,
                             children: [
                               ElevatedButton(
+
                                 style: ElevatedButton.styleFrom(
                                   padding: EdgeInsets.zero, // Padding'i kaldır
                                   shape: const RoundedRectangleBorder(
@@ -131,39 +133,45 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                         .cover, // Resmi tamamen kaplayacak şekilde ayarla
                                   ),
                                 ),
-                                onPressed: () => {}, // Boş bir fonksiyon
+                                onPressed: () {}, // Boş bir fonksiyon
                               ),
                               Positioned(
                                 child: Card(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(4.0),
+                                  child: GestureDetector(
+                                    onTap:(){Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) =>
+                                        (TurCalmaListesi(turIndex: index ,))));
+                                      } ,
                                     child: Padding(
-                                      padding: const EdgeInsets.only(left: 8.0),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            flex: 7,
-                                            child: Center(
-                                              child: Text(
-                                                songs[index].title,
-                                                style: TextStyle(
-                                                    color: renk2(),
-                                                    fontSize: 25,
-                                                    fontWeight:
-                                                        FontWeight.w900),
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(left: 8.0),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              flex: 7,
+                                              child: Center(
+                                                child: Text(
+                                                  songs[index].title,
+                                                  style: TextStyle(
+                                                      color: renk2(),
+                                                      fontSize: 25,
+                                                      fontWeight:
+                                                          FontWeight.w900),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          Expanded(
-                                              flex: 3,
-                                              child: Icon(
-                                                Icons.play_circle,
-                                                color: renk2(),
-                                                size: 33,
-                                              )),
-                                        ],
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
+                                            Expanded(
+                                                flex: 3,
+                                                child: Icon(
+                                                  Icons.play_circle,
+                                                  color: renk2(),
+                                                  size: 33,
+                                                )),
+                                          ],
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                        ),
                                       ),
                                     ),
                                   ),
