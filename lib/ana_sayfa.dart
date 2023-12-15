@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:musica/arama_sayfasi.dart';
+import 'package:musica/modeller/song_model.dart';
 import 'package:musica/play_music_sayfasi.dart';
 import 'package:musica/profil_sayfasi.dart';
 
@@ -15,7 +16,8 @@ class AnaSayfa extends StatefulWidget {
 }
 
 class _AnaSayfaState extends State<AnaSayfa> {
-  List<String> turListesi = ["Pop", "Rap", "Rock", "Jazz", "Türkü"];
+  List<Song> songs = Song.songs;
+  //List<String> turListesi = ["Pop", "Rap", "Rock", "Jazz", "Türkü"];
   bool isPlaying = false;
   final TextEditingController _searchController = TextEditingController();
 
@@ -72,25 +74,22 @@ class _AnaSayfaState extends State<AnaSayfa> {
                       absorbing:
                           true, // AbsorbPointer'ı true olarak ayarlayarak dokunma etkisizleştirilir.
                       child: Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: renk2(),
-                              spreadRadius: 25, // Gölgeli alanın genişliği
-                              blurRadius: 10, // Gölgeli alanın bulanıklığı
-                              //offset: Offset(0),
-
-                            )
-                          ]
-                        ),
+                        decoration: BoxDecoration(boxShadow: [
+                          BoxShadow(
+                            color: renk2(),
+                            spreadRadius: 25, // Gölgeli alanın genişliği
+                            blurRadius: 10, // Gölgeli alanın bulanıklığı
+                            //offset: Offset(0),
+                          )
+                        ]),
                         child: TextField(
-
                           controller: _searchController,
                           decoration: const InputDecoration(
                             fillColor: Colors.white,
                             filled: true,
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(20)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
                             ),
                             hintText: 'Müzik ya da sanatçı ara',
                             prefixIcon: Icon(Icons.search),
@@ -105,8 +104,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                   children: [
                     ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: 5, // Örnek için liste öğe sayısı.
-
+                      itemCount: songs.length,
                       itemBuilder: (context, index) {
                         return SizedBox(
                           width: 200,
@@ -127,8 +125,8 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(
                                       20), // Resmi yuvarlat
-                                  child: Image.network(
-                                    'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Stainer.jpg/640px-Stainer.jpg',
+                                  child: Image.asset(
+                                    songs[index].coverUrl,
                                     fit: BoxFit
                                         .cover, // Resmi tamamen kaplayacak şekilde ayarla
                                   ),
@@ -147,7 +145,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                             flex: 7,
                                             child: Center(
                                               child: Text(
-                                                turListesi[index],
+                                                songs[index].title,
                                                 style: TextStyle(
                                                     color: renk2(),
                                                     fontSize: 25,
