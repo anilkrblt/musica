@@ -1,6 +1,7 @@
 // ignore_for_file: sort_child_properties_last
 
 import 'package:flutter/material.dart';
+import 'package:musica/alt_sayfalar/calma_listesi_p.dart';
 import 'package:musica/arama_sayfasi.dart';
 import 'package:musica/modeller/music_tur_playlist.dart';
 import 'package:musica/modeller/song_model.dart';
@@ -21,6 +22,25 @@ class _AnaSayfaState extends State<AnaSayfa> {
   //List<String> turListesi = ["Pop", "Rap", "Rock", "Jazz", "Türkü"];
   bool isPlaying = false;
   final TextEditingController _searchController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return PageView(children: [anaSayfa(widget: widget, searchController: _searchController, songs: songs),CalmaListesi(),ProfilSayfasi()]
+    );
+  }
+}
+
+class anaSayfa extends StatelessWidget {
+  const anaSayfa({
+    super.key,
+    required this.widget,
+    required TextEditingController searchController,
+    required this.songs,
+  }) : _searchController = searchController;
+
+  final AnaSayfa widget;
+  final TextEditingController _searchController;
+  final List<Song> songs;
 
   @override
   Widget build(BuildContext context) {
