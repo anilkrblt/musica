@@ -159,7 +159,8 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
     _loadFavoriSarkilar();
   }
 
-  late Set<String> _favoriSarkilar = {}; // Favori şarkıların Spotify_ID'lerini saklar
+  late Set<String> _favoriSarkilar =
+      {}; // Favori şarkıların Spotify_ID'lerini saklar
 
   Future<void> _loadFavoriSarkilar() async {
     final songCRUD = SongCRUD(DatabaseHelper.instance);
@@ -175,7 +176,8 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
   void _favoriDegistir(Map<String, dynamic> track) async {
     final songCRUD = SongCRUD(DatabaseHelper.instance);
     final trackId = track['id'];
-    print('favori degistir icinde trackID $trackId'); // buradaki track id aslında spotify_id
+    print(
+        'favori degistir icinde trackID $trackId'); // buradaki track id aslında spotify_id
     setState(() {
       if (_favoriSarkilar.contains(trackId)) {
         _favoriSarkilar.remove(trackId);
@@ -191,7 +193,7 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
     });
   }
 
-  List<String> aramaGecmisi=[];
+  List<String> aramaGecmisi = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -207,11 +209,12 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
               focusNode: FocusNode(),
               onSubmitted: (value) => _searchTracks(),
               decoration: InputDecoration(
-
                 prefixIcon: Icon(Icons.search),
-                suffixIcon: IconButton(onPressed: (){
-                 _searchController.clear();
-                }, icon: Icon(Icons.clear)),
+                suffixIcon: IconButton(
+                    onPressed: () {
+                      _searchController.clear();
+                    },
+                    icon: Icon(Icons.clear)),
                 fillColor: Colors.white,
                 filled: true,
                 border: OutlineInputBorder(
@@ -219,7 +222,6 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
                 ),
                 hintText: 'Müzik ya da sanatçı ara',
               ),
-
             ),
           ),
         ),
@@ -227,52 +229,63 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
       body: Container(
         decoration: genelTema(),
         child: Column(
-
           children: [
-            Expanded( flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 17.0),
-                    child: Text("Arama geçmişi",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(color: beyaz(),fontSize: 27, fontWeight: FontWeight.bold )),),
-                  Expanded(
-                    flex: 4,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Container(
-                        child: ListView.builder(
-                            itemCount:aramaGecmisi.length,itemBuilder: (context,index){
-                          return ListTile(
-                            onTap: (){
-                              setState(() {
-                                _searchController=TextEditingController(text: aramaGecmisi[index]);
-                              });
-                            },
-                            title: Text("${aramaGecmisi[index]}",
-                              style: TextStyle(fontSize: 20, color: beyaz()),),
-                            trailing: IconButton(
-                              icon:Icon(Icons.delete,
-                                color: beyaz()),
-                              onPressed: (){setState(() {
-                                aramaGecmisi.removeAt(index);
-                              });},  ),
-                          );
-                        }
+            Expanded(
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 17.0),
+                      child: Text("Arama geçmişi",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              color: beyaz(),
+                              fontSize: 27,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Container(
+                          child: ListView.builder(
+                              itemCount: aramaGecmisi.length,
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  onTap: () {
+                                    setState(() {
+                                      _searchController = TextEditingController(
+                                          text: aramaGecmisi[index]);
+                                    });
+                                  },
+                                  title: Text(
+                                    "${aramaGecmisi[index]}",
+                                    style:
+                                        TextStyle(fontSize: 20, color: beyaz()),
+                                  ),
+                                  trailing: IconButton(
+                                    icon: Icon(Icons.delete, color: beyaz()),
+                                    onPressed: () {
+                                      setState(() {
+                                        aramaGecmisi.removeAt(index);
+                                      });
+                                    },
+                                  ),
+                                );
+                              }),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-            Expanded(flex:4,
+            Expanded(
+              flex: 4,
               child: ListView.builder(
                 itemCount: _tracks.length,
                 itemBuilder: (context, index) {
@@ -286,9 +299,10 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
                       child: ListTile(
                         title: Text(
                           track['name'], // Şarkı adı
-                          style: const TextStyle(color: Colors.white,
-                              fontWeight: FontWeight.bold, fontSize: 17),
-
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17),
                         ),
                         subtitle: Text(
                           '${track['artist']} - ${track['duration']}', // Sanatçı adı ve süre
@@ -307,7 +321,6 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
                           onPressed: () {
                             if (track.containsKey('id') &&
                                 track['id'] != null) {
-
                               _favoriDegistir(track);
                             } else {
                               // 'id' yok ya da null ise burada uygun bir işlem yapın
@@ -358,7 +371,7 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
                 color: Colors.white,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/AnaSayfa');
+                Navigator.of(context).pop();
               },
             ),
             IconButton(
