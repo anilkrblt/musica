@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> {
         '/AramaSayfasi':(context) => const Arama_Sayfasi(),
         '/RegisterScreen':(context) =>  const RegisterScreen(),
         //'/AnaSayfa':(context) => const AnaSayfa(username: ),
-        '/ProfilSayfasi':(context) => const ProfilSayfasi(),
+        //'/ProfilSayfasi':(context) => const ProfilSayfasi(),
         '/TumSarkilar': (context) => const TumSarkilarSayfasi(),
         '/CalmaListesi': (context) => const CalmaListesi(),
         '/SonDinlenenler':(context) => const SonDinlenenler(),

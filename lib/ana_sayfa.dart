@@ -25,7 +25,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
 
   @override
   Widget build(BuildContext context) {
-    return PageView(children: [anaSayfa(widget: widget, searchController: _searchController, songs: songs),CalmaListesi(),ProfilSayfasi()]
+    return PageView(children: [anaSayfa(widget: widget, searchController: _searchController, songs: songs),CalmaListesi(),ProfilSayfasi(name: widget.username,)]
     );
   }
 }
@@ -51,10 +51,16 @@ class anaSayfa extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: InkWell(
             onTap: () {
-              Navigator.push(
+          /*    Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const ProfilSayfasi()));
+                      builder: (context) => const ProfilSayfasi(name: widget.username,)));*/
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) =>
+                  (ProfilSayfasi(name: widget.username)
+                  )
+                  )
+              );
             },
             child: const CircleAvatar(
               radius: 50,
@@ -170,9 +176,13 @@ class anaSayfa extends StatelessWidget {
                                     Positioned(
                                       child: Card(
                                         child: GestureDetector(
-                                          onTap:(){Navigator.push(context,
+                                          onTap:(){
+                                            Navigator.push(context,
                                               MaterialPageRoute(builder: (context) =>
-                                              (TurCalmaListesi(turIndex: index ,))));
+                                              (TurCalmaListesi(turIndex: index ,)
+                                              )
+                                              )
+                                          );
                                             } ,
                                           child: Padding(
                                             padding: const EdgeInsets.all(4.0),
