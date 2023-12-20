@@ -284,7 +284,7 @@ class anaSayfa extends StatelessWidget {
                 color: Colors.white,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/CalmaListesi');
+                Navigator.pushNamed(context, '/Favoriler');
               },
             ),
             IconButton(

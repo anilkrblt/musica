@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:musica/ana_sayfa.dart';
 import 'package:musica/database/song_crud.dart';
 import 'package:musica/database/database_helper.dart';
 import 'package:musica/play_music_sayfasi.dart';
+
+import '../profil_sayfasi.dart';
 
 class Favoriler extends StatefulWidget {
   const Favoriler({super.key});
@@ -49,49 +52,134 @@ class _FavorilerState extends State<Favoriler> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Favorilerim'),
+        leading: IconButton(
+          icon: Icon(
+            Icons.keyboard_arrow_left,
+            color: beyaz(),
+            size: 38,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title:  Text('Favorilerim', style: TextStyle(color: beyaz()),),
+        backgroundColor: renk2(),
       ),
       body: _favoriSarkilar.isNotEmpty
-          ? ListView.builder(
-              itemCount: _favoriSarkilar.length,
-              itemBuilder: (context, index) {
-                final sarki = _favoriSarkilar[index];
-                return Dismissible(
-                  
-                  key: ValueKey(index), // Her öğe için benzersiz bir anahtar
-                  onDismissed: (direction) {
-                    _favoriKaldir(sarki);
-                  },
-                  background:
-                      Container(color: Colors.red), // Kaydırma arka planı
-                  child: ListTile(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PlayMusic(
-                                  sarkiAd: sarki['title'],
-                                  sanatciAd: sarki['artist'],
-                                  sure: sarki['duration'].toString(),
-                                  sarkUrl: sarki['sarkiUrl'].toString(),
-                                  image: sarki['image'],
-                                )),
-                      );
+          ? Container(
+        decoration: genelTema(),
+            child: ListView.builder(
+                itemCount: _favoriSarkilar.length,
+                itemBuilder: (context, index) {
+                  final sarki = _favoriSarkilar[index];
+                  return Dismissible(
+
+                    key: ValueKey(index), // Her öğe için benzersiz bir anahtar
+                    onDismissed: (direction) {
+                      _favoriKaldir(sarki);
                     },
-                    title: Text(sarki['title'] ?? 'Başlıksız'),
-                    subtitle: Text(sarki['artist'] ?? 'Sanatçı Bilinmiyor'),
-                    leading: sarki['image'] != null
-                        ? Image.network(sarki['image'])
-                        : const Icon(Icons.music_note),
-                    trailing:
-                        Text(_formatDuration(parseDuration(sarki['duration']))),
-                  ),
-                );
-              },
-            )
+                    background:
+                        Expanded(
+                          child: Container(decoration: genelTema(), child: Card(
+
+                            child: Padding(
+                              padding:  EdgeInsets.all(15.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Icon(Icons.delete_forever),
+                                  Icon(Icons.delete_forever),
+                                ],
+                              ),
+                            ),
+                          ),),
+                        ), // Kaydırma arka planı
+                    child: Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Card(
+                          shadowColor: Colors.black,
+                          elevation: 10,
+                          color: renk2(),
+                          child: ListTile(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PlayMusic(
+                                          sarkiAd: sarki['title'],
+                                          sanatciAd: sarki['artist'],
+                                          sure: sarki['duration'].toString(),
+                                          sarkUrl: sarki['sarkiUrl'].toString(),
+                                          image: sarki['image'],
+                                        )),
+                              );
+                            },
+                            title: Text(sarki['title'] ?? 'Başlıksız', style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17,
+                                color: beyaz()),),
+                            subtitle: Text(sarki['artist'] ?? 'Sanatçı Bilinmiyor', style: TextStyle(color: beyaz()),),
+                            leading: sarki['image'] != null
+                                ? Image.network(sarki['image'])
+                                : const Icon(Icons.music_note),
+                            trailing:
+                                Text(_formatDuration(parseDuration(sarki['duration'])),
+                                  style: TextStyle(color: beyaz(),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14),
+                                ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+          )
           : const Center(
               child: Text('Favori şarkılarınız bulunmamaktadır.'),
             ),
+      bottomNavigationBar: BottomAppBar(
+        color: Color.fromARGB(255, 117, 23, 239),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            IconButton(
+              padding: const EdgeInsets.only(right: 50),
+              icon: const Icon(
+                Icons.home_outlined,
+                size: 30,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, '/AnaSayfa');
+              },
+            ),
+            IconButton(
+              padding: const EdgeInsets.only(right: 50),
+              icon: const Icon(
+                Icons.favorite,
+                size: 30,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, '/CalmaListesi');
+              },
+            ),
+            IconButton(
+              icon: const Icon(
+                Icons.person_outlined,
+                size: 30,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, '/ProfilSayfasi');
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 
