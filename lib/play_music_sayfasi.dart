@@ -1,15 +1,10 @@
-import 'dart:ffi';
-
 import 'package:audioplayers/audioplayers.dart';
 import 'package:marquee/marquee.dart';
-import 'package:musica/modeller/login_screen.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:musica/ana_sayfa.dart';
-import 'package:path/path.dart';
 
-//ilk çaldıgında şarkının sliderının hareket etmemesi ve toplam süresinin gözükmemesi hatası giderilecek
-//karman çorman şu koda bir tutam düzen
+
 // ignore: must_be_immutable
 class PlayMusic extends StatefulWidget {
   final String sarkiAd;
@@ -52,7 +47,7 @@ class _PlayMusicState extends State<PlayMusic> {
     sarkiSuresi = widget.sure;
     sarkiUrl = widget.sarkUrl;
     sarkiImage = widget.image;
-    _maxSliderValue = _maxValueBul(sarkiSuresi) ?? 0.0;
+    _maxSliderValue = _maxValueBul(sarkiSuresi);
     arkaPlanRengi();
   }
 
@@ -167,7 +162,7 @@ class _PlayMusicState extends State<PlayMusic> {
                               fontWeight: FontWeight.bold,
                               color: Colors.white))
                       : Marquee(
-                          text: sarkiAdi,
+                          text: "$sarkiAdi ",
                           style: const TextStyle(
                               fontSize: 35,
                               fontWeight: FontWeight.bold,

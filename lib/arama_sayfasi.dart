@@ -9,9 +9,7 @@ import 'package:musica/database/song_crud.dart';
 import 'package:musica/play_music_sayfasi.dart';
 import 'package:musica/profil_sayfasi.dart';
 import 'package:sqflite/sqflite.dart';
-//to do karman çorman koda bir parça düzen çikolatalı düzen
 
-// SpotifyService classınızı buraya ekleyin veya ayrı bir dosyada tutun ve burada import edin.
 class SpotifyService {
   final String _clientId = 'd9b578117ffc4b9fbf1f5553a7a72051';
   final String _clientSecret = '50032f2b81ee4d46b8cbfc31d9fc5816';
