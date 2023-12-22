@@ -80,23 +80,23 @@ class _FavorilerState extends State<Favoriler> {
                     },
                     background:
                         Expanded(
-                          child: Container(decoration: genelTema(), child: Card(
-
+                          child: Container(
+                            padding: EdgeInsets.all(11),
+                            //decoration: genelTema(),
                             child: Padding(
                               padding:  EdgeInsets.all(15.0),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Icon(Icons.delete_forever),
-                                  Icon(Icons.delete_forever),
+                                  Icon(Icons.delete, color: beyaz(), size: 30,),
+                                  Icon(Icons.delete, color: beyaz(),size: 30,),
                                 ],
                               ),
-                            ),
-                          ),),
+                            ),),
                         ), // Kaydırma arka planı
                     child: Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.all(10.0),
+                        padding: const EdgeInsets.all(10),
                         child: Card(
                           shadowColor: Colors.black,
                           elevation: 10,
