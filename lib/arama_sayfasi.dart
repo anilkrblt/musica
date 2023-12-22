@@ -196,29 +196,42 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.keyboard_arrow_left,
+            color: beyaz(),
+            size: 38,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         backgroundColor: renk2(),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              autofocus: true,
-              controller: _searchController, // Bu satırı ekleyin
-              focusNode: FocusNode(),
-              onSubmitted: (value) => _searchTracks(),
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search),
-                suffixIcon: IconButton(
-                    onPressed: () {
-                      _searchController.clear();
-                    },
-                    icon: Icon(Icons.clear)),
-                fillColor: Colors.white,
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
+            child: Container(
+            // padding: EdgeInsets.only(top: 30),
+              child: TextField(
+                autofocus: true,
+                controller: _searchController, // Bu satırı ekleyin
+                focusNode: FocusNode(),
+                onSubmitted: (value) => _searchTracks(),
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.search),
+                  suffixIcon: IconButton(
+                      onPressed: () {
+                        _searchController.clear();
+                      },
+                      icon: Icon(Icons.clear)),
+                  fillColor: Colors.white,
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  hintText: 'Müzik ya da sanatçı ara',
                 ),
-                hintText: 'Müzik ya da sanatçı ara',
               ),
             ),
           ),
