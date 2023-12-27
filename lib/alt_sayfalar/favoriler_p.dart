@@ -62,38 +62,48 @@ class _FavorilerState extends State<Favoriler> {
             Navigator.pop(context);
           },
         ),
-        title:  Text('Favorilerim', style: TextStyle(color: beyaz()),),
+        title: Text(
+          'Favorilerim',
+          style: TextStyle(color: beyaz()),
+        ),
         backgroundColor: renk2(),
       ),
       body: _favoriSarkilar.isNotEmpty
           ? Container(
-        decoration: genelTema(),
-            child: ListView.builder(
+              decoration: genelTema(),
+              child: ListView.builder(
                 itemCount: _favoriSarkilar.length,
                 itemBuilder: (context, index) {
                   final sarki = _favoriSarkilar[index];
                   return Dismissible(
-
                     key: ValueKey(index), // Her öğe için benzersiz bir anahtar
                     onDismissed: (direction) {
                       _favoriKaldir(sarki);
                     },
-                    background:
-                        Expanded(
-                          child: Container(
-                            padding: EdgeInsets.all(11),
-                            //decoration: genelTema(),
-                            child: Padding(
-                              padding:  EdgeInsets.all(15.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Icon(Icons.delete, color: beyaz(), size: 30,),
-                                  Icon(Icons.delete, color: beyaz(),size: 30,),
-                                ],
+                    background: Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(11),
+                        //decoration: genelTema(),
+                        child: Padding(
+                          padding: EdgeInsets.all(15.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Icon(
+                                Icons.delete,
+                                color: beyaz(),
+                                size: 30,
                               ),
-                            ),),
-                        ), // Kaydırma arka planı
+                              Icon(
+                                Icons.delete,
+                                color: beyaz(),
+                                size: 30,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ), // Kaydırma arka planı
                     child: Expanded(
                       child: Padding(
                         padding: const EdgeInsets.all(10),
@@ -115,20 +125,27 @@ class _FavorilerState extends State<Favoriler> {
                                         )),
                               );
                             },
-                            title: Text(sarki['title'] ?? 'Başlıksız', style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 17,
-                                color: beyaz()),),
-                            subtitle: Text(sarki['artist'] ?? 'Sanatçı Bilinmiyor', style: TextStyle(color: beyaz()),),
+                            title: Text(
+                              sarki['title'] ?? 'Başlıksız',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17,
+                                  color: beyaz()),
+                            ),
+                            subtitle: Text(
+                              sarki['artist'] ?? 'Sanatçı Bilinmiyor',
+                              style: TextStyle(color: beyaz()),
+                            ),
                             leading: sarki['image'] != null
                                 ? Image.network(sarki['image'])
                                 : const Icon(Icons.music_note),
-                            trailing:
-                                Text(_formatDuration(parseDuration(sarki['duration'])),
-                                  style: TextStyle(color: beyaz(),
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14),
-                                ),
+                            trailing: Text(
+                              _formatDuration(parseDuration(sarki['duration'])),
+                              style: TextStyle(
+                                  color: beyaz(),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14),
+                            ),
                           ),
                         ),
                       ),
@@ -136,9 +153,15 @@ class _FavorilerState extends State<Favoriler> {
                   );
                 },
               ),
-          )
-          : const Center(
-              child: Text('Favori şarkılarınız bulunmamaktadır.'),
+            )
+          : Container(
+              decoration: genelTema(),
+              child: const Center(
+                child: Text(
+                  'Favori şarkılarınız bulunmamaktadır.',
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                ),
+              ),
             ),
       bottomNavigationBar: BottomAppBar(
         color: Color.fromARGB(255, 117, 23, 239),

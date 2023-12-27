@@ -25,8 +25,14 @@ class _AnaSayfaState extends State<AnaSayfa> {
 
   @override
   Widget build(BuildContext context) {
-    return PageView(children: [anaSayfa(widget: widget, searchController: _searchController, songs: songs),CalmaListesi(),ProfilSayfasi(name: widget.username,)]
-    );
+    return PageView(children: [
+      anaSayfa(
+          widget: widget, searchController: _searchController, songs: songs),
+      CalmaListesi(),
+      ProfilSayfasi(
+        name: widget.username,
+      )
+    ]);
   }
 }
 
@@ -51,16 +57,15 @@ class anaSayfa extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: InkWell(
             onTap: () {
-          /*    Navigator.push(
+              /*    Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => const ProfilSayfasi(name: widget.username,)));*/
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) =>
-                  (ProfilSayfasi(name: widget.username)
-                  )
-                  )
-              );
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          (ProfilSayfasi(name: widget.username))));
             },
             child: const CircleAvatar(
               radius: 50,
@@ -82,15 +87,17 @@ class anaSayfa extends StatelessWidget {
       body: Container(
         padding: EdgeInsets.all(20),
         decoration: genelTema(),
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Expanded(
               flex: 1,
               child: Container(
-                  margin: EdgeInsets.only(right: 100,  ),
+                  margin: EdgeInsets.only(
+                    right: 100,
+                  ),
                   //padding: EdgeInsets.only(top: 3),
                   child: ZamanMetni(
                     name: widget.username,
@@ -99,8 +106,7 @@ class anaSayfa extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Container(
-
-                  margin: EdgeInsets.only(bottom: 0, top:10),
+                  margin: EdgeInsets.only(bottom: 0, top: 10),
                   child: GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, '/AramaSayfasi');
@@ -126,7 +132,6 @@ class anaSayfa extends StatelessWidget {
                     ),
                   )),
             ),
-
             Expanded(
               flex: 6,
               child: Container(
@@ -134,9 +139,17 @@ class anaSayfa extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [SizedBox(
-                      height: 34,
-                      child: Text("  Trend müzikler", style: TextStyle(fontSize: 20, color:beyaz(), fontWeight: FontWeight.bold,), )),
+                  children: [
+                    SizedBox(
+                        height: 34,
+                        child: Text(
+                          "  Trend müzikler",
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: beyaz(),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )),
                     SizedBox(
                       height: 150,
                       child: Stack(
@@ -151,12 +164,12 @@ class anaSayfa extends StatelessWidget {
                                   alignment: Alignment.bottomCenter,
                                   children: [
                                     ElevatedButton(
-
                                       style: ElevatedButton.styleFrom(
-                                        padding: EdgeInsets.zero, // Padding'i kaldır
+                                        padding:
+                                            EdgeInsets.zero, // Padding'i kaldır
                                         shape: const RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.all(Radius.circular(20)),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20)),
                                         ),
                                         backgroundColor: Colors
                                             .transparent, // Düğme arka planını saydam yap
@@ -176,18 +189,20 @@ class anaSayfa extends StatelessWidget {
                                     Positioned(
                                       child: Card(
                                         child: GestureDetector(
-                                          onTap:(){
-                                            Navigator.push(context,
-                                              MaterialPageRoute(builder: (context) =>
-                                              (TurCalmaListesi(turIndex: index ,)
-                                              )
-                                              )
-                                          );
-                                            } ,
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        (TurCalmaListesi(
+                                                          turIndex: index,
+                                                        ))));
+                                          },
                                           child: Padding(
                                             padding: const EdgeInsets.all(4.0),
                                             child: Padding(
-                                              padding: const EdgeInsets.only(left: 8.0),
+                                              padding: const EdgeInsets.only(
+                                                  left: 8.0),
                                               child: Row(
                                                 children: [
                                                   Expanded(
@@ -199,7 +214,8 @@ class anaSayfa extends StatelessWidget {
                                                             color: renk2(),
                                                             fontSize: 25,
                                                             fontWeight:
-                                                                FontWeight.w900),
+                                                                FontWeight
+                                                                    .w900),
                                                       ),
                                                     ),
                                                   ),
@@ -212,7 +228,8 @@ class anaSayfa extends StatelessWidget {
                                                       )),
                                                 ],
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment.spaceAround,
+                                                    MainAxisAlignment
+                                                        .spaceAround,
                                               ),
                                             ),
                                           ),
@@ -245,18 +262,20 @@ class anaSayfa extends StatelessWidget {
                   children: [
                     Container(
                         margin: EdgeInsets.only(bottom: 10),
-                        child: Text("  Çalma listelerim", style: TextStyle(fontSize: 20, color: beyaz(), fontWeight: FontWeight.w700),  )),
+                        child: Text(
+                          "  Çalma listelerim",
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: beyaz(),
+                              fontWeight: FontWeight.w700),
+                        )),
                     Playlists("playlist 1"),
                     Playlists("playlist 2"),
                     Playlists("playlist 3"),
-
-
-
                   ],
                 ),
               ),
             ),
-
           ],
         ),
       ),
@@ -294,7 +313,11 @@ class anaSayfa extends StatelessWidget {
                 color: Colors.white,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/ProfilSayfasi');
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            (ProfilSayfasi(name: widget.username))));
               },
             ),
           ],
@@ -305,19 +328,31 @@ class anaSayfa extends StatelessWidget {
 
   Card Playlists(title) {
     return Card(
-      margin: EdgeInsets.only(bottom: 20, ),
+      margin: EdgeInsets.only(
+        bottom: 20,
+      ),
       shadowColor: Colors.black,
       elevation: 10,
       color: renk2(),
-                  child: ListTile(
-                    title: Text(title, style: TextStyle(color: beyaz(), fontWeight: FontWeight.bold, fontSize: 17),),
-                    subtitle: Text("3 şarkı", style: TextStyle(color: beyaz(), ),),
-                    leading: Image.network("https://picsum.photos/200/300"),
-                    trailing: IconButton(icon:Icon(Icons.play_circle, color: beyaz()),
-
-                      onPressed: (){},  ),
-                  ),
-                );
+      child: ListTile(
+        title: Text(
+          title,
+          style: TextStyle(
+              color: beyaz(), fontWeight: FontWeight.bold, fontSize: 17),
+        ),
+        subtitle: Text(
+          "3 şarkı",
+          style: TextStyle(
+            color: beyaz(),
+          ),
+        ),
+        leading: Image.network("https://picsum.photos/200/300"),
+        trailing: IconButton(
+          icon: Icon(Icons.play_circle, color: beyaz()),
+          onPressed: () {},
+        ),
+      ),
+    );
   }
 }
 
