@@ -52,7 +52,7 @@ class _FavorilerState extends State<Favoriler> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
+       /* leading: IconButton(
           icon: Icon(
             Icons.keyboard_arrow_left,
             color: beyaz(),
@@ -61,7 +61,7 @@ class _FavorilerState extends State<Favoriler> {
           onPressed: () {
             Navigator.pop(context);
           },
-        ),
+        ),*/
         title: Text(
           'Favorilerim',
           style: TextStyle(color: beyaz()),
@@ -163,46 +163,7 @@ class _FavorilerState extends State<Favoriler> {
                 ),
               ),
             ),
-      bottomNavigationBar: BottomAppBar(
-        color: Color.fromARGB(255, 117, 23, 239),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            IconButton(
-              padding: const EdgeInsets.only(right: 50),
-              icon: const Icon(
-                Icons.home_outlined,
-                size: 30,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.pushNamed(context, '/AnaSayfa');
-              },
-            ),
-            IconButton(
-              padding: const EdgeInsets.only(right: 50),
-              icon: const Icon(
-                Icons.favorite,
-                size: 30,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.pushNamed(context, '/CalmaListesi');
-              },
-            ),
-            IconButton(
-              icon: const Icon(
-                Icons.person_outlined,
-                size: 30,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.pushNamed(context, '/ProfilSayfasi');
-              },
-            ),
-          ],
-        ),
-      ),
+
     );
   }
 

@@ -10,6 +10,9 @@ import 'package:musica/play_music_sayfasi.dart';
 import 'package:musica/profil_sayfasi.dart';
 import 'package:sqflite/sqflite.dart';
 
+
+
+
 class SpotifyService {
   final String _clientId = 'd9b578117ffc4b9fbf1f5553a7a72051';
   final String _clientSecret = '50032f2b81ee4d46b8cbfc31d9fc5816';
@@ -65,6 +68,7 @@ class Arama_Sayfasi extends StatefulWidget {
 class _Arama_SayfasiState extends State<Arama_Sayfasi> {
   TextEditingController _searchController = TextEditingController();
   final AudioPlayer audioPlayer = AudioPlayer();
+
   List<Map<String, dynamic>> _tracks = [];
 
   Future<void> _searchTracks() async {
@@ -190,6 +194,7 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
       }
     });
   }
+
 
   List<String> aramaGecmisi = [];
   @override
@@ -393,7 +398,9 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
                 color: Colors.white,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/Favoriler');
+                Navigator.pushNamed(context, '/Favoriler',);
+
+                
               },
             ),
             IconButton(
@@ -404,6 +411,7 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
               ),
               onPressed: () {
                 Navigator.pushNamed(context, '/ProfilSayfasi');
+
               },
             ),
           ],
