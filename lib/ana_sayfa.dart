@@ -41,13 +41,14 @@ class _AnaSayfaState extends State<AnaSayfa> {
     return Scaffold(
       body: PageView(
         controller: _pageController,
-        children: [anaSayfa(widget: widget, searchController: _searchController, songs: songs),Favoriler(),ProfilSayfasi(name: widget.username,),
+        children: [anaSayfa(widget: widget, searchController: _searchController, songs: songs),Favoriler(control: 0,),ProfilSayfasi(name: widget.username,),
         ],
         onPageChanged: onPageChanged,
       ),
 
       bottomNavigationBar: BottomAppBar(
         color: Color.fromARGB(255, 117, 23, 239),
+
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [

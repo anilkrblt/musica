@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:musica/alt_sayfalar/favoriler_p.dart';
 import 'package:musica/ana_sayfa.dart';
 import 'package:musica/database/database_helper.dart';
 import 'package:musica/database/song_crud.dart';
@@ -398,9 +399,12 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
                 color: Colors.white,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/Favoriler',);
-
-                
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Favoriler(control: 1),
+                  ),
+                );
               },
             ),
             IconButton(

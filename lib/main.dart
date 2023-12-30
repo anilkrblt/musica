@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
         '/TumSarkilar': (context) => const TumSarkilarSayfasi(),
         '/CalmaListesi': (context) => const CalmaListesi(),
         '/SonDinlenenler':(context) => const SonDinlenenler(),
-        '/Favoriler':(context) => const Favoriler(),
+        '/Favoriler':(context) =>  Favoriler(control: 0,),
         '/Ayarlar':(context) => const Ayarlar()
       },
     );
