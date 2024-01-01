@@ -4,7 +4,6 @@ import 'package:palette_generator/palette_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:musica/ana_sayfa.dart';
 
-
 // ignore: must_be_immutable
 class PlayMusic extends StatefulWidget {
   final String sarkiAd;
@@ -185,7 +184,7 @@ class _PlayMusicState extends State<PlayMusic> {
                       slider(),
                       Text(
                         //buraya alternetif çözüm bul
-                        '${_formatDuration(_sliderValue)}                                               ${_formatDuration(_maxSliderValue)}',
+                        '${_formatDuration(_sliderValue)}                                           ${_formatDuration(_maxSliderValue)}',
                         style: const TextStyle(
                             fontSize: 20, color: Colors.white60),
                       ),

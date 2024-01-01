@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:musica/alt_sayfalar/ayarlar_p.dart';
 import 'package:musica/alt_sayfalar/calma_listesi_p.dart';
 import 'package:musica/alt_sayfalar/favoriler_p.dart';
+import 'package:musica/alt_sayfalar/font.dart';
 import 'package:musica/alt_sayfalar/son_dinlenenler_p.dart';
 import 'package:musica/alt_sayfalar/tum_sarkilar_p.dart';
 import 'package:musica/ana_sayfa.dart';
@@ -23,27 +24,29 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        fontFamily: 'MyCustomFont',
+      ),
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
         '/': (context) => const Giris(),
-        '/LoginScreen':(context) => const LoginScreen(),
-        '/AramaSayfasi':(context) => const Arama_Sayfasi(),
-        '/RegisterScreen':(context) =>  const RegisterScreen(),
+        '/LoginScreen': (context) => const LoginScreen(),
+        '/AramaSayfasi': (context) => const Arama_Sayfasi(),
+        '/RegisterScreen': (context) => const RegisterScreen(),
         //'/AnaSayfa':(context) => const AnaSayfa(username: ),
         //'/ProfilSayfasi':(context) => const ProfilSayfasi(),
         '/TumSarkilar': (context) => const TumSarkilarSayfasi(),
         '/CalmaListesi': (context) => const CalmaListesi(),
-        '/SonDinlenenler':(context) => const SonDinlenenler(),
-        '/Favoriler':(context) =>  Favoriler(control: 0,),
-        '/Ayarlar':(context) => const Ayarlar()
+        '/SonDinlenenler': (context) => const SonDinlenenler(),
+        '/Favoriler': (context) => Favoriler(
+              control: 0,
+            ),
+        '/Ayarlar': (context) => const Ayarlar()
       },
     );
   }
 }
-
-

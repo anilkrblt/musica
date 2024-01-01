@@ -11,9 +11,6 @@ import 'package:musica/play_music_sayfasi.dart';
 import 'package:musica/profil_sayfasi.dart';
 import 'package:sqflite/sqflite.dart';
 
-
-
-
 class SpotifyService {
   final String _clientId = 'd9b578117ffc4b9fbf1f5553a7a72051';
   final String _clientSecret = '50032f2b81ee4d46b8cbfc31d9fc5816';
@@ -196,7 +193,6 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
     });
   }
 
-
   List<String> aramaGecmisi = [];
   @override
   Widget build(BuildContext context) {
@@ -218,7 +214,7 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
-            // padding: EdgeInsets.only(top: 30),
+              // padding: EdgeInsets.only(top: 30),
               child: TextField(
                 autofocus: true,
                 controller: _searchController, // Bu satırı ekleyin
@@ -264,8 +260,8 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
                               fontSize: 27,
                               fontWeight: FontWeight.bold)),
                     ),
-                    Expanded(
-                      flex: 4,
+                    Flexible(
+                      fit: FlexFit.loose,
                       child: Padding(
                         padding: const EdgeInsets.only(left: 10),
                         child: Container(
@@ -302,7 +298,7 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
               ),
             ),
             Expanded(
-              flex: 4,
+              flex: 5,
               child: ListView.builder(
                 itemCount: _tracks.length,
                 itemBuilder: (context, index) {
@@ -415,7 +411,6 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
               ),
               onPressed: () {
                 Navigator.pushNamed(context, '/ProfilSayfasi');
-
               },
             ),
           ],

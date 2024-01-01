@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musica/alt_sayfalar/font.dart';
 import 'package:musica/ana_sayfa.dart';
 import 'package:musica/database/database_helper.dart';
 import 'package:musica/database/user_crud.dart';
@@ -52,18 +53,11 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        //title: Text('Giriş Yap'),
-        backgroundColor: renk3(),
-        leading: IconButton(
-          icon: Icon(
-            Icons.keyboard_arrow_left,
-            color: beyaz(),
-            size: 38,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+        title: Text(
+          'Giriş Yap',
+          style: Font.normal,
         ),
+        backgroundColor: renk2(),
       ),
       body: Container(
         decoration: genelTema(),
@@ -151,15 +145,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     ElevatedButton(
                       onPressed: _login,
-                      child: Text(
-                        'Giriş Yap',
-                          style: TextStyle(color: renk3(),),)
+                      child: const Text('Giriş Yap'),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 10),
+                      padding: const EdgeInsets.only(top: 10),
                       child: ElevatedButton(
                         onPressed: () {},
-                        child: Text('Şifremi Unuttum', style: TextStyle(color: renk3(),),),
+                        child: const Text('Şifremi Unuttum'),
                       ),
                     ),
                     Row(
