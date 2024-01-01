@@ -53,11 +53,18 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Giriş Yap',
-          style: Font.normal,
+
+        backgroundColor: renk3(),
+        leading: IconButton(
+          icon: Icon(
+            Icons.keyboard_arrow_left,
+            color: beyaz(),
+            size: 38,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-        backgroundColor: renk2(),
       ),
       body: Container(
         decoration: genelTema(),
@@ -145,13 +152,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     ElevatedButton(
                       onPressed: _login,
-                      child: const Text('Giriş Yap'),
+                      child:  Text('Giriş Yap',
+                        style: TextStyle(color: renk3()),),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 10),
                       child: ElevatedButton(
                         onPressed: () {},
-                        child: const Text('Şifremi Unuttum'),
+                        child:Text('Şifremi Unuttum' ,
+                            style: TextStyle(color: renk3())),
                       ),
                     ),
                     Row(
