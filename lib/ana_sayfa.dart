@@ -456,5 +456,5 @@ class Tema {
     return _singleton;
   }
   Tema._internal();
-  bool isDarkModeEnabled = false;
+  bool isDarkModeEnabled = true;
 }
