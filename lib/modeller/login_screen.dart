@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musica/alt_sayfalar/font.dart';
 import 'package:musica/ana_sayfa.dart';
 import 'package:musica/database/database_helper.dart';
 import 'package:musica/database/user_crud.dart';
@@ -52,7 +53,10 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Giriş Yap'),
+        title: Text(
+          'Giriş Yap',
+          style: Font.normal,
+        ),
         backgroundColor: renk2(),
       ),
       body: Container(
