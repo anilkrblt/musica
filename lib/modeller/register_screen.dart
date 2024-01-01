@@ -64,6 +64,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(backgroundColor: renk2()),
       body: Container(decoration: genelTema(),
         child: Padding(
@@ -80,13 +81,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
+                      // ignore: sort_child_properties_last
                       child: Text("Kaydol", style: TextStyle(color: beyaz(), fontWeight:FontWeight.w900, fontSize: 33 ),
                       ),
                       margin: EdgeInsets.only(left: 20, bottom: 50 ),
                     ),
                     TextField(
                       controller: _usernameController,
-                      decoration: const InputDecoration(labelText: 'Kullanıcı adı', filled: true,
+                      decoration: const InputDecoration(hintText: 'Kullanıcı adı', filled: true,
                           fillColor: Colors.white, border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                         ), ),
@@ -98,7 +100,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: TextField(
 
                         controller: _passwordController,
-                        decoration: const InputDecoration(labelText: 'Şifre', filled: true,  border: OutlineInputBorder(
+                        decoration: const InputDecoration(hintText: 'Şifre', filled: true,  border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                         ),
                           fillColor: Colors.white, ),

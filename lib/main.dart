@@ -23,7 +23,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,19 +30,18 @@ class _MyAppState extends State<MyApp> {
       initialRoute: '/',
       routes: {
         '/': (context) => const Giris(),
-        '/LoginScreen':(context) => const LoginScreen(),
-        '/AramaSayfasi':(context) => const Arama_Sayfasi(),
-        '/RegisterScreen':(context) =>  const RegisterScreen(),
+        '/LoginScreen': (context) => const LoginScreen(),
+        '/AramaSayfasi': (context) => const Arama_Sayfasi(),
+        '/RegisterScreen': (context) => const RegisterScreen(),
         //'/AnaSayfa':(context) => const AnaSayfa(username: ),
         //'/ProfilSayfasi':(context) => const ProfilSayfasi(),
+
         '/TumSarkilar': (context) => const TumSarkilarSayfasi(),
-        '/CalmaListesi': (context) => const CalmaListesi(),
-        '/SonDinlenenler':(context) => const SonDinlenenler(),
-        '/Favoriler':(context) => const Favoriler(),
-        '/Ayarlar':(context) => const Ayarlar()
+
+        '/SonDinlenenler': (context) => const SonDinlenenler(),
+        '/Favoriler': (context) => const Favoriler(),
+        '/Ayarlar': (context) => const Ayarlar()
       },
     );
   }
 }
-
-

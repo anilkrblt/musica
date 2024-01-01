@@ -14,7 +14,7 @@ class DatabaseHelper {
   DatabaseHelper._init() {
     userCRUD = UserCRUD(this);
     songCRUD = SongCRUD(this);
-    //deleteDb();
+    deleteDb();
   }
 
   Future<void> deleteDb() async {
@@ -92,9 +92,10 @@ class DatabaseHelper {
     await db.execute('''
     CREATE TABLE playlists (
       id $idType,
-      user_id $integerType,
+      user_name $textType,
       name $textType,
-      FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+      image $textType,
+      FOREIGN KEY (user_name) REFERENCES users (username) ON DELETE CASCADE
     );
   ''');
 
@@ -102,9 +103,10 @@ class DatabaseHelper {
     await db.execute('''
     CREATE TABLE playlist_songs (
       playlist_id $integerType,
-      song_id $integerType,
+      song_id $textType,
+      
       FOREIGN KEY (playlist_id) REFERENCES playlists (id) ON DELETE CASCADE,
-      FOREIGN KEY (song_id) REFERENCES songs (id) ON DELETE CASCADE
+      FOREIGN KEY (song_id) REFERENCES songs (spotify_id) ON DELETE CASCADE
     );
   ''');
 

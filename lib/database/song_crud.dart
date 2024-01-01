@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:musica/database/database_helper.dart';
 
 class SongCRUD {
@@ -79,5 +81,59 @@ class SongCRUD {
         whereArgs: [spotifyId],
       );
     }
+  }
+
+  // Playlistleri şarkıları sorgulama
+  Future<List<Map<String, dynamic>>> getPlaylists() async {
+    final db = await _dbHelper.database;
+    return await db.query('playlists');
+  }
+
+// Playlist oluşturmak için bir metod ekleyin
+  Future<int> createPlaylist(String userName, String name, String image) async {
+    final db = await _dbHelper.database;
+
+    int playlistId = await db.insert(
+        'playlists', {'user_name': userName, 'name': name, 'image': image});
+    return playlistId;
+  }
+
+  Future<List<String>> findSongIdsByPlaylist(int playlistId) async {
+    final db = await _dbHelper.database;
+    final result = await db.rawQuery('''
+    SELECT song_id FROM playlist_songs
+    WHERE playlist_id = ?
+  ''', [playlistId]);
+    print("$result xxxxxxx");
+    return result.map((row) => row['song_id'] as String).toList();
+  }
+
+// Çalma listesine şarkı eklemek için bir metod ekleyin
+  Future<void> addSongToPlaylist(int playlistId, String songId) async {
+    final db = await _dbHelper.database;
+    final result = await db.insert(
+        'playlist_songs', {'playlist_id': playlistId, 'song_id': songId});
+    print("$result addsong to playlistin orası");
+  }
+
+// Çalma listesinden şarkı kaldır
+  Future<void> removeSongToPlaylist(int playlistId, int songId) async {
+    final db = await _dbHelper.database;
+    await db.delete(
+      'songs',
+      where: 'id = ?',
+      whereArgs: [songId],
+    );
+  }
+
+  Future<void> deletePlaylist(int playlistId) async {
+    final db = await _dbHelper.database;
+
+    // Çalma listesini sil
+    await db.delete('playlists', where: 'id = ?', whereArgs: [playlistId]);
+
+    // Çalma listesine ait şarkıları sil (CASCADE özelliği sayesinde)
+    await db.delete('playlist_songs',
+        where: 'playlist_id = ?', whereArgs: [playlistId]);
   }
 }

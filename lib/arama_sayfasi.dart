@@ -8,7 +8,6 @@ import 'package:musica/database/database_helper.dart';
 import 'package:musica/database/song_crud.dart';
 import 'package:musica/play_music_sayfasi.dart';
 import 'package:musica/profil_sayfasi.dart';
-import 'package:sqflite/sqflite.dart';
 
 class SpotifyService {
   final String _clientId = 'd9b578117ffc4b9fbf1f5553a7a72051';
@@ -66,6 +65,20 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
   TextEditingController _searchController = TextEditingController();
   final AudioPlayer audioPlayer = AudioPlayer();
   List<Map<String, dynamic>> _tracks = [];
+  List<Map<String, dynamic>> _calmaListeleri = [];
+
+  Future<void> _calmaListeleriniGetir() async {
+    final dbHelper = DatabaseHelper.instance;
+    final songCRUD = SongCRUD(dbHelper);
+    try {
+      final playlist = await songCRUD.getPlaylists();
+      setState(() {
+        _calmaListeleri = List<Map<String, dynamic>>.from(playlist);
+      });
+    } catch (e) {
+      print('Veritabanı hatası: $e');
+    }
+  }
 
   Future<void> _searchTracks() async {
     aramaGecmisi.insert(0, _searchController.text);
@@ -123,47 +136,71 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
     return '$minutes:$seconds';
   }
 
-  void _playPreview(String previewUrl) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Müzik Önizlemesi'),
-        content: const Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text('Şimdi oynatılıyor...'),
-            // Burada AudioPlayer widget'ını yerleştirin
-          ],
+void _playPreview(String previewUrl, track) {
+  print("------------$_calmaListeleri");
+
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      actions: <Widget>[
+        TextButton(
+          child: const Text('Çalma Listesine Ekle'),
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) => StatefulBuilder(
+                builder: (context, setState) => AlertDialog(
+                  title: const Text('Çalma Listesi Seçin'),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      for (int index = 0; index < _calmaListeleri.length; index++)
+                        ListTile(
+                          leading: const Icon(Icons.music_note),
+                          title: Text(_calmaListeleri[index]['name']),
+                          trailing: IconButton(
+                            icon: Icon(Icons.add),
+                            onPressed: () {
+                              setState(() {
+                                _calmaListesineEkle(track['id'], index);
+                              });
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ),
+                    ],
+                  ),
+                  actions: [
+                    TextButton(
+                      child: const Text('Kapat'),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
         ),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('Kapat'),
-            onPressed: () {
-              audioPlayer.stop();
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      ),
-    );
-    if (previewUrl.isNotEmpty) {
-      audioPlayer.play(UrlSource(previewUrl));
-    }
-  }
+      ],
+    ),
+  );
+}
+
+
 
   @override
   void initState() {
     super.initState();
     _loadFavoriSarkilar();
+    _calmaListeleriniGetir();
   }
 
-  late Set<String> _favoriSarkilar =
-      {}; // Favori şarkıların Spotify_ID'lerini saklar
+  late Set<String> _favoriSarkilar = {};
 
   Future<void> _loadFavoriSarkilar() async {
     final songCRUD = SongCRUD(DatabaseHelper.instance);
     final favoriSarkilar = await songCRUD.getFavoriteSongs();
-    print("Favori Şarkılar: $favoriSarkilar"); // Bu satırı ekleyin
+    print("Favori Şarkılar: $favoriSarkilar"); 
 
     setState(() {
       _favoriSarkilar =
@@ -191,10 +228,30 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
     });
   }
 
+  void _calmaListesineEkle(String songId, index) async {
+    final dbHelper = DatabaseHelper.instance;
+    final songCRUD = SongCRUD(dbHelper);
+    //TODO tıklanan playlistin idsini bul en son set state yapmaya gerek var mı bilmiyorum
+    final List<Map<String, dynamic>> playlists = await songCRUD.getPlaylists();
+    if (playlists.isNotEmpty) {
+      final int playlistId = playlists[index]['id'];
+
+      try {
+        await songCRUD.addSongToPlaylist(playlistId, songId);
+        print('Şarkı çalma listesine eklendi');
+      } catch (e) {
+        print('Hata oluştu: $e');
+      }
+    } else {
+      print('Çalma listesi bulunamadı');
+    }
+  }
+
   List<String> aramaGecmisi = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(
@@ -210,16 +267,16 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight),
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(5.0),
             child: Container(
-            // padding: EdgeInsets.only(top: 30),
+              // padding: EdgeInsets.only(top: 30),
               child: TextField(
                 autofocus: true,
                 controller: _searchController, // Bu satırı ekleyin
                 focusNode: FocusNode(),
                 onSubmitted: (value) => _searchTracks(),
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.search),
+                  prefixIcon: const Icon(Icons.search),
                   suffixIcon: IconButton(
                       onPressed: () {
                         _searchController.clear();
@@ -227,7 +284,7 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
                       icon: Icon(Icons.clear)),
                   fillColor: Colors.white,
                   filled: true,
-                  border: OutlineInputBorder(
+                  border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
                   hintText: 'Müzik ya da sanatçı ara',
@@ -237,136 +294,139 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
           ),
         ),
       ),
-      body: Container(
-        decoration: genelTema(),
-        child: Column(
-          children: [
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 17.0),
-                      child: Text("Arama geçmişi",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              color: beyaz(),
-                              fontSize: 27,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                    Expanded(
-                      flex: 4,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Container(
-                          child: ListView.builder(
-                              itemCount: aramaGecmisi.length,
-                              itemBuilder: (context, index) {
-                                return ListTile(
-                                  onTap: () {
-                                    setState(() {
-                                      _searchController = TextEditingController(
-                                          text: aramaGecmisi[index]);
-                                    });
-                                  },
-                                  title: Text(
-                                    "${aramaGecmisi[index]}",
-                                    style:
-                                        TextStyle(fontSize: 20, color: beyaz()),
-                                  ),
-                                  trailing: IconButton(
-                                    icon: Icon(Icons.delete, color: beyaz()),
-                                    onPressed: () {
+      body: Expanded(
+        child: Container(
+          decoration: genelTema(),
+          child: Column(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 17.0),
+                        child: Text("Arama geçmişi",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                color: beyaz(),
+                                fontSize: 27,
+                                fontWeight: FontWeight.bold)),
+                      ),
+                      Expanded(
+                        flex: 4,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Container(
+                            child: ListView.builder(
+                                itemCount: aramaGecmisi.length,
+                                itemBuilder: (context, index) {
+                                  return ListTile(
+                                    onTap: () {
                                       setState(() {
-                                        aramaGecmisi.removeAt(index);
+                                        _searchController =
+                                            TextEditingController(
+                                                text: aramaGecmisi[index]);
                                       });
                                     },
-                                  ),
-                                );
-                              }),
+                                    title: Text(
+                                      "${aramaGecmisi[index]}",
+                                      style: TextStyle(
+                                          fontSize: 20, color: beyaz()),
+                                    ),
+                                    trailing: IconButton(
+                                      icon: Icon(Icons.delete, color: beyaz()),
+                                      onPressed: () {
+                                        setState(() {
+                                          aramaGecmisi.removeAt(index);
+                                        });
+                                      },
+                                    ),
+                                  );
+                                }),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              flex: 4,
-              child: ListView.builder(
-                itemCount: _tracks.length,
-                itemBuilder: (context, index) {
-                  final track = _tracks[index];
-                  return Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Card(
-                      shadowColor: Colors.black,
-                      elevation: 10,
-                      color: renk2(),
-                      child: ListTile(
-                        title: Text(
-                          track['name'], // Şarkı adı
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17),
-                        ),
-                        subtitle: Text(
-                          '${track['artist']} - ${track['duration']}', // Sanatçı adı ve süre
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                        leading: Image.network(track['image']), // Albüm resmi
-                        trailing: IconButton(
-                          icon: Icon(
-                            _favoriSarkilar.contains(track['id'])
-                                ? Icons.favorite
-                                : Icons.favorite_border,
-                            color: _favoriSarkilar.contains(track['id'])
-                                ? beyaz()
-                                : beyaz(),
+              Expanded(
+                flex: 4,
+                child: ListView.builder(
+                  itemCount: _tracks.length,
+                  itemBuilder: (context, index) {
+                    final track = _tracks[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Card(
+                        shadowColor: Colors.black,
+                        elevation: 10,
+                        color: renk2(),
+                        child: ListTile(
+                          title: Text(
+                            track['name'], // Şarkı adı
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17),
                           ),
-                          onPressed: () {
-                            if (track.containsKey('id') &&
-                                track['id'] != null) {
-                              _favoriDegistir(track);
+                          subtitle: Text(
+                            '${track['artist']} - ${track['duration']}', // Sanatçı adı ve süre
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          leading: Image.network(track['image']), // Albüm resmi
+                          trailing: IconButton(
+                            icon: Icon(
+                              _favoriSarkilar.contains(track['id'])
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: _favoriSarkilar.contains(track['id'])
+                                  ? beyaz()
+                                  : beyaz(),
+                            ),
+                            onPressed: () {
+                              if (track.containsKey('id') &&
+                                  track['id'] != null) {
+                                _favoriDegistir(track);
+                              } else {
+                                // 'id' yok ya da null ise burada uygun bir işlem yapın
+                                // ignore: avoid_print
+                                print('Track data: $track');
+                              }
+                            },
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PlayMusic(
+                                        sarkiAd: track['name'],
+                                        sanatciAd: track['artist'],
+                                        sure: track['duration'],
+                                        sarkUrl: track['previewUrl'],
+                                        image: track['image'],
+                                      )),
+                            );
+                          },
+                          onLongPress: () {
+                            if (track['previewUrl'] == null) {
+                              textYaz();
                             } else {
-                              // 'id' yok ya da null ise burada uygun bir işlem yapın
-                              // ignore: avoid_print
-                              print('Track data: $track');
+                              _playPreview(track['previewUrl'], track);
                             }
                           },
                         ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => PlayMusic(
-                                      sarkiAd: track['name'],
-                                      sanatciAd: track['artist'],
-                                      sure: track['duration'],
-                                      sarkUrl: track['previewUrl'],
-                                      image: track['image'],
-                                    )),
-                          );
-                        },
-                        onLongPress: () {
-                          if (track['previewUrl'] == null) {
-                            textYaz();
-                          } else {
-                            _playPreview(track['previewUrl']);
-                          }
-                        },
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(

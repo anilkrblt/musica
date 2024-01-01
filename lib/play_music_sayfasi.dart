@@ -144,6 +144,7 @@ class _PlayMusicState extends State<PlayMusic> {
                   ).createShader(bounds);
                 },
                 blendMode: BlendMode.dstIn,
+                //TODO buraya default resim ata
                 child: Image.network(
                   sarkiImage,
                   fit: BoxFit.cover,

@@ -40,6 +40,16 @@ Future<List<Map<String, dynamic>>> getUsersByUsername(String username) async {
     whereArgs: [username],
   );
 }
+Future<List<Map<String, dynamic>>> getUserIdByUsername(String username) async {
+  final db = await _dbHelper.database;
+  // Burada 'password' sütunu da dahil edilmeli
+  return await db.query(
+    'users',
+    columns: ['id'], // 'password' sütunu eklenmeli
+    where: 'username = ?',
+    whereArgs: [username],
+  );
+}
 
   // Kullanıcı güncelleme
   Future<int> updateUser(int id, Map<String, dynamic> user) async {
