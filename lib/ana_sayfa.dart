@@ -47,7 +47,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
       ),
 
       bottomNavigationBar: BottomAppBar(
-        color: Color.fromARGB(255, 117, 23, 239),
+        color: renk3(),
 
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -96,7 +96,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
 
 }
 
-class anaSayfa extends StatelessWidget {
+class anaSayfa extends StatefulWidget {
   const anaSayfa({
     super.key,
     required this.widget,
@@ -109,10 +109,26 @@ class anaSayfa extends StatelessWidget {
   final List<Song> songs;
 
   @override
+  State<anaSayfa> createState() => _anaSayfaState();
+}
+
+class _anaSayfaState extends State<anaSayfa> {
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('Musica')),
+        actions: [
+          Switch(
+            value: Tema().isDarkModeEnabled,
+            onChanged: (value) {
+              setState(() {
+                Tema().isDarkModeEnabled = value;
+              });
+            },
+          )
+        ],
+       // title: const Center(child: Text('Musica')),
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
           child: InkWell(
@@ -123,7 +139,7 @@ class anaSayfa extends StatelessWidget {
                       builder: (context) => const ProfilSayfasi(name: widget.username,)));*/
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) =>
-                  (ProfilSayfasi(name: widget.username)
+                  (ProfilSayfasi(name: widget.widget.username)
                   )
                   )
               );
@@ -143,7 +159,7 @@ class anaSayfa extends StatelessWidget {
             onPressed: () => Navigator.pushNamed(context, '/AramaSayfasi'),
           ),
         ],*/
-        backgroundColor: Color.fromARGB(255, 117, 23, 239),
+        backgroundColor: renk3(),
       ),
       body: Container(
         padding: EdgeInsets.all(20),
@@ -159,7 +175,7 @@ class anaSayfa extends StatelessWidget {
                   margin: EdgeInsets.only(right: 100,  ),
                   //padding: EdgeInsets.only(top: 3),
                   child: ZamanMetni(
-                    name: widget.username,
+                    name: widget.widget.username,
                   )),
             ),
             Expanded(
@@ -176,7 +192,7 @@ class anaSayfa extends StatelessWidget {
                       true, // AbsorbPointer'ı true olarak ayarlayarak dokunma etkisizleştirilir.
                       child: Container(
                         child: TextField(
-                          controller: _searchController,
+                          controller: widget._searchController,
                           decoration: const InputDecoration(
                             fillColor: Colors.white,
                             filled: true,
@@ -209,7 +225,7 @@ class anaSayfa extends StatelessWidget {
                         children: [
                           ListView.builder(
                             scrollDirection: Axis.horizontal,
-                            itemCount: songs.length,
+                            itemCount: widget.songs.length,
                             itemBuilder: (context, index) {
                               return SizedBox(
                                 width: 200,
@@ -232,7 +248,7 @@ class anaSayfa extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(
                                             20), // Resmi yuvarlat
                                         child: Image.asset(
-                                          songs[index].coverUrl,
+                                          widget.songs[index].coverUrl,
                                           fit: BoxFit
                                               .cover, // Resmi tamamen kaplayacak şekilde ayarla
                                         ),
@@ -244,8 +260,7 @@ class anaSayfa extends StatelessWidget {
                                         child: GestureDetector(
                                           onTap:(){
                                             Navigator.push(context,
-                                                MaterialPageRoute(builder: (context) =>
-                                                (TurCalmaListesi(turIndex: index ,)
+                                                MaterialPageRoute(builder: (context) => (TurCalmaListesi(turIndex: index ,)
                                                 )
                                                 )
                                             );
@@ -260,9 +275,9 @@ class anaSayfa extends StatelessWidget {
                                                     flex: 7,
                                                     child: Center(
                                                       child: Text(
-                                                        songs[index].title,
+                                                        widget.songs[index].title,
                                                         style: TextStyle(
-                                                            color: renk2(),
+                                                            color: renk3(),
                                                             fontSize: 25,
                                                             fontWeight:
                                                             FontWeight.w900),
@@ -273,7 +288,7 @@ class anaSayfa extends StatelessWidget {
                                                       flex: 3,
                                                       child: Icon(
                                                         Icons.play_circle,
-                                                        color: renk2(),
+                                                        color: renk3(),
                                                         size: 33,
                                                       )),
                                                 ],
@@ -347,8 +362,18 @@ class anaSayfa extends StatelessWidget {
   }
 }
 
-Color renk() => const Color.fromARGB(255, 101, 3, 54);
-BoxDecoration genelTema() => const BoxDecoration(
+Color renk1() =>  Color.fromARGB(255, 101, 3, 54);
+
+Color renk2() => Tema().isDarkModeEnabled
+    ? Color.fromARGB(255, 117, 23, 239)
+    : Colors.white12;
+
+Color renk3() => Tema().isDarkModeEnabled
+    ? Color.fromARGB(255, 117, 23, 239)
+    : Colors.black;
+
+BoxDecoration genelTema() => Tema().isDarkModeEnabled
+    ? BoxDecoration(
   gradient: LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
@@ -359,7 +384,9 @@ BoxDecoration genelTema() => const BoxDecoration(
       /// Beyaz renk (geçiş sonu)
     ],
   ),
-);
+)
+    : BoxDecoration(color: Colors.black);
+
 
 class NowPlayingBar extends StatelessWidget {
   const NowPlayingBar({super.key});
@@ -421,4 +448,13 @@ class ZamanMetni extends StatelessWidget {
       textAlign: TextAlign.left,
     );
   }
+}
+
+class Tema {
+  static final Tema _singleton = Tema._internal();
+  factory Tema() {
+    return _singleton;
+  }
+  Tema._internal();
+  bool isDarkModeEnabled = false;
 }

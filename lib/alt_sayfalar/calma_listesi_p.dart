@@ -15,7 +15,7 @@ class _CalmaListesiState extends State<CalmaListesi> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Çalma Listesi',textAlign: TextAlign.end, ),
-      backgroundColor:renk2(),),
+      backgroundColor:renk3(),),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,

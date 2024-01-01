@@ -68,7 +68,7 @@ class _FavorilerState extends State<Favoriler> {
           'Beğendiklerim',
           style: TextStyle(color: beyaz(), fontWeight:FontWeight.w500 ),
         ),
-        backgroundColor: renk2(),
+        backgroundColor: renk3(),
       ),
       body: _favoriSarkilar.isNotEmpty
           ? Container(
@@ -174,6 +174,9 @@ class _FavorilerState extends State<Favoriler> {
                               child: ElevatedButton(onPressed: (){},
 
                                   style: ElevatedButton.styleFrom(
+                                    backgroundColor:  Tema().isDarkModeEnabled
+                                      ? beyaz()
+                                      : null,
                                     shape: RoundedRectangleBorder(
                                       borderRadius:   BorderRadius.circular(17.0),
                                     ),
@@ -187,8 +190,15 @@ class _FavorilerState extends State<Favoriler> {
                                       child: Row(
 
                                         children: [
-                                          Text("Karışık", style: TextStyle(fontSize: 20, color: renk2(), fontWeight: FontWeight.bold), ),
-                                          Icon(Icons.shuffle, color: renk2(),),
+                                          Text("Karışık", style: TextStyle(fontSize: 20,
+                                              color: Tema().isDarkModeEnabled
+                                                  ? renk2()
+                                                  : renk3()
+
+                                              , fontWeight: FontWeight.bold), ),
+                                          Icon(Icons.shuffle, color: Tema().isDarkModeEnabled
+                                              ? renk2()
+                                              : renk3()),
                                         ],),
                                     ),
                                   )),
@@ -232,7 +242,7 @@ class _FavorilerState extends State<Favoriler> {
             )
           : Container(
               decoration: genelTema(),
-              child: const Center(
+              child: Center(
                 child: Text(
                   'Favori şarkılarınız bulunmamaktadır.',
                   style: TextStyle(color: Colors.white, fontSize: 18),
@@ -241,7 +251,7 @@ class _FavorilerState extends State<Favoriler> {
             ),
       bottomNavigationBar: widget.control==1
           ?  BottomAppBar(
-        color: renk2(),
+        color: renk3(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [

@@ -64,7 +64,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: renk2()),
+      appBar: AppBar(
+        backgroundColor: renk3(),
+        leading: IconButton(
+          icon: Icon(
+            Icons.keyboard_arrow_left,
+            color: beyaz(),
+            size: 38,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: Container(decoration: genelTema(),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -108,7 +120,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Center(
                       child: ElevatedButton(
                         onPressed: _register,
-                        child: const Text('Kaydol'),
+                        child:  Text('Kaydol',style: TextStyle(color: renk3(),)),
 
                       ),
                     ),

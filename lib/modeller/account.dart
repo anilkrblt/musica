@@ -14,7 +14,7 @@ class _GirisState extends State<Giris> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: renk2(),),
+      appBar: AppBar(backgroundColor: renk3(),),
       body: Container(
         decoration: genelTema(),
         width: MediaQuery.of(context).size.width,
@@ -50,8 +50,11 @@ class _GirisState extends State<Giris> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
 
-                                Icon(Icons.person_add_alt_1_rounded),
-                                Text("Hesap oluştur",style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),),
+                                Icon(Icons.person_add_alt_1_rounded,color: renk3(),),
+                                Text("Hesap oluştur",style: TextStyle(
+                                    fontSize: 20,
+                                    color: renk3(),
+                                    fontWeight: FontWeight.w900),),
                               ],
                             ),
                           )),
@@ -69,8 +72,14 @@ class _GirisState extends State<Giris> {
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
 
-                                  Icon(Icons.person),
-                                  Text("Giriş yap",style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),),
+                                  Icon(Icons.person, color: renk3(),),
+                                  Text(
+                                    "Giriş yap",
+                                    style: TextStyle(fontSize: 20,
+                                      fontWeight: FontWeight.w900,
+                                      color: renk3(),
+                                    ),
+                                  ),
                                 ],
                               ),
                             )),

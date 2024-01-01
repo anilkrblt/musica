@@ -212,7 +212,7 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
             Navigator.pop(context);
           },
         ),
-        backgroundColor: renk2(),
+        backgroundColor: renk3(),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight),
           child: Padding(
@@ -376,7 +376,7 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: renk2(),
+        color: renk3(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [

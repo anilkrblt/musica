@@ -17,8 +17,21 @@ class _TurCalmaListesiState extends State<TurCalmaListesi> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Çalma Listesi',textAlign: TextAlign.end, ),
-      backgroundColor:renk2(),),
+      appBar: AppBar(
+        //title: const Text('Çalma Listesi',textAlign: TextAlign.end,  ),
+      backgroundColor:renk3(),
+        leading: IconButton(
+          icon: Icon(
+            Icons.keyboard_arrow_left,
+            color: beyaz(),
+            size: 38,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
+
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
