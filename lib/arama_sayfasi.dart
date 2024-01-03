@@ -7,53 +7,7 @@ import 'package:musica/database/song_crud.dart';
 import 'package:musica/database/user_crud.dart';
 import 'package:musica/play_music_sayfasi.dart';
 import 'package:musica/profil_sayfasi.dart';
-import 'package:sqflite/sqflite.dart';
-
-
-
-
-class SpotifyService {
-  final String _clientId = 'd9b578117ffc4b9fbf1f5553a7a72051';
-  final String _clientSecret = '50032f2b81ee4d46b8cbfc31d9fc5816';
-  final String _baseUrl = 'https://api.spotify.com/v1';
-
-  Future<String> _getAccessToken() async {
-    final response = await http.post(
-      Uri.parse('https://accounts.spotify.com/api/token'),
-      headers: {
-        'Authorization':
-            'Basic ${base64Encode(utf8.encode('$_clientId:$_clientSecret'))}',
-      },
-      body: {
-        'grant_type': 'client_credentials',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      return data['access_token'];
-    } else {
-      throw Exception('Access token could not be retrieved');
-    }
-  }
-
-  Future<List<dynamic>> searchTrack(String query) async {
-    final accessToken = await _getAccessToken();
-    final response = await http.get(
-      Uri.parse('$_baseUrl/search?q=$query&type=track'),
-      headers: {
-        'Authorization': 'Bearer $accessToken',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      return data['tracks']['items']; // API'nin döndürdüğü şarkı listesi.
-    } else {
-      throw Exception('Hata!!!');
-    }
-  }
-}
+import 'spotify_service.dart';
 
 // ignore: camel_case_types
 class Arama_Sayfasi extends StatefulWidget {
@@ -332,7 +286,7 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
             Navigator.pop(context);
           },
         ),
-        backgroundColor: renk3(),
+        backgroundColor: renk2(),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight),
           child: Padding(
@@ -372,7 +326,7 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: renk3(),
+        color: renk2(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [

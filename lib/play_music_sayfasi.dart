@@ -135,7 +135,7 @@ class _PlayMusicState extends State<PlayMusic> {
         leading: IconButton(
           icon: Icon(
             Icons.keyboard_arrow_left,
-            color: renk1(),
+            color: renk2(),
             size: 38,
           ),
           onPressed: () {
@@ -147,7 +147,7 @@ class _PlayMusicState extends State<PlayMusic> {
           IconButton(
             icon: Icon(
               Icons.share,
-              color: renk1(),
+              color: renk2(),
               size: 30,
             ),
             onPressed: () {},
@@ -297,7 +297,7 @@ class _PlayMusicState extends State<PlayMusic> {
     return Slider(
       thumbColor: Colors.white,
       activeColor: Colors.white,
-      inactiveColor: renk1(),
+      inactiveColor: renk2(),
       value: _sliderValue.clamp(0.0, _maxSliderValue),
       min: 0.0,
       max: _maxSliderValue,

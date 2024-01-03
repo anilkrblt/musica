@@ -3,6 +3,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:musica/alt_sayfalar/calma_listesi_p.dart';
 import 'package:musica/alt_sayfalar/favoriler_p.dart';
 import 'package:musica/database/database_helper.dart';
@@ -43,8 +45,8 @@ class _AnaSayfaState extends State<AnaSayfa> {
   }
 }
 
-class anaSayfa extends StatelessWidget {
-  const anaSayfa({
+class Sayfam extends StatefulWidget {
+  const Sayfam({
     super.key,
     required this.widget,
     required TextEditingController searchController,
@@ -60,6 +62,7 @@ class anaSayfa extends StatelessWidget {
   @override
   State<Sayfam> createState() => _SayfamState();
 }
+
 
 class _SayfamState extends State<Sayfam> {
   late String calmaListeAdi = '';
@@ -214,7 +217,7 @@ class _SayfamState extends State<Sayfam> {
                       true, // AbsorbPointer'ı true olarak ayarlayarak dokunma etkisizleştirilir.
                       child: Container(
                         child: TextField(
-                          controller: _searchController,
+                          controller: widget._searchController,
                           decoration: const InputDecoration(
                             fillColor: Colors.white,
                             filled: true,
@@ -564,15 +567,6 @@ class _SayfamState extends State<Sayfam> {
 }
 
 Color renk() => const Color.fromARGB(255, 101, 3, 54);
-BoxDecoration genelTema() => const BoxDecoration(
-      gradient: LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [
-          Color.fromARGB(255, 117, 23, 239), // En koyu renk
-          Color.fromARGB(255, 169, 158, 255),
-Color renk1() =>  Color.fromARGB(255, 101, 3, 54);
-
 Color renk2() => Tema().isDarkModeEnabled
     ? Color.fromARGB(255, 117, 23, 239)
     : Colors.white12;
@@ -593,12 +587,9 @@ BoxDecoration genelTema() => Tema().isDarkModeEnabled
           /// Beyaz renk (geçiş sonu)
         ],
       ),
-    );
-      /// Beyaz renk (geçiş sonu)
-    ],
-  ),
-)
-    : BoxDecoration(color: Colors.black);
+    ): BoxDecoration(color: Colors.black);
+  
+    
 
 
 //search bar bu amk
