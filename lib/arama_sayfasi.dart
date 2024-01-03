@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:audioplayers/audioplayers.dart';
+import 'package:musica/alt_sayfalar/favoriler_p.dart';
 import 'package:musica/ana_sayfa.dart';
 import 'package:musica/database/database_helper.dart';
 import 'package:musica/database/song_crud.dart';
@@ -342,14 +343,19 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
               },
             ),
             IconButton(
-              padding: const EdgeInsets.only(right: 50),
-              icon: const Icon(
+              padding:  EdgeInsets.only(right: 50),
+              icon: Icon(
                 Icons.favorite_border_outlined,
                 size: 30,
                 color: Colors.white,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/Favoriler');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Favoriler(control: 1),
+                  ),
+                );
               },
             ),
             IconButton(

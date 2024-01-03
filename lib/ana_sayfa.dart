@@ -28,20 +28,81 @@ class _AnaSayfaState extends State<AnaSayfa> {
   bool isPlaying = false;
   final TextEditingController _searchController = TextEditingController();
 
+  final PageController _pageController = PageController();
+  int _currentPageIndex = 0;
+
+  void onPageChanged(int index) {
+    setState(() {
+      _currentPageIndex = index;
+    });
+  }
+  void navigateToPage(int index) {
+    _pageController.jumpToPage(index);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return PageView(children: [
-      Sayfam(
-        widget: widget,
-        searchController: _searchController,
-        songs: songs,
-        userName: widget.username,
+    return Scaffold(
+         body: PageView(
+          controller: _pageController,
+          children: [
+        Sayfam(
+          widget: widget,
+          searchController: _searchController,
+          songs: songs,
+          userName: widget.username,
+        ),
+        Favoriler(control: 0,),
+        ProfilSayfasi(
+          name: widget.username,
+        )
+      ],
+          onPageChanged: onPageChanged,
       ),
-      const Favoriler(),
-      ProfilSayfasi(
-        name: widget.username,
-      )
-    ]);
+        bottomNavigationBar: BottomAppBar(
+          color: renk3(),
+
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                padding: EdgeInsets.only(right: 50),
+                icon:  Icon(
+                  _currentPageIndex == 0 ?  Icons.home : Icons.home_outlined,
+                  size: 30,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  navigateToPage(0);
+                },
+              ),
+              IconButton(
+                padding:  EdgeInsets.only(right: 50),
+                icon:  Icon(
+                  _currentPageIndex == 1 ? Icons.favorite: Icons.favorite_border,
+                  size: 30,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  navigateToPage(1);
+                },
+              ),
+              IconButton(
+                icon:  Icon(
+                  _currentPageIndex == 2 ? Icons.person: Icons.person_outlined,
+                  size: 30,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  navigateToPage(2);
+                },
+              ),
+
+            ],
+
+          ),
+        )
+    );
   }
 }
 
@@ -385,46 +446,7 @@ class _SayfamState extends State<Sayfam> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: Color.fromARGB(255, 117, 23, 239),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            IconButton(
-              padding: const EdgeInsets.only(right: 50),
-              icon: const Icon(
-                Icons.home_sharp,
-                size: 30,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                //Navigator.pushNamed(context, '/ProfilSayfasi');
-              },
-            ),
-            IconButton(
-              padding: const EdgeInsets.only(right: 50),
-              icon: const Icon(
-                Icons.favorite_border_outlined,
-                size: 30,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.pushNamed(context, '/Favoriler');
-              },
-            ),
-            IconButton(
-              icon: const Icon(
-                Icons.person_outlined,
-                size: 30,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.pushNamed(context, '/ProfilSayfasi');
-              },
-            ),
-          ],
-        ),
-      ),
+
     );
   }
 

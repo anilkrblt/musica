@@ -7,7 +7,8 @@ import 'package:musica/play_music_sayfasi.dart';
 import '../profil_sayfasi.dart';
 
 class Favoriler extends StatefulWidget {
-  const Favoriler({super.key});
+  int control;
+  Favoriler({super.key, required this.control});
 
   @override
   State<Favoriler> createState() => _FavorilerState();
@@ -172,8 +173,9 @@ class _FavorilerState extends State<Favoriler> {
                 child: Text('Favori şarkılarınız bulunmamaktadır.'),
               ),
           ),
-      bottomNavigationBar: BottomAppBar(
-        color: const Color.fromARGB(255, 117, 23, 239),
+      bottomNavigationBar: widget.control==1
+          ?  BottomAppBar(
+        color: renk3(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -184,7 +186,9 @@ class _FavorilerState extends State<Favoriler> {
                 size: 30,
                 color: Colors.white,
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
             ),
             IconButton(
               padding: const EdgeInsets.only(right: 50),
@@ -194,7 +198,12 @@ class _FavorilerState extends State<Favoriler> {
                 color: Colors.white,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/CalmaListesi');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Favoriler(control: 1),
+                  ),
+                );
               },
             ),
             IconButton(
@@ -203,11 +212,15 @@ class _FavorilerState extends State<Favoriler> {
                 size: 30,
                 color: Colors.white,
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/ProfilSayfasi');
+
+              },
             ),
           ],
         ),
-      ),
+      )
+          : null,
     );
   }
 
