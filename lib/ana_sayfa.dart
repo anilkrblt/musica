@@ -246,7 +246,7 @@ class _SayfamState extends State<Sayfam> {
         backgroundColor: renk3(),
       ),
       body: Container(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.only(top: 20,left:20, right:20, bottom: 5),
         decoration: genelTema(),
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -378,11 +378,10 @@ class _SayfamState extends State<Sayfam> {
                                                           widget.songs[index]
                                                               .title,
                                                           style: TextStyle(
-                                                              color: renk2(),
-                                                              fontSize: 25,
+                                                              color: renk3(),
+                                                              fontSize: 23,
                                                               fontWeight:
-                                                                  FontWeight
-                                                                      .w900),
+                                                                  FontWeight.w900),
                                                         ),
                                                       ),
                                                     ),
@@ -390,7 +389,7 @@ class _SayfamState extends State<Sayfam> {
                                                         flex: 3,
                                                         child: Icon(
                                                           Icons.play_circle,
-                                                          color: renk2(),
+                                                          color: renk3(),
                                                           size: 33,
                                                         )),
                                                   ],
@@ -423,7 +422,8 @@ class _SayfamState extends State<Sayfam> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+             // padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.only(top: 10, left: 16, right: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -459,29 +459,33 @@ class _SayfamState extends State<Sayfam> {
     return Card(
       margin: EdgeInsets.only(bottom: 20),
       shadowColor: Colors.black,
-      elevation: 10,
+      elevation: 14,
       color: renk2(),
-      child: ListTile(
-        onLongPress: () => _showPlaylistOptions(title),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => CalmaListesi(
-                      calmaListeAdi: title['name'],
-                      calmaListeId: title['id'],
-                    )),
-          );
-        },
-        title: Text(
-          title['name'] ?? '',
-          style: TextStyle(
-              color: beyaz(), fontWeight: FontWeight.bold, fontSize: 17),
-        ),
-        leading: calmaListesiResmi(),
-        trailing: IconButton(
-          icon: Icon(Icons.play_circle, color: beyaz()),
-          onPressed: () {},
+      child: Padding(
+         padding: const EdgeInsets.only(top:10,bottom:10),
+       // padding: const EdgeInsets.all(10),
+        child: ListTile(
+          onLongPress: () => _showPlaylistOptions(title),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CalmaListesi(
+                        calmaListeAdi: title['name'],
+                        calmaListeId: title['id'],
+                      )),
+            );
+          },
+          title: Text(
+            title['name'] ?? '',
+            style: TextStyle(
+                color: beyaz(), fontWeight: FontWeight.bold, fontSize: 17),
+          ),
+          leading: calmaListesiResmi(),
+          trailing: IconButton(
+            icon: Icon(Icons.play_circle, color: beyaz()),
+            onPressed: () {},
+          ),
         ),
       ),
     );

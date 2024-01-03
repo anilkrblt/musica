@@ -46,6 +46,7 @@ class _TurCalmaListesiState extends State<TurCalmaListesi> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+
         leading: IconButton(
           icon: Icon(
             Icons.keyboard_arrow_left,
@@ -61,12 +62,12 @@ class _TurCalmaListesiState extends State<TurCalmaListesi> {
             onPressed: () {
               _addPlaylist;
             },
-            icon: Icon(Icons.playlist_add),
+            icon: Icon(Icons.playlist_add, color: beyaz(), ),
             iconSize: 45,
           )
         ],
 
-        backgroundColor: renk2(),
+        backgroundColor: renk3(),
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
