@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:musica/ana_sayfa.dart';
-
+import 'package:musica/database/database_helper.dart';
+import 'package:musica/database/song_crud.dart';
+import 'package:musica/database/user_crud.dart';
 import 'play_music_sayfasi.dart';
-
 
 class ProfilSayfasi extends StatefulWidget {
   final String name;
@@ -13,6 +14,8 @@ class ProfilSayfasi extends StatefulWidget {
 }
 
 class _ProfilSayfasiState extends State<ProfilSayfasi> {
+  final songCRUD = SongCRUD(DatabaseHelper.instance);
+  final userId = CurrentUser().userId;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,96 +47,93 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
                     shadowColor: Colors.black,
                     elevation: 10,
                     color: renk2(),
-                    child: Container(
-                      //margin: const EdgeInsets.only(top: 80, left: 50),
-                      child: Row(
-                        children: [
-                           Expanded(flex: 2,
-                             child: CircleAvatar(
-                                                       radius: 60,
-                                                       backgroundImage: NetworkImage(
+                    child: Row(
+                      children: [
+                        const Expanded(
+                          flex: 2,
+                          child: CircleAvatar(
+                            radius: 60,
+                            backgroundImage: NetworkImage(
                               'https://upload.wikimedia.org/wikipedia/tr/8/83/DarthVader.JPG',
-                                                       ),
-                                                     ),
-                           ),
-                          Expanded(flex: 3,
-                            child: Container(
-                              margin:  EdgeInsets.only(top: 30),
-                              child:  Column(
-                                children: [
-                                  Text(
-                                   " ${widget.name}", style: TextStyle(color: Colors.white,fontSize: 30),
-                                  ),
-                                  Text(
-                                    "Kullanıcı adı", style: TextStyle(color: Colors.white,fontSize: 15),
-                            
-                                  ),
-                                ],
-                              ),
                             ),
                           ),
-
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(flex: 3,
-                  child: Card(
-                    shadowColor: Colors.black,
-                    elevation: 10,
-                    margin: EdgeInsets.only(top: 30,),
-                    color: renk2(),
-                    child: Center(
-                      child: Container(
-                      margin: EdgeInsets.only(top: 30),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Elemanları simetrik olarak düzenler
-                          children: [
-                            Column(
-                              children: [
-                                Text("Takip edilen", style: TextStyle(fontSize: 20, color: beyaz()),),
-                                Text("31", style: TextStyle(fontSize: 35, color: beyaz(), fontWeight: FontWeight.bold),),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Text("Takipçi", style: TextStyle(fontSize: 20, color: beyaz()),),
-                                Text("24", style: TextStyle(fontSize: 35, color: beyaz(), fontWeight: FontWeight.bold)),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Text("Beğeniler", style: TextStyle(fontSize: 20, color: beyaz()),),
-                                Text("255", style: TextStyle(fontSize: 35, color: beyaz(), fontWeight: FontWeight.bold)),
-                              ],
-                            ),
-                          ],
                         ),
-                      ),
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 30),
+                            child: Text(
+                              " ${widget.name}",
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 30),
+                            ),
+                          ),
+                        ),
+                        
+                      ],
                     ),
                   ),
                 ),
-                Expanded(flex : 8, child: SizedBox())
-
+                const SizedBox(height: 25),
+                const Text(
+                  "Son Dinlenenler",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 25,
+                      fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(height: 25),
+                Expanded(flex: 8, child: sonDinlenenSarkilariListele())
               ],
             ),
           ),
-        )
+        ));
+  }
+
+  FutureBuilder<List<Map<String, dynamic>>> sonDinlenenSarkilariListele() {
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: songCRUD.getRecentPlayed(userId!),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasData) {
+          // Veri varsa bu kısmı doldur
+          var recentPlayed = snapshot.data!;
+          return ListView.builder(
+            itemCount: recentPlayed.length,
+            itemBuilder: (context, index) {
+              var song = recentPlayed[index];
+
+              // Burada şarkı bilgilerini gösteren bir widget döndür
+              return ListTile(
+                title: Text(song['name']),
+                subtitle: Text(song['artist']),
+                leading: Image.network(song['image']),
+                onTap: () {
+                  // Burada müziği çalabilirsiniz
+                },
+              );
+            },
+          );
+        } else if (snapshot.hasError) {
+          return Text('Hata oluştu: ${snapshot.error}');
+        } else {
+          return const Text('Son dinlenen müzikler yok veya yüklenemedi');
+        }
+      },
     );
   }
 }
 
 BoxDecoration genelTema3() => const BoxDecoration(
-  gradient: LinearGradient(
-    end: Alignment.bottomLeft,
-    begin: Alignment.centerRight,
-    tileMode: TileMode.mirror,
-
-    colors: [
-      Color.fromARGB(255, 50, 29, 112),// En koyu renk
-      Color.fromARGB(255, 203, 109, 46), // Beyaz renk (geçiş sonu)
-    ],
-  ),
-);
+      gradient: LinearGradient(
+        end: Alignment.bottomLeft,
+        begin: Alignment.centerRight,
+        tileMode: TileMode.mirror,
+        colors: [
+          Color.fromARGB(255, 50, 29, 112), // En koyu renk
+          Color.fromARGB(255, 203, 109, 46), // Beyaz renk (geçiş sonu)
+        ],
+      ),
+    );
 Color beyaz() => const Color.fromARGB(255, 255, 255, 255);

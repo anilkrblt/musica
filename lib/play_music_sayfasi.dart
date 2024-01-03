@@ -1,19 +1,25 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:marquee/marquee.dart';
+import 'package:musica/database/database_helper.dart';
+import 'package:musica/database/song_crud.dart';
+import 'package:musica/database/user_crud.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:musica/ana_sayfa.dart';
 
-
 // ignore: must_be_immutable
 class PlayMusic extends StatefulWidget {
+  final String sarkiId;
   final String sarkiAd;
   final String sanatciAd;
   final String sure;
   final String sarkUrl;
   final String image;
-  PlayMusic(
-      {required this.sarkiAd,
+  const PlayMusic(
+      {required this.sarkiId,
+      required this.sarkiAd,
       required this.sanatciAd,
       required this.sure,
       required this.sarkUrl,
@@ -26,6 +32,7 @@ class PlayMusic extends StatefulWidget {
 }
 
 class _PlayMusicState extends State<PlayMusic> {
+  late String sarkId;
   late String sarkiAdi;
   late String sanatciAdi;
   late String sarkiSuresi;
@@ -42,6 +49,7 @@ class _PlayMusicState extends State<PlayMusic> {
   void initState() {
     super.initState();
     audioPlayer = AudioPlayer();
+    sarkId = widget.sarkiId;
     sarkiAdi = widget.sarkiAd;
     sanatciAdi = widget.sanatciAd;
     sarkiSuresi = widget.sure;
@@ -54,8 +62,11 @@ class _PlayMusicState extends State<PlayMusic> {
   void arkaPlanRengi() async {
     _generator =
         await PaletteGenerator.fromImageProvider((NetworkImage(sarkiImage)));
-    dominantColor = _generator.dominantColor!.color;
-    vibrantColor = _generator.vibrantColor!.color;
+    dominantColor =
+        _generator.dominantColor!.color ?? _generator.vibrantColor!.color;
+    vibrantColor =
+        _generator.vibrantColor!.color ?? _generator.dominantColor!.color;
+
     setState(() {
       bd = BoxDecoration(
           gradient: LinearGradient(
@@ -66,7 +77,25 @@ class _PlayMusicState extends State<PlayMusic> {
     });
   }
 
+  void onMusicPlay(Map<String, dynamic> trackInfo) {
+    final songCRUD = SongCRUD(DatabaseHelper.instance);
+    final userId = CurrentUser().userId;
+
+    if (userId != null) {
+      songCRUD.addRecentPlayed(trackInfo, userId);
+    }
+  }
+
   void _oynat() async {
+    final sarki = {
+      'id': widget.sarkiId,
+      'name': widget.sarkiAd,
+      'artist': widget.sanatciAd,
+      'image': widget.image,
+      'duration': widget.sure,
+      'previewUrl': widget.sarkUrl
+    };
+    onMusicPlay(sarki);
     await audioPlayer.play(UrlSource(widget.sarkUrl));
     setState(() {
       _isPlaying = true;
@@ -144,11 +173,7 @@ class _PlayMusicState extends State<PlayMusic> {
                   ).createShader(bounds);
                 },
                 blendMode: BlendMode.dstIn,
-                //TODO buraya default resim ata
-                child: Image.network(
-                  sarkiImage,
-                  fit: BoxFit.cover,
-                ),
+                child: resmiGoruntule(),
               ),
             ),
             Expanded(
@@ -255,6 +280,17 @@ class _PlayMusicState extends State<PlayMusic> {
         ),
       ),
     );
+  }
+
+  Image resmiGoruntule() {
+    if (sarkiImage != null) {
+      return Image.network(
+        sarkiImage,
+        fit: BoxFit.cover,
+      );
+    } else {
+      return Image.asset('assets/image/Pop.jpg', fit: BoxFit.cover,);
+    }
   }
 
   Slider slider() {

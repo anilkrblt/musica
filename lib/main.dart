@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:musica/alt_sayfalar/ayarlar_p.dart';
-import 'package:musica/alt_sayfalar/calma_listesi_p.dart';
 import 'package:musica/alt_sayfalar/favoriler_p.dart';
 import 'package:musica/alt_sayfalar/son_dinlenenler_p.dart';
 import 'package:musica/alt_sayfalar/tum_sarkilar_p.dart';
-import 'package:musica/ana_sayfa.dart';
 import 'package:musica/arama_sayfasi.dart';
 import 'package:musica/modeller/login_screen.dart';
 import 'package:musica/modeller/register_screen.dart';
-import 'package:musica/profil_sayfasi.dart';
 
 import 'modeller/account.dart';
 

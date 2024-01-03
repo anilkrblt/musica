@@ -37,31 +37,66 @@ class _GirisState extends State<Giris> {
                         fontSize: 35,
                         fontWeight: FontWeight.w900),
                   ),
-                  margin: EdgeInsets.only(top: 30),
+                  margin: const EdgeInsets.only(top: 30),
                 )),
             // Container()
             Expanded(
               flex: 5,
               child: Padding(
                 padding: const EdgeInsets.only(left: 55, right: 55),
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          children: [
-                            Text(
-                              "Hemen katıl.",
-                              style: TextStyle(
-                                  color: beyaz(),
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                            ElevatedButton(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Text(
+                            "Hemen katıl.",
+                            style: TextStyle(
+                                color: beyaz(),
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          ElevatedButton(
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                    context, '/RegisterScreen');
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.all(17.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Icon(Icons.person_add_alt_1_rounded),
+                                    Text(
+                                      "Hesap oluştur",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w900),
+                                    ),
+                                  ],
+                                ),
+                              )),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Text(
+                            "Zaten bir hesabın var mı?",
+                            style: TextStyle(
+                                color: beyaz(),
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 5),
+                            child: ElevatedButton(
                                 onPressed: () {
                                   Navigator.pushNamed(
-                                      context, '/RegisterScreen');
+                                      context, '/LoginScreen');
                                 },
                                 child: const Padding(
                                   padding: EdgeInsets.all(17.0),
@@ -69,9 +104,9 @@ class _GirisState extends State<Giris> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      Icon(Icons.person_add_alt_1_rounded),
+                                      Icon(Icons.person),
                                       Text(
-                                        "Hesap oluştur",
+                                        "Giriş yap",
                                         style: TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.w900),
@@ -79,48 +114,11 @@ class _GirisState extends State<Giris> {
                                     ],
                                   ),
                                 )),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            Text(
-                              "Zaten bir hesabın var mı?",
-                              style: TextStyle(
-                                  color: beyaz(),
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(top: 5),
-                              child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pushNamed(
-                                        context, '/LoginScreen');
-                                  },
-                                  child: const Padding(
-                                    padding: EdgeInsets.all(17.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Icon(Icons.person),
-                                        Text(
-                                          "Giriş yap",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w900),
-                                        ),
-                                      ],
-                                    ),
-                                  )),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             )

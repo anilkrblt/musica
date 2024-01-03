@@ -1,56 +1,13 @@
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:musica/ana_sayfa.dart';
 import 'package:musica/database/database_helper.dart';
 import 'package:musica/database/song_crud.dart';
+import 'package:musica/database/user_crud.dart';
 import 'package:musica/play_music_sayfasi.dart';
 import 'package:musica/profil_sayfasi.dart';
-
-class SpotifyService {
-  final String _clientId = 'd9b578117ffc4b9fbf1f5553a7a72051';
-  final String _clientSecret = '50032f2b81ee4d46b8cbfc31d9fc5816';
-  final String _baseUrl = 'https://api.spotify.com/v1';
-
-  Future<String> _getAccessToken() async {
-    final response = await http.post(
-      Uri.parse('https://accounts.spotify.com/api/token'),
-      headers: {
-        'Authorization':
-            'Basic ${base64Encode(utf8.encode('$_clientId:$_clientSecret'))}',
-      },
-      body: {
-        'grant_type': 'client_credentials',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      return data['access_token'];
-    } else {
-      throw Exception('Access token could not be retrieved');
-    }
-  }
-
-  Future<List<dynamic>> searchTrack(String query) async {
-    final accessToken = await _getAccessToken();
-    final response = await http.get(
-      Uri.parse('$_baseUrl/search?q=$query&type=track'),
-      headers: {
-        'Authorization': 'Bearer $accessToken',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      return data['tracks']['items']; // API'nin döndürdüğü şarkı listesi.
-    } else {
-      throw Exception('Hata!!!');
-    }
-  }
-}
+import 'spotify_service.dart';
 
 // ignore: camel_case_types
 class Arama_Sayfasi extends StatefulWidget {
@@ -66,6 +23,9 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
   final AudioPlayer audioPlayer = AudioPlayer();
   List<Map<String, dynamic>> _tracks = [];
   List<Map<String, dynamic>> _calmaListeleri = [];
+  List<String> aramaGecmisi = [];
+  final FocusNode _focusNode = FocusNode();
+  bool _isFocused = false;
 
   Future<void> _calmaListeleriniGetir() async {
     final dbHelper = DatabaseHelper.instance;
@@ -81,7 +41,9 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
   }
 
   Future<void> _searchTracks() async {
-    aramaGecmisi.insert(0, _searchController.text);
+    //aramaGecmisi.add(_searchController.text);
+    int? userId = CurrentUser().userId;
+    _addSearchHistoryToDatabase(userId!, _searchController.text);
     final spotifyService =
         SpotifyService(); // SpotifyService nesnesi oluşturuldu.
 
@@ -95,7 +57,6 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
           if (previewUrl == null || previewUrl.isEmpty) {
             previewUrl = null;
           }
-
           return {
             'id': track['id'],
             'name': track['name'],
@@ -129,6 +90,16 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
     }
   }
 
+  Future<void> _addSearchHistoryToDatabase(int userId, String query) async {
+    final userCRUD = UserCRUD(DatabaseHelper.instance);
+    try {
+      await userCRUD.addSearchHistory(userId, query);
+      _loadSearchHistory();
+    } catch (e) {
+      print('Arama geçmişi eklenirken hata oluştu: $e');
+    }
+  }
+
   String _formatDuration(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, '0');
     final minutes = twoDigits(duration.inMinutes.remainder(60));
@@ -136,71 +107,126 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
     return '$minutes:$seconds';
   }
 
-void _playPreview(String previewUrl, track) {
-  print("------------$_calmaListeleri");
-
-  showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      actions: <Widget>[
-        TextButton(
-          child: const Text('Çalma Listesine Ekle'),
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) => StatefulBuilder(
-                builder: (context, setState) => AlertDialog(
-                  title: const Text('Çalma Listesi Seçin'),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      for (int index = 0; index < _calmaListeleri.length; index++)
-                        ListTile(
-                          leading: const Icon(Icons.music_note),
-                          title: Text(_calmaListeleri[index]['name']),
-                          trailing: IconButton(
-                            icon: Icon(Icons.add),
-                            onPressed: () {
-                              setState(() {
-                                _calmaListesineEkle(track['id'], index);
-                              });
-                              Navigator.of(context).pop();
-                            },
-                          ),
+  void _playPreview(String previewUrl, track) {
+    print("------------$_calmaListeleri");
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        actions: <Widget>[
+          Center(
+            child: TextButton(
+              child: const Text('Çalma Listesine Ekle'),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => StatefulBuilder(
+                    builder: (context, setState) => AlertDialog(
+                      title: const Text('Çalma Listesi Seçin'),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          for (int index = 0;
+                              index < _calmaListeleri.length;
+                              index++)
+                            ListTile(
+                              leading: const Icon(Icons.music_note),
+                              title: Text(_calmaListeleri[index]['name']),
+                              trailing: IconButton(
+                                icon: const Icon(Icons.add),
+                                onPressed: () {
+                                  setState(() {
+                                    _calmaListesineEkle(track, index);
+                                  });
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ),
+                        ],
+                      ),
+                      actions: [
+                        TextButton(
+                          child: const Text('Kapat'),
+                          onPressed: () => Navigator.of(context).pop(),
                         ),
-                    ],
-                  ),
-                  actions: [
-                    TextButton(
-                      child: const Text('Kapat'),
-                      onPressed: () => Navigator.of(context).pop(),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
-      ],
-    ),
-  );
-}
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-
+  void _onFocusChange() {
+    setState(() {
+      _isFocused = _focusNode.hasFocus;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    _focusNode.addListener(_onFocusChange);
     _loadFavoriSarkilar();
     _calmaListeleriniGetir();
+    _loadSearchHistory();
   }
 
   late Set<String> _favoriSarkilar = {};
 
+  Future<void> _loadSearchHistory() async {
+    final dbHelper = DatabaseHelper.instance;
+    final userCRUD = UserCRUD(dbHelper);
+    int? userId = CurrentUser().userId;
+    try {
+      final history = await userCRUD.getSearchHistory(userId!);
+      setState(() {
+        aramaGecmisi = history.map((e) => e['query'] as String).toList();
+      });
+    } catch (e) {
+      print('Arama geçmişi yüklenirken hata: $e');
+    }
+  }
+
+  void _deleteSearchHistory(int index) async {
+    final dbHelper = DatabaseHelper.instance;
+    final userCRUD = UserCRUD(dbHelper);
+
+    int? userId = CurrentUser().userId;
+
+    if (userId == null) {
+      print('Kullanıcı girişi yapılmamış.');
+      return;
+    }
+
+    String query = aramaGecmisi[index];
+
+    try {
+      final history = await userCRUD.getSearchHistory(userId);
+      final historyItem = history.firstWhere(
+        (e) => e['query'] == query,
+        orElse: () => {},
+      );
+
+      if (historyItem.isNotEmpty) {
+        int id = historyItem['id'];
+        await userCRUD.deleteSearchHistory(id);
+        setState(() {
+          aramaGecmisi.removeAt(index);
+        });
+      }
+    } catch (e) {
+      print('Arama geçmişi silinirken hata: $e');
+    }
+  }
+
   Future<void> _loadFavoriSarkilar() async {
     final songCRUD = SongCRUD(DatabaseHelper.instance);
     final favoriSarkilar = await songCRUD.getFavoriteSongs();
-    print("Favori Şarkılar: $favoriSarkilar"); 
+    print("Favori Şarkılar: $favoriSarkilar");
 
     setState(() {
       _favoriSarkilar =
@@ -211,8 +237,6 @@ void _playPreview(String previewUrl, track) {
   void _favoriDegistir(Map<String, dynamic> track) async {
     final songCRUD = SongCRUD(DatabaseHelper.instance);
     final trackId = track['id'];
-    print(
-        'favori degistir icinde trackID $trackId'); // buradaki track id aslında spotify_id
     setState(() {
       if (_favoriSarkilar.contains(trackId)) {
         _favoriSarkilar.remove(trackId);
@@ -228,16 +252,15 @@ void _playPreview(String previewUrl, track) {
     });
   }
 
-  void _calmaListesineEkle(String songId, index) async {
+  void _calmaListesineEkle(Map<String, dynamic> song, index) async {
     final dbHelper = DatabaseHelper.instance;
     final songCRUD = SongCRUD(dbHelper);
-    //TODO tıklanan playlistin idsini bul en son set state yapmaya gerek var mı bilmiyorum
     final List<Map<String, dynamic>> playlists = await songCRUD.getPlaylists();
     if (playlists.isNotEmpty) {
       final int playlistId = playlists[index]['id'];
 
       try {
-        await songCRUD.addSongToPlaylist(playlistId, songId);
+        await songCRUD.addSongToPlaylist(playlistId, song);
         print('Şarkı çalma listesine eklendi');
       } catch (e) {
         print('Hata oluştu: $e');
@@ -247,9 +270,9 @@ void _playPreview(String previewUrl, track) {
     }
   }
 
-  List<String> aramaGecmisi = [];
   @override
   Widget build(BuildContext context) {
+    _loadFavoriSarkilar();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -268,27 +291,24 @@ void _playPreview(String previewUrl, track) {
           preferredSize: const Size.fromHeight(kToolbarHeight),
           child: Padding(
             padding: const EdgeInsets.all(5.0),
-            child: Container(
-              // padding: EdgeInsets.only(top: 30),
-              child: TextField(
-                autofocus: true,
-                controller: _searchController, // Bu satırı ekleyin
-                focusNode: FocusNode(),
-                onSubmitted: (value) => _searchTracks(),
-                decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.search),
-                  suffixIcon: IconButton(
-                      onPressed: () {
-                        _searchController.clear();
-                      },
-                      icon: Icon(Icons.clear)),
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  hintText: 'Müzik ya da sanatçı ara',
+            child: TextField(
+              autofocus: true,
+              controller: _searchController,
+              focusNode: _focusNode,
+              onSubmitted: (value) => _searchTracks(),
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: IconButton(
+                    onPressed: () {
+                      _searchController.clear();
+                    },
+                    icon: const Icon(Icons.clear)),
+                fillColor: Colors.white,
+                filled: true,
+                border: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
+                hintText: 'Müzik ya da sanatçı ara',
               ),
             ),
           ),
@@ -299,132 +319,8 @@ void _playPreview(String previewUrl, track) {
           decoration: genelTema(),
           child: Column(
             children: [
-              Expanded(
-                flex: 2,
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 17.0),
-                        child: Text("Arama geçmişi",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                color: beyaz(),
-                                fontSize: 27,
-                                fontWeight: FontWeight.bold)),
-                      ),
-                      Expanded(
-                        flex: 4,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: Container(
-                            child: ListView.builder(
-                                itemCount: aramaGecmisi.length,
-                                itemBuilder: (context, index) {
-                                  return ListTile(
-                                    onTap: () {
-                                      setState(() {
-                                        _searchController =
-                                            TextEditingController(
-                                                text: aramaGecmisi[index]);
-                                      });
-                                    },
-                                    title: Text(
-                                      "${aramaGecmisi[index]}",
-                                      style: TextStyle(
-                                          fontSize: 20, color: beyaz()),
-                                    ),
-                                    trailing: IconButton(
-                                      icon: Icon(Icons.delete, color: beyaz()),
-                                      onPressed: () {
-                                        setState(() {
-                                          aramaGecmisi.removeAt(index);
-                                        });
-                                      },
-                                    ),
-                                  );
-                                }),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 4,
-                child: ListView.builder(
-                  itemCount: _tracks.length,
-                  itemBuilder: (context, index) {
-                    final track = _tracks[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Card(
-                        shadowColor: Colors.black,
-                        elevation: 10,
-                        color: renk2(),
-                        child: ListTile(
-                          title: Text(
-                            track['name'], // Şarkı adı
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 17),
-                          ),
-                          subtitle: Text(
-                            '${track['artist']} - ${track['duration']}', // Sanatçı adı ve süre
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                          leading: Image.network(track['image']), // Albüm resmi
-                          trailing: IconButton(
-                            icon: Icon(
-                              _favoriSarkilar.contains(track['id'])
-                                  ? Icons.favorite
-                                  : Icons.favorite_border,
-                              color: _favoriSarkilar.contains(track['id'])
-                                  ? beyaz()
-                                  : beyaz(),
-                            ),
-                            onPressed: () {
-                              if (track.containsKey('id') &&
-                                  track['id'] != null) {
-                                _favoriDegistir(track);
-                              } else {
-                                // 'id' yok ya da null ise burada uygun bir işlem yapın
-                                // ignore: avoid_print
-                                print('Track data: $track');
-                              }
-                            },
-                          ),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => PlayMusic(
-                                        sarkiAd: track['name'],
-                                        sanatciAd: track['artist'],
-                                        sure: track['duration'],
-                                        sarkUrl: track['previewUrl'],
-                                        image: track['image'],
-                                      )),
-                            );
-                          },
-                          onLongPress: () {
-                            if (track['previewUrl'] == null) {
-                              textYaz();
-                            } else {
-                              _playPreview(track['previewUrl'], track);
-                            }
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
+              if (_isFocused) aramaGecmisiTamami(),
+              muzikleriListele(),
             ],
           ),
         ),
@@ -472,5 +368,141 @@ void _playPreview(String previewUrl, track) {
     );
   }
 
-  void textYaz() {}
+  Expanded aramaGecmisiTamami() {
+    return Expanded(
+      flex: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            aramaGecmisiYazisi(),
+            aramaGecmisiniGoruntule(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Expanded muzikleriListele() {
+    return Expanded(
+      flex: 5,
+      child: ListView.builder(
+        itemCount: _tracks.length,
+        itemBuilder: (context, index) {
+          final track = _tracks[index];
+          return Padding(
+            padding: const EdgeInsets.all(10),
+            child: Card(
+              shadowColor: Colors.black,
+              elevation: 10,
+              color: renk2(),
+              child: ListTile(
+                title: Text(
+                  track['name'], // Şarkı adı
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 17),
+                ),
+                subtitle: Text(
+                  '${track['artist']} - ${track['duration']}',
+                  style: const TextStyle(color: Colors.white),
+                ),
+                leading: Image.network(track['image']),
+                trailing: IconButton(
+                  icon: Icon(
+                    _favoriSarkilar.contains(track['id'])
+                        ? Icons.favorite
+                        : Icons.favorite_border,
+                    color: _favoriSarkilar.contains(track['id'])
+                        ? beyaz()
+                        : beyaz(),
+                  ),
+                  onPressed: () {
+                    if (track.containsKey('id') && track['id'] != null) {
+                      _favoriDegistir(track);
+                    } else {
+                      // ignore: avoid_print
+                      print('Track data: $track');
+                    }
+                  },
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PlayMusic(
+                              sarkiId: track['id'],
+                              sarkiAd: track['name'],
+                              sanatciAd: track['artist'],
+                              sure: track['duration'],
+                              sarkUrl: track['previewUrl'],
+                              image: track['image'],
+                            )),
+                  );
+                },
+                onLongPress: () {
+                  if (track['previewUrl'] == null) {
+                    textYaz();
+                  } else {
+                    _playPreview(track['previewUrl'], track);
+                  }
+                },
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Padding aramaGecmisiYazisi() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 17.0),
+      child: Text("Arama geçmişi",
+          textAlign: TextAlign.left,
+          style: TextStyle(
+              color: beyaz(), fontSize: 27, fontWeight: FontWeight.bold)),
+    );
+  }
+
+  Expanded aramaGecmisiniGoruntule() {
+    return Expanded(
+      flex: 4,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 10),
+        child: ListView.builder(
+            itemCount: aramaGecmisi.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                onTap: () {
+                  setState(() {
+                    _searchController =
+                        TextEditingController(text: aramaGecmisi[index]);
+                  });
+                },
+                title: Text(
+                  aramaGecmisi[index],
+                  style: TextStyle(fontSize: 20, color: beyaz()),
+                ),
+                trailing: IconButton(
+                  icon: Icon(Icons.delete, color: beyaz()),
+                  onPressed: () {
+                    setState(() {
+                      _deleteSearchHistory(index);
+                      _loadSearchHistory();
+                    });
+                  },
+                ),
+              );
+            }),
+      ),
+    );
+  }
+
+  void textYaz() {
+    //buraya gerek olmayabilir
+  }
 }

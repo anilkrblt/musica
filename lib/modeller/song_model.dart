@@ -36,7 +36,7 @@ class Song {
 
     ),
     Song(
-      title: 'Türkü',
+      title: 'Country',
       description: 'Türkü',
       coverUrl: 'assets/image/Turku.jpg',
 

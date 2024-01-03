@@ -129,6 +129,31 @@ class DatabaseHelper {
       FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
     );
   ''');
+
+    // Search history tablosunu oluşturma
+    await db.execute('''
+      CREATE TABLE search_history (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER,
+        query TEXT,
+        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id)
+      );
+    ''');
+    // Son dinlenen müzikler tablosu oluşturma
+    await db.execute('''
+  CREATE TABLE recent_played (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    track_id TEXT,
+    name TEXT,
+    artist TEXT,
+    image TEXT,
+    duration TEXT,
+    previewUrl TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+  );
+''');
   }
 
   // Ana DatabaseHelper sınıfında CRUD işlemleri yok artık, bunlar ilgili CRUD sınıflarına taşındı.
