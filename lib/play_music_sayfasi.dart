@@ -147,7 +147,7 @@ class _PlayMusicState extends State<PlayMusic> {
           IconButton(
             icon: Icon(
               Icons.share,
-              color: renk2(),
+              color: renk1(),
               size: 30,
             ),
             onPressed: () {},
@@ -289,7 +289,10 @@ class _PlayMusicState extends State<PlayMusic> {
         fit: BoxFit.cover,
       );
     } else {
-      return Image.asset('assets/image/Pop.jpg', fit: BoxFit.cover,);
+      return Image.asset(
+        'assets/image/Pop.jpg',
+        fit: BoxFit.cover,
+      );
     }
   }
 
@@ -297,7 +300,7 @@ class _PlayMusicState extends State<PlayMusic> {
     return Slider(
       thumbColor: Colors.white,
       activeColor: Colors.white,
-      inactiveColor: renk2(),
+      inactiveColor: renk1(),
       value: _sliderValue.clamp(0.0, _maxSliderValue),
       min: 0.0,
       max: _maxSliderValue,
@@ -316,6 +319,8 @@ class _PlayMusicState extends State<PlayMusic> {
     toplamSure = toplamSure + double.tryParse(saatDakikaSaniye[1])!;
     return toplamSure;
   }
+
+  Color renk1() => Color.fromARGB(255, 101, 3, 54);
 }
 
 class Ileri extends StatelessWidget {
@@ -362,5 +367,3 @@ String _formatDuration(double value) {
   final duration = Duration(seconds: value.round());
   return '${duration.inMinutes.remainder(60)}:${(duration.inSeconds.remainder(60)).toString().padLeft(2, '0')}';
 }
-
-

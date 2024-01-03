@@ -14,14 +14,7 @@ class MusicPlayerControls extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Slider(
-            onChanged: (value) {
-              audioService.seek(Duration(seconds: value.toInt()));
-            },
-            value: audioService.currentPosition.inSeconds.toDouble(),
-            min: 0,
-            max: audioService.totalDuration.inSeconds.toDouble(),
-          ),
+         
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
