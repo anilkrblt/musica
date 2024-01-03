@@ -52,6 +52,10 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Giriş Yap'),
+        backgroundColor: renk2(),
+      ),
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text('Giriş Yap'),
@@ -74,6 +78,16 @@ class _LoginScreenState extends State<LoginScreen> {
               Expanded(
                 flex: 12,
                 child: Column(
+                  children: [
+                    Container(
+                        margin: EdgeInsets.only(bottom: 30, right: 200),
+                        child: Text(
+                          "Giriş yap",
+                          style: TextStyle(
+                              fontSize: 33,
+                              fontWeight: FontWeight.w900,
+                              color: beyaz()),
+                        )),
                   children: [
                     Container(
                         margin: EdgeInsets.only(bottom: 30, right: 200),
@@ -157,9 +171,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       padding: const EdgeInsets.only(top: 10),
                       child: ElevatedButton(
                         onPressed: () {},
+                        onPressed: () {},
                         child: const Text('Şifremi Unuttum'),
                       ),
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -167,7 +184,20 @@ class _LoginScreenState extends State<LoginScreen> {
                           "Hesabın yok mu? ",
                           style: TextStyle(color: beyaz(), fontSize: 18),
                         ),
+                        Text(
+                          "Hesabın yok mu? ",
+                          style: TextStyle(color: beyaz(), fontSize: 18),
+                        ),
                         TextButton(
+                          onPressed: () {
+                            Navigator.popAndPushNamed(
+                                context, '/RegisterScreen');
+                          },
+                          child: Text(
+                            'Kaydol',
+                            style: TextStyle(color: beyaz(), fontSize: 18),
+                          ),
+                        ),
                           onPressed: () {
                             Navigator.popAndPushNamed(
                                 context, '/RegisterScreen');

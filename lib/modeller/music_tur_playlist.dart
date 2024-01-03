@@ -41,70 +41,73 @@ class _TurCalmaListesiState extends State<TurCalmaListesi> {
                   Container(child: Text("${Song.songs[widget.turIndex].title}",
                     style: TextStyle(fontSize: 35, fontWeight: FontWeight.w900, color: beyaz()),),
                     margin: EdgeInsets.only(bottom: 10),),
-                  Row(
-                   // mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                  Container(
+                    margin: EdgeInsets.only(left: 12),
+                    child: Row(
+                     // mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
 
-                      Stack(children: [
+                        Stack(children: [
 
-                        Container(
-                          margin: EdgeInsets.only(left: 150),
-                          child: ElevatedButton(onPressed: (){},
-
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:   BorderRadius.circular(17.0),
-                                ),
-                              ),
-
-                              child: Container(
-                                padding: EdgeInsets.only(left: 20, right: 20, top: 10,bottom:10),
-
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 12),
-                                  child: Row(
-
-                                    children: [
-                                      Text("Karışık", style: TextStyle(fontSize: 20, color: renk2(), fontWeight: FontWeight.bold), ),
-                                      Icon(Icons.shuffle, color: renk2(),),
-                                    ],),
-                                ),
-                              )),
-                        ),
-                        Positioned(
-                          left: 20,
-                          child: Container(
-                            padding: EdgeInsets.only(left: 30, right: 30),
+                          Container(
+                            margin: EdgeInsets.only(left: 150),
                             child: ElevatedButton(onPressed: (){},
 
                                 style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
                                     borderRadius:   BorderRadius.circular(17.0),
                                   ),
-                                    primary: renk2(), // Arka plan rengi
-                                    onPrimary: Colors.white// Yazı rengi,
-                                  ,
                                 ),
+
                                 child: Container(
-                          
                                   padding: EdgeInsets.only(left: 20, right: 20, top: 10,bottom:10),
-                                  child: Row(
-                                    mainAxisAlignment:MainAxisAlignment.center,
-                                    children: [
-                          
-                                      Text("Çal", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold), ),
-                                      Icon(Icons.play_arrow, )
-                                    ],),
+
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 12),
+                                    child: Row(
+
+                                      children: [
+                                        Text("Karışık", style: TextStyle(fontSize: 20, color: renk2(), fontWeight: FontWeight.bold), ),
+                                        Icon(Icons.shuffle, color: renk2(),),
+                                      ],),
+                                  ),
                                 )),
                           ),
-                        ),
+                          Positioned(
+                            left: 20,
+                            child: Container(
+                              padding: EdgeInsets.only(left: 30, right: 30),
+                              child: ElevatedButton(onPressed: (){},
 
-                      ],
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius:   BorderRadius.circular(17.0),
+                                    ),
+                                      primary: renk2(), // Arka plan rengi
+                                      onPrimary: Colors.white// Yazı rengi,
+                                    ,
+                                  ),
+                                  child: Container(
+
+                                    padding: EdgeInsets.only(left: 20, right: 20, top: 10,bottom:10),
+                                    child: Row(
+                                      mainAxisAlignment:MainAxisAlignment.center,
+                                      children: [
+
+                                        Text("Çal", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold), ),
+                                        Icon(Icons.play_arrow, )
+                                      ],),
+                                  )),
+                            ),
+                          ),
+
+                        ],
 
 
-                      )
+                        )
 
-                  ],)
+                    ],),
+                  )
 
                 ],),
               ),
