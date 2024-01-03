@@ -66,7 +66,7 @@ class _FavorilerState extends State<Favoriler> {
           },
         ),
         title: Text(
-          'Favorilerim',
+          'Beğendiklerim',
           style: TextStyle(color: beyaz()),
         ),
         backgroundColor: renk3(),
@@ -168,9 +168,10 @@ class _FavorilerState extends State<Favoriler> {
             )
           : Container(
             decoration: genelTema(),
-            child: const Center(
+            child:  Center(
             
-                child: Text('Favori şarkılarınız bulunmamaktadır.'),
+                child: Text('Beğendiğiniz şarkı bulunmamaktadır.',
+                style: TextStyle(color: beyaz(), fontSize: 17)),
               ),
           ),
       bottomNavigationBar: widget.control==1

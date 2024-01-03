@@ -69,8 +69,8 @@ class _AnaSayfaState extends State<AnaSayfa> {
                 padding: EdgeInsets.only(right: 50),
                 icon:  Icon(
                   _currentPageIndex == 0 ?  Icons.home : Icons.home_outlined,
-                  size: 30,
-                  color: Colors.white,
+                  size:  _currentPageIndex == 0 ?  35 : 30,
+                  color: beyaz(),
                 ),
                 onPressed: () {
                   navigateToPage(0);
@@ -80,8 +80,8 @@ class _AnaSayfaState extends State<AnaSayfa> {
                 padding:  EdgeInsets.only(right: 50),
                 icon:  Icon(
                   _currentPageIndex == 1 ? Icons.favorite: Icons.favorite_border,
-                  size: 30,
-                  color: Colors.white,
+                  size:  _currentPageIndex == 1 ?  35 : 30,
+                  color: beyaz(),
                 ),
                 onPressed: () {
                   navigateToPage(1);
@@ -90,8 +90,8 @@ class _AnaSayfaState extends State<AnaSayfa> {
               IconButton(
                 icon:  Icon(
                   _currentPageIndex == 2 ? Icons.person: Icons.person_outlined,
-                  size: 30,
-                  color: Colors.white,
+                  size:  _currentPageIndex == 2 ?  35 : 30,
+                  color: beyaz(),
                 ),
                 onPressed: () {
                   navigateToPage(2);
@@ -243,7 +243,7 @@ class _SayfamState extends State<Sayfam> {
             onPressed: () => Navigator.pushNamed(context, '/AramaSayfasi'),
           ),
         ],*/
-        backgroundColor: Color.fromARGB(255, 117, 23, 239),
+        backgroundColor: renk3(),
       ),
       body: Container(
         padding: EdgeInsets.all(20),
@@ -265,10 +265,10 @@ class _SayfamState extends State<Sayfam> {
                   )),
             ),
             Expanded(
-              flex: 2,
+              flex: 3,
               child: Container(
 
-                  margin: EdgeInsets.only(bottom: 0, top:10),
+                  margin: EdgeInsets.only(bottom: 0, top:5),
                   child: GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, '/AramaSayfasi');
@@ -279,8 +279,8 @@ class _SayfamState extends State<Sayfam> {
                       child: Container(
                         child: TextField(
                           controller: widget._searchController,
-                          decoration: const InputDecoration(
-                            fillColor: Colors.white,
+                          decoration:  InputDecoration(
+                            fillColor: beyaz(),
                             filled: true,
                             border: OutlineInputBorder(
                               borderRadius:
@@ -294,11 +294,10 @@ class _SayfamState extends State<Sayfam> {
                     ),
                   )),
             ),
-
             Expanded(
               flex: 7,
               child: Container(
-                margin: EdgeInsets.only(top: 20),
+                margin: EdgeInsets.only(top: 10),
                 padding: EdgeInsets.only(right: 2),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -425,11 +424,17 @@ class _SayfamState extends State<Sayfam> {
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  calmaListesiOlustur();
-                },
-                child: Text('Çalma Listesi Oluştur'),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Çalma listelerim", style: TextStyle(fontSize: 20, color: beyaz(), fontWeight: FontWeight.w700),  ),
+                  TextButton(
+                    onPressed: () {
+                      calmaListesiOlustur();
+                    },
+                    child: Text('Oluştur',  style: TextStyle(fontSize: 20, color: beyaz(), fontWeight: FontWeight.w900), ),
+                  ),
+                ],
               ),
             ),
             // var olan çalma listelerini yükle
@@ -672,7 +677,7 @@ class ZamanMetni extends StatelessWidget {
       style: TextStyle(
         fontSize: 30,
         fontWeight: FontWeight.w900,
-        color: Colors.white,
+        color: beyaz(),
       ),
       textAlign: TextAlign.left,
     );

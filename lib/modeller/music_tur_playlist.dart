@@ -46,6 +46,16 @@ class _TurCalmaListesiState extends State<TurCalmaListesi> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.keyboard_arrow_left,
+            color: beyaz(),
+            size: 38,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -55,10 +65,7 @@ class _TurCalmaListesiState extends State<TurCalmaListesi> {
             iconSize: 45,
           )
         ],
-        title: const Text(
-          'Çalma Listesi',
-          textAlign: TextAlign.end,
-        ),
+
         backgroundColor: renk2(),
       ),
       body: Container(
@@ -76,121 +83,88 @@ class _TurCalmaListesiState extends State<TurCalmaListesi> {
             ),
             //Butonlar
             Expanded(
-              flex: 3,
+              flex: 2,
               child: Container(
-                margin: EdgeInsets.only(top: 5, bottom: 15),
-                child: Column(
-                  children: [
-                    Container(
-                      child: Text(
-                        "${Song.songs[widget.turIndex].title}",
-                        style: TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.w900,
-                            color: beyaz()),
-                      ),
-                      margin: const EdgeInsets.only(bottom: 10),
-                    ),
-                    Row(
+                margin: EdgeInsets.only(top:5, bottom: 5),
+                child: Column(children: [
+                  Container(child: Text("${Song.songs[widget.turIndex].title}",
+                    style: TextStyle(fontSize: 35, fontWeight: FontWeight.w900, color: beyaz()),),
+                    margin: EdgeInsets.only(bottom: 10),),
+                  Container(
+                    margin: EdgeInsets.only(left: 12),
+                    child: Row(
                       // mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Stack(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(left: 150),
-                              child: ElevatedButton(
-                                  onPressed: () {},
+
+                        Stack(children: [
+
+                          Container(
+                            margin: EdgeInsets.only(left: 150),
+                            child: ElevatedButton(onPressed: (){},
+
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:   BorderRadius.circular(17.0),
+                                  ),
+                                ),
+
+                                child: Container(
+                                  padding: EdgeInsets.only(left: 20, right: 20, top: 10,bottom:10),
+
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 12),
+                                    child: Row(
+
+                                      children: [
+                                        Text("Karışık", style: TextStyle(fontSize: 20, color: renk2(), fontWeight: FontWeight.bold), ),
+                                        Icon(Icons.shuffle, color: renk2(),),
+                                      ],),
+                                  ),
+                                )),
+                          ),
+                          Positioned(
+                            left: 20,
+                            child: Container(
+                              padding: EdgeInsets.only(left: 30, right: 30),
+                              child: ElevatedButton(onPressed: (){},
+
                                   style: ElevatedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
+                                      borderRadius:   BorderRadius.circular(17.0),
                                     ),
+                                    primary: renk2(), // Arka plan rengi
+                                    onPrimary: beyaz()// Yazı rengi,
+                                    ,
                                   ),
                                   child: Container(
-                                    padding: EdgeInsets.only(
-                                        left: 20,
-                                        right: 20,
-                                        top: 10,
-                                        bottom: 10),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 12),
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            "    Karışık",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                color: renk2(),
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          IconButton(
-                                            onPressed: () {
-                                              calinacakMuzikler.shuffle();
-                                            },
-                                            icon: Icon(
-                                              Icons.shuffle,
-                                              color: renk2(),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+
+                                    padding: EdgeInsets.only(left: 20, right: 20, top: 10,bottom:10),
+                                    child: Row(
+                                      mainAxisAlignment:MainAxisAlignment.center,
+                                      children: [
+
+                                        Text("Çal", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold), ),
+                                        Icon(Icons.play_arrow, )
+                                      ],),
                                   )),
                             ),
-                            Positioned(
-                              left: 20,
-                              child: Container(
-                                padding: EdgeInsets.only(left: 30, right: 30),
-                                child: ElevatedButton(
-                                    onPressed: () {},
-                                    style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                      ),
-                                      backgroundColor:
-                                          renk2(), // Arka plan rengi
-                                      foregroundColor:
-                                          Colors.white // Yazı rengi,
-                                      ,
-                                    ),
-                                    child: Container(
-                                      padding: const EdgeInsets.only(
-                                          left: 20,
-                                          right: 20,
-                                          top: 10,
-                                          bottom: 10),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "Çal",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          IconButton(
-                                              onPressed: () {},
-                                              icon: Icon(
-                                                Icons.play_arrow,
-                                              ))
-                                        ],
-                                      ),
-                                    )),
-                              ),
-                            ),
-                          ],
+                          ),
+
+                        ],
+
+
                         )
-                      ],
-                    )
-                  ],
-                ),
+
+                      ],),
+                  )
+
+                ],),
               ),
             ),
             Expanded(
               flex: 7,
               child: Container(
-                padding: EdgeInsets.only(left: 10, right: 10),
+                padding: EdgeInsets.only(left: 10, right: 10, top: 15),
                 child: sarkilariListele(),
               ),
             ),
@@ -218,29 +192,26 @@ class _TurCalmaListesiState extends State<TurCalmaListesi> {
             itemCount: sarkilar.length,
             itemBuilder: (context, index) {
               var sarki = sarkilar[index];
-              return Card(
-                color: renk2(),
-                child: ListTile(
-                  leading: Text(
-                    "${index + 1}",
-                    style: TextStyle(color: beyaz(), fontSize: 20),
-                  ),
-                  title: Text(
-                    sarki['name'],
-                    style: TextStyle(
-                        color: beyaz(),
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  onTap: () {},
-                  subtitle: Text(
-                    "${sarki['artist']} - ${sarki['duration']}",
-                    style: TextStyle(color: beyaz(), fontSize: 18),
-                  ),
-                  trailing: IconButton(
-                    icon: Icon(Icons.more_vert, color: beyaz()),
-                    onPressed: () {},
-                  ),
+              return ListTile(
+                leading: Text(
+                  "${index + 1}",
+                  style: TextStyle(color: beyaz(), fontSize: 20),
+                ),
+                title: Text(
+                  sarki['name'],
+                  style: TextStyle(
+                      color: beyaz(),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
+                onTap: () {},
+                subtitle: Text(
+                  "${sarki['artist']} - ${sarki['duration']}",
+                  style: TextStyle(color: beyaz(), fontSize: 18),
+                ),
+                trailing: IconButton(
+                  icon: Icon(Icons.more_vert, color: beyaz()),
+                  onPressed: () {},
                 ),
               );
             },
