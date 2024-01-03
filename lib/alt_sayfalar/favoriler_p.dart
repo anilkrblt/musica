@@ -68,7 +68,7 @@ class _FavorilerState extends State<Favoriler> {
           'Favorilerim',
           style: TextStyle(color: beyaz()),
         ),
-        backgroundColor: renk2(),
+        backgroundColor: renk3(),
       ),
       body: _favoriSarkilar.isNotEmpty
           ? Container(

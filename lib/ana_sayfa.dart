@@ -43,8 +43,8 @@ class _AnaSayfaState extends State<AnaSayfa> {
   }
 }
 
-class Sayfam extends StatefulWidget {
-  const Sayfam({
+class anaSayfa extends StatelessWidget {
+  const anaSayfa({
     super.key,
     required this.widget,
     required TextEditingController searchController,
@@ -143,7 +143,17 @@ class _SayfamState extends State<Sayfam> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Center(child: Text('Musica')),
+        actions: [
+          Switch(
+            value: Tema().isDarkModeEnabled,
+            onChanged: (value) {
+              setState(() {
+                Tema().isDarkModeEnabled = value;
+              });
+            },
+          )
+        ],
+       // title: const Center(child: Text('Musica')),
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
           child: InkWell(
@@ -162,6 +172,13 @@ class _SayfamState extends State<Sayfam> {
             ),
           ),
         ),
+        /* actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            color: Colors.white,
+            onPressed: () => Navigator.pushNamed(context, '/AramaSayfasi'),
+          ),
+        ],*/
         backgroundColor: Color.fromARGB(255, 117, 23, 239),
       ),
       body: Container(
@@ -183,30 +200,37 @@ class _SayfamState extends State<Sayfam> {
                     name: widget.widget.username,
                   )),
             ),
-            Container(
-                margin: EdgeInsets.only(bottom: 0, top: 10),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/AramaSayfasi');
-                  },
-                  child: AbsorbPointer(
-                    absorbing:
-                        true, // AbsorbPointer'ı true olarak ayarlayarak dokunma etkisizleştirilir.
-                    child: TextField(
-                      cursorHeight: 20,
-                      controller: widget._searchController,
-                      decoration: const InputDecoration(
-                        fillColor: Colors.white,
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
+            Expanded(
+              flex: 2,
+              child: Container(
+
+                  margin: EdgeInsets.only(bottom: 0, top:10),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/AramaSayfasi');
+                    },
+                    child: AbsorbPointer(
+                      absorbing:
+                      true, // AbsorbPointer'ı true olarak ayarlayarak dokunma etkisizleştirilir.
+                      child: Container(
+                        child: TextField(
+                          controller: _searchController,
+                          decoration: const InputDecoration(
+                            fillColor: Colors.white,
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(20)),
+                            ),
+                            hintText: 'Müzik ya da sanatçı ara',
+                            prefixIcon: Icon(Icons.search),
+                          ),
                         ),
-                        hintText: 'Müzik ya da sanatçı ara',
-                        prefixIcon: Icon(Icons.search),
                       ),
                     ),
-                  ),
-                )),
+                  )),
+            ),
+
             Expanded(
               flex: 7,
               child: Container(
@@ -547,11 +571,35 @@ BoxDecoration genelTema() => const BoxDecoration(
         colors: [
           Color.fromARGB(255, 117, 23, 239), // En koyu renk
           Color.fromARGB(255, 169, 158, 255),
+Color renk1() =>  Color.fromARGB(255, 101, 3, 54);
+
+Color renk2() => Tema().isDarkModeEnabled
+    ? Color.fromARGB(255, 117, 23, 239)
+    : Colors.white12;
+
+Color renk3() => Tema().isDarkModeEnabled
+    ? Color.fromARGB(255, 117, 23, 239)
+    : Colors.black;
+
+BoxDecoration genelTema() => Tema().isDarkModeEnabled
+    ? BoxDecoration(
+  gradient: LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      Color.fromARGB(255, 117, 23, 239), // En koyu renk
+      Color.fromARGB(255, 169, 158, 255),
 
           /// Beyaz renk (geçiş sonu)
         ],
       ),
     );
+      /// Beyaz renk (geçiş sonu)
+    ],
+  ),
+)
+    : BoxDecoration(color: Colors.black);
+
 
 //search bar bu amk
 class NowPlayingBar extends StatelessWidget {
@@ -616,4 +664,13 @@ class ZamanMetni extends StatelessWidget {
       textAlign: TextAlign.left,
     );
   }
+}
+
+class Tema {
+  static final Tema _singleton = Tema._internal();
+  factory Tema() {
+    return _singleton;
+  }
+  Tema._internal();
+  bool isDarkModeEnabled = true;
 }

@@ -110,7 +110,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Center(
                       child: ElevatedButton(
                         onPressed: _register,
-                        child: const Text('Kaydol'),
+                        child:  Text('Kaydol',style: TextStyle(color: renk3(),)),
 
                       ),
                     ),

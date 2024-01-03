@@ -20,7 +20,7 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: renk2(),
+          backgroundColor: renk3(),
           leading: IconButton(
             icon: Icon(
               Icons.keyboard_arrow_left,

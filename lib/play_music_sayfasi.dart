@@ -135,7 +135,7 @@ class _PlayMusicState extends State<PlayMusic> {
         leading: IconButton(
           icon: Icon(
             Icons.keyboard_arrow_left,
-            color: renk(),
+            color: renk1(),
             size: 38,
           ),
           onPressed: () {
@@ -147,7 +147,7 @@ class _PlayMusicState extends State<PlayMusic> {
           IconButton(
             icon: Icon(
               Icons.share,
-              color: renk(),
+              color: renk1(),
               size: 30,
             ),
             onPressed: () {},
@@ -211,7 +211,7 @@ class _PlayMusicState extends State<PlayMusic> {
                       slider(),
                       Text(
                         //buraya alternetif çözüm bul
-                        '${_formatDuration(_sliderValue)}                                               ${_formatDuration(_maxSliderValue)}',
+                        '${_formatDuration(_sliderValue)}                                           ${_formatDuration(_maxSliderValue)}',
                         style: const TextStyle(
                             fontSize: 20, color: Colors.white60),
                       ),
@@ -297,7 +297,7 @@ class _PlayMusicState extends State<PlayMusic> {
     return Slider(
       thumbColor: Colors.white,
       activeColor: Colors.white,
-      inactiveColor: renk(),
+      inactiveColor: renk1(),
       value: _sliderValue.clamp(0.0, _maxSliderValue),
       min: 0.0,
       max: _maxSliderValue,
@@ -363,4 +363,4 @@ String _formatDuration(double value) {
   return '${duration.inMinutes.remainder(60)}:${(duration.inSeconds.remainder(60)).toString().padLeft(2, '0')}';
 }
 
-Color renk2() => const Color.fromARGB(255, 117, 23, 239);
+
