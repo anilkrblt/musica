@@ -252,6 +252,7 @@ class _PlayMusicState extends State<PlayMusic> {
         padding: const EdgeInsets.only(left: 50, right: 50),
         color: vibrantColor,
         child: Row(
+
           children: [
             IconButton(
               padding: const EdgeInsets.only(right: 220),

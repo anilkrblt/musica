@@ -64,7 +64,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(backgroundColor: renk2()),
+      appBar: AppBar(
+        backgroundColor: renk3(),
+        leading: IconButton(
+        icon: Icon(
+          Icons.keyboard_arrow_left,
+          color: beyaz(),
+          size: 38,
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),),
       body: Container(decoration: genelTema(),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -87,8 +98,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     TextField(
                       controller: _usernameController,
-                      decoration: const InputDecoration(hintText: 'Kullanıcı adı', filled: true,
-                          fillColor: Colors.white, border: OutlineInputBorder(
+                      decoration: const InputDecoration(
+                        hintText: 'Kullanıcı adı',
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                         ), ),
 

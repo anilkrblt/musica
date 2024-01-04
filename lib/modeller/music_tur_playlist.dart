@@ -13,6 +13,7 @@ import 'package:musica/spotify_service.dart';
 class TurCalmaListesi extends StatefulWidget {
   int turIndex;
 
+
   TurCalmaListesi({super.key, required this.turIndex});
   @override
   State<TurCalmaListesi> createState() => _TurCalmaListesiState();
@@ -23,7 +24,28 @@ class _TurCalmaListesiState extends State<TurCalmaListesi> {
   final userId = CurrentUser().userId;
   late final AudioService _audioService = AudioService();
   final spotifyService = SpotifyService();
+  late Set<String> _favoriSarkilar = {};
   Future<List<Map<String, dynamic>>>? tracksFuture;
+
+
+
+  void _favoriDegistir(Map<String, dynamic> track) async {
+    final songCRUD = SongCRUD(DatabaseHelper.instance);
+    final trackId = track['id'];
+    setState(() {
+      if (_favoriSarkilar.contains(trackId)) {
+        _favoriSarkilar.remove(trackId);
+
+        // Şarkıyı favorilerden çıkar
+        songCRUD.addOrUpdateSong(track, false);
+      } else {
+        _favoriSarkilar.add(trackId);
+        // Şarkıyı favorilere ekle
+        songCRUD.addOrUpdateSong(track, true);
+        print('favorilere eklendi');
+      }
+    });
+  }
 
   void _addPlaylist() async {
     final dbHelper = DatabaseHelper.instance;
@@ -92,7 +114,7 @@ class _TurCalmaListesiState extends State<TurCalmaListesi> {
             iconSize: 45,
           )
         ],
-        backgroundColor: renk2(),
+        backgroundColor: renk3(),
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -111,7 +133,7 @@ class _TurCalmaListesiState extends State<TurCalmaListesi> {
             Expanded(
               flex: 2,
               child: Container(
-                margin: EdgeInsets.only(top: 5, bottom: 5),
+               // margin: EdgeInsets.only(top: 5, bottom: 5),
                 child: Column(
                   children: [
                     Container(
@@ -122,7 +144,7 @@ class _TurCalmaListesiState extends State<TurCalmaListesi> {
                             fontWeight: FontWeight.w900,
                             color: beyaz()),
                       ),
-                      margin: EdgeInsets.only(bottom: 10),
+                      margin: EdgeInsets.only(bottom: 5),
                     ),
                     Container(
                       margin: EdgeInsets.only(left: 12),
@@ -216,6 +238,7 @@ class _TurCalmaListesiState extends State<TurCalmaListesi> {
                 ),
               ),
             ),
+          //  SizedBox(width: 10),
             Expanded(
               flex: 7,
               child: Container(
@@ -256,7 +279,7 @@ class _TurCalmaListesiState extends State<TurCalmaListesi> {
                   sarki['name'],
                   style: TextStyle(
                       color: beyaz(),
-                      fontSize: 20,
+                      fontSize: 24,
                       fontWeight: FontWeight.bold),
                 ),
                 onTap: () {
@@ -267,8 +290,22 @@ class _TurCalmaListesiState extends State<TurCalmaListesi> {
                   style: TextStyle(color: beyaz(), fontSize: 18),
                 ),
                 trailing: IconButton(
-                  icon: Icon(Icons.more_vert, color: beyaz()),
-                  onPressed: () {},
+                  icon: Icon(
+                    _favoriSarkilar.contains(sarki['id'])
+                        ? Icons.favorite
+                        : Icons.favorite_border,
+                    color: _favoriSarkilar.contains(sarki['id'])
+                        ? beyaz()
+                        : beyaz(),
+                  ),
+                  onPressed: () {
+                    if (sarki.containsKey('id') && sarki['id'] != null) {
+                      _favoriDegistir(sarki);
+                    } else {
+                      // ignore: avoid_print
+                      print('Track data: $sarki');
+                    }
+                  },
                 ),
               );
             },

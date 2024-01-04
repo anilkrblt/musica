@@ -62,8 +62,18 @@ void _showErrorSnackBar(String message) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Giriş Yap'),
-        backgroundColor: renk2(),
+        //title: const Text('Giriş Yap'),
+        backgroundColor: renk3(),
+        leading: IconButton(
+          icon: Icon(
+            Icons.keyboard_arrow_left,
+            color: beyaz(),
+            size: 38,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Container(
         decoration: genelTema(),
@@ -158,7 +168,7 @@ void _showErrorSnackBar(String message) {
                     Flexible(
                       child: ElevatedButton(
                         onPressed: _login,
-                        child: const Text('Giriş Yap'),
+                        child:  Text('Giriş Yap', style: TextStyle(color: renk3()),),
                       ),
                     ),
                     Padding(

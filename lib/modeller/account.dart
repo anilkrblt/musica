@@ -15,7 +15,7 @@ class _GirisState extends State<Giris> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: renk2(),
+        backgroundColor: renk3(),
       ),
       body: Container(
         decoration: genelTema(),
@@ -61,18 +61,20 @@ class _GirisState extends State<Giris> {
                                 Navigator.pushNamed(
                                     context, '/RegisterScreen');
                               },
-                              child: const Padding(
+                              child:  Padding(
                                 padding: EdgeInsets.all(17.0),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    Icon(Icons.person_add_alt_1_rounded),
+                                    Icon(Icons.person_add_alt_1_rounded, color: renk3()),
                                     Text(
                                       "Hesap oluştur",
                                       style: TextStyle(
                                           fontSize: 20,
-                                          fontWeight: FontWeight.w900),
+                                          fontWeight: FontWeight.w900,
+                                          color: renk3()
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -97,18 +99,20 @@ class _GirisState extends State<Giris> {
                                   Navigator.pushNamed(
                                       context, '/LoginScreen');
                                 },
-                                child: const Padding(
+                                child:  Padding(
                                   padding: EdgeInsets.all(17.0),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      Icon(Icons.person),
+                                      Icon(Icons.person, color: renk3(),),
                                       Text(
                                         "Giriş yap",
                                         style: TextStyle(
                                             fontSize: 20,
-                                            fontWeight: FontWeight.w900),
+                                            fontWeight: FontWeight.w900,
+                                          color: renk3()
+                                        ),
                                       ),
                                     ],
                                   ),
