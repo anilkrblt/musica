@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/': (context) => const Giris(),
         '/LoginScreen': (context) => const LoginScreen(),
-        '/AramaSayfasi': (context) => const Arama_Sayfasi(),
+       // '/AramaSayfasi': (context) => const Arama_Sayfasi(),
         '/RegisterScreen': (context) => const RegisterScreen(),
         //'/AnaSayfa':(context) => const AnaSayfa(username: ),
         //'/ProfilSayfasi':(context) => const ProfilSayfasi(),
@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
         '/TumSarkilar': (context) => const TumSarkilarSayfasi(),
 
         '/SonDinlenenler': (context) => const SonDinlenenler(),
-        '/Favoriler': (context) =>  Favoriler(control: 0,),
+       // '/Favoriler': (context) =>  Favoriler(control: 0,),
         '/Ayarlar': (context) => const Ayarlar()
       },
     );

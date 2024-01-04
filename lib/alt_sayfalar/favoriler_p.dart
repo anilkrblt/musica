@@ -10,7 +10,8 @@ import '../profil_sayfasi.dart';
 
 class Favoriler extends StatefulWidget {
   int control;
-  Favoriler({super.key, required this.control});
+  final String username;
+  Favoriler({super.key, required this.username, required this.control});
 
   @override
   State<Favoriler> createState() => _FavorilerState();
@@ -173,52 +174,69 @@ class _FavorilerState extends State<Favoriler> {
               ),
           ),
       bottomNavigationBar: widget.control==1
-          ?  BottomAppBar(
-        color: renk3(),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            IconButton(
-              padding: const EdgeInsets.only(right: 50),
-              icon: const Icon(
-                Icons.home_outlined,
-                size: 30,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            IconButton(
-              padding: const EdgeInsets.only(right: 50),
-              icon: const Icon(
-                Icons.favorite,
-                size: 35,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Favoriler(control: 1),
-                  ),
-                );
-              },
-            ),
-            IconButton(
-              icon: const Icon(
-                Icons.person_outlined,
-                size: 30,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.pushNamed(context, '/ProfilSayfasi');
-
-              },
+          ?  Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: Offset(0, 0),
             ),
           ],
         ),
-      )
+            child: BottomAppBar(
+                    color: renk3(),
+                    child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                padding: const EdgeInsets.only(right: 50),
+                icon: const Icon(
+                  Icons.home_outlined,
+                  size: 30,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              IconButton(
+                padding: const EdgeInsets.only(right: 50),
+                icon: const Icon(
+                  Icons.favorite,
+                  size: 35,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Favoriler(username: widget.username,control: 1),
+                    ),
+                  );
+                },
+              ),
+
+              IconButton(
+                icon: const Icon(
+                  Icons.person_outlined,
+                  size: 30,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfilSayfasi( name: widget.username,control: 2),
+                    ),
+                  );
+                },
+              ),
+            ],
+                    ),
+                  ),
+          )
           : null,
     );
   }

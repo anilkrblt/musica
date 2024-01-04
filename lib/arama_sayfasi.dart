@@ -12,7 +12,8 @@ import 'spotify_service.dart';
 
 // ignore: camel_case_types
 class Arama_Sayfasi extends StatefulWidget {
-  const Arama_Sayfasi({super.key});
+  final String username;
+   Arama_Sayfasi({ super.key, required this.username,});
 
   @override
   State<Arama_Sayfasi> createState() => _Arama_SayfasiState();
@@ -331,49 +332,66 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: renk3(),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            IconButton(
-              padding: const EdgeInsets.only(right: 50),
-              icon: const Icon(
-                Icons.home_outlined,
-                size: 30,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            IconButton(
-              padding: EdgeInsets.only(right: 50),
-              icon: Icon(
-                Icons.favorite_border_outlined,
-                size: 30,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Favoriler(control: 1),
-                  ),
-                );
-              },
-            ),
-            IconButton(
-              icon: const Icon(
-                Icons.person_outlined,
-                size: 30,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.pushNamed(context, '/ProfilSayfasi');
-              },
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: Offset(0, 0),
             ),
           ],
+        ),
+        child: BottomAppBar(
+          color: renk3(),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                padding: const EdgeInsets.only(right: 50),
+                icon: const Icon(
+                  Icons.home_outlined,
+                  size: 30,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              IconButton(
+                padding: EdgeInsets.only(right: 50),
+                icon: Icon(
+                  Icons.favorite_border_outlined,
+                  size: 30,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Favoriler( username: widget.username,control: 1),
+                    ),
+                  );
+                },
+              ),
+              IconButton(
+                icon: const Icon(
+                  Icons.person_outlined,
+                  size: 30,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfilSayfasi( name: widget.username,control: 2),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

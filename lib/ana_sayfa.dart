@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:musica/alt_sayfalar/calma_listesi_p.dart';
 import 'package:musica/alt_sayfalar/favoriler_p.dart';
+import 'package:musica/arama_sayfasi.dart';
 import 'package:musica/database/database_helper.dart';
 import 'package:musica/database/song_crud.dart';
 import 'package:musica/database/user_crud.dart';
@@ -54,6 +55,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
               userName: widget.username,
             ),
             Favoriler(
+              username: widget.username,
               control: 0,
             ),
             ProfilSayfasi(
@@ -276,7 +278,14 @@ class _SayfamState extends State<Sayfam> {
                   margin: EdgeInsets.only(bottom: 0, top: 5),
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, '/AramaSayfasi');
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                              (
+                                  Arama_Sayfasi(username: widget.userName,)
+                              )
+                          ));
                     },
                     child: AbsorbPointer(
                       absorbing:

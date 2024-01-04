@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musica/alt_sayfalar/favoriler_p.dart';
 import 'package:musica/ana_sayfa.dart';
 import 'package:musica/database/database_helper.dart';
 import 'package:musica/database/song_crud.dart';
@@ -108,52 +109,64 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
           ),
         ),
       bottomNavigationBar: widget.control==2
-          ?  BottomAppBar(
-        color: renk3(),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            IconButton(
-              padding: const EdgeInsets.only(right: 50),
-              icon: const Icon(
-                Icons.home_outlined,
-                size: 30,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            IconButton(
-              padding: const EdgeInsets.only(right: 50),
-              icon: const Icon(
-                Icons.favorite_border,
-                size: 30,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProfilSayfasi(name: widget.name,control: 1),
-                  ),
-                );
-              },
-            ),
-            IconButton(
-              icon: const Icon(
-                Icons.person,
-                size: 35,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.pushNamed(context, '/ProfilSayfasi');
-
-              },
+          ?  Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: Offset(0, 0),
             ),
           ],
         ),
-      )
+            child: BottomAppBar(
+                    color: renk3(),
+                    child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                padding: const EdgeInsets.only(right: 50),
+                icon: const Icon(
+                  Icons.home_outlined,
+                  size: 30,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              IconButton(
+                padding: const EdgeInsets.only(right: 50),
+                icon: const Icon(
+                  Icons.favorite_border,
+                  size: 30,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Favoriler(username: widget.name, control: 1)
+                    ),
+                  );
+                },
+              ),
+              IconButton(
+                icon: const Icon(
+                  Icons.person,
+                  size: 35,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, '/ProfilSayfasi');
+
+                },
+              ),
+            ],
+                    ),
+                  ),
+          )
           : null,
 
     );
