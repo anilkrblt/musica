@@ -629,6 +629,16 @@ Color renk2() => Tema().isDarkModeEnabled
 Color renk3() =>
     Tema().isDarkModeEnabled ? Color.fromARGB(255, 117, 23, 239) : Colors.black;
 
+Color renk4() =>
+    Tema().isDarkModeEnabled ? Color.fromARGB(255, 117, 23, 239) : beyaz();
+
+Color renk5() =>
+    Tema().isDarkModeEnabled ? beyaz() : Colors.black ;
+
+Color renk6() =>
+    Tema().isDarkModeEnabled ?  beyaz() : Color.fromARGB(255, 117, 23, 239);
+
+
 BoxDecoration genelTema() => Tema().isDarkModeEnabled
     ? BoxDecoration(
         gradient: LinearGradient(

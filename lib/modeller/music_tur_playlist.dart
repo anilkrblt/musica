@@ -156,6 +156,7 @@ class _TurCalmaListesiState extends State<TurCalmaListesi> {
                                 child: ElevatedButton(
                                     onPressed: () {},
                                     style: ElevatedButton.styleFrom(
+                                      backgroundColor: renk5(),
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(17.0),
@@ -176,12 +177,13 @@ class _TurCalmaListesiState extends State<TurCalmaListesi> {
                                               "Karışık",
                                               style: TextStyle(
                                                   fontSize: 20,
-                                                  color: renk2(),
+                                                  color: renk4(),
                                                   fontWeight: FontWeight.bold),
                                             ),
                                             Icon(
                                               Icons.shuffle,
-                                              color: renk2(),
+                                              color: renk4()
+
                                             ),
                                           ],
                                         ),
@@ -199,7 +201,7 @@ class _TurCalmaListesiState extends State<TurCalmaListesi> {
                                           borderRadius:
                                               BorderRadius.circular(17.0),
                                         ),
-                                        primary: renk2(), // Arka plan rengi
+                                        primary: renk3(), // Arka plan rengi
                                         onPrimary: beyaz() // Yazı rengi,
                                         ,
                                       ),

@@ -80,7 +80,7 @@ class _CalmaListesiState extends State<CalmaListesi> {
             Navigator.pop(context);
           },
         ),
-        backgroundColor: renk2(),
+        backgroundColor: renk3(),
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -124,6 +124,7 @@ class _CalmaListesiState extends State<CalmaListesi> {
                                       }
                                     },
                                     style: ElevatedButton.styleFrom(
+                                      backgroundColor: renk5(),
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
                                         BorderRadius.circular(17.0),
@@ -144,12 +145,12 @@ class _CalmaListesiState extends State<CalmaListesi> {
                                               "Karışık",
                                               style: TextStyle(
                                                   fontSize: 20,
-                                                  color: renk2(),
+                                                  color: renk4(),
                                                   fontWeight: FontWeight.bold),
                                             ),
                                             Icon(
                                               Icons.shuffle,
-                                              color: renk2(),
+                                              color: renk4(),
                                             ),
                                           ],
                                         ),
@@ -167,7 +168,7 @@ class _CalmaListesiState extends State<CalmaListesi> {
                                           borderRadius:
                                           BorderRadius.circular(17.0),
                                         ),
-                                        primary: renk2(), // Arka plan rengi
+                                        primary: renk3(), // Arka plan rengi
                                         onPrimary: beyaz() // Yazı rengi,
                                         ,
                                       ),
@@ -221,13 +222,15 @@ class _CalmaListesiState extends State<CalmaListesi> {
                                   Navigator.pushNamed(context, '/AramaSayfasi');
                                 },
                                 style: ElevatedButton.styleFrom(
+
+                                  backgroundColor: renk6(),
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 15, vertical: 6, ),
                                   shape: RoundedRectangleBorder(
                                     borderRadius:   BorderRadius.circular(10),
                                   )
                                 ),
-                                child: const Text("Şarkı Ekle"),
+                                child:  Text("Şarkı Ekle", style: TextStyle(color: renk4())),
                               ),
                               Expanded(child: Container())
                             ]),
