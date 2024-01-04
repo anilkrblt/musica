@@ -40,7 +40,7 @@ class UserCRUD {
       where: 'username = ?',
       whereArgs: [username],
     );
-    
+
     if (result.isNotEmpty) {
       return result.first['id'] as int;
     }
@@ -61,7 +61,6 @@ class UserCRUD {
   Future<List<Map<String, dynamic>>> getUserIdByUsername(
       String username) async {
     final db = await _dbHelper.database;
-    // Burada 'password' sütunu da dahil edilmeli
     return await db.query(
       'users',
       columns: ['id'], // 'password' sütunu eklenmeli
@@ -70,6 +69,15 @@ class UserCRUD {
     );
   }
 
+  Future<List<Map<String, dynamic>>> getUsernameByUserId(int userId) async {
+    final db = await _dbHelper.database;
+    return await db.query(
+      'users',
+      columns: ['username'],
+      where: 'id = ?',
+      whereArgs: [userId],
+    );
+  }
 
   Future<int> updateUser(int id, Map<String, dynamic> user) async {
     final db = await _dbHelper.database;
@@ -113,31 +121,35 @@ class UserCRUD {
     return users.isNotEmpty;
   }
 
-Future<void> addSearchHistory(int userId, String query) async {
-  final db = await _dbHelper.database;
-  final existingQuery = await db.query(
-    'search_history',
-    where: 'user_id = ? AND query = ?',
-    whereArgs: [userId, query],
-  );
+  Future<void> addSearchHistory(int userId, String query) async {
+    final db = await _dbHelper.database;
+    final existingQuery = await db.query(
+      'search_history',
+      where: 'user_id = ? AND query = ?',
+      whereArgs: [userId, query],
+    );
 
-  // Eğer sorgu zaten varsa, tarihi güncelle
-  if (existingQuery.isNotEmpty) {
-    await db.update(
-      'search_history',
-      {'timestamp': DateTime.now().toIso8601String()},
-      where: 'id = ?',
-      whereArgs: [existingQuery.first['id']],
-    );
-  } else {
-    // Yoksa yeni bir kayıt oluştur
-    await db.insert(
-      'search_history',
-      {'user_id': userId, 'query': query, 'timestamp': DateTime.now().toIso8601String()},
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    // Eğer sorgu zaten varsa, tarihi güncelle
+    if (existingQuery.isNotEmpty) {
+      await db.update(
+        'search_history',
+        {'timestamp': DateTime.now().toIso8601String()},
+        where: 'id = ?',
+        whereArgs: [existingQuery.first['id']],
+      );
+    } else {
+      // Yoksa yeni bir kayıt oluştur
+      await db.insert(
+        'search_history',
+        {
+          'user_id': userId,
+          'query': query,
+          'timestamp': DateTime.now().toIso8601String()
+        },
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    }
   }
-}
 
   Future<List<Map<String, dynamic>>> getSearchHistory(int userId) async {
     final db = await _dbHelper.database;

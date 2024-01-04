@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:musica/ana_sayfa.dart';
 import 'package:musica/database/database_helper.dart';
 import 'package:musica/database/user_crud.dart';
-import 'package:musica/play_music_sayfasi.dart';
 import 'package:musica/profil_sayfasi.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -84,7 +83,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       // ignore: sort_child_properties_last
                       child: Text("Kaydol", style: TextStyle(color: beyaz(), fontWeight:FontWeight.w900, fontSize: 33 ),
                       ),
-                      margin: EdgeInsets.only(left: 20, bottom: 50 ),
+                      margin: const EdgeInsets.only(left: 20, bottom: 50 ),
                     ),
                     TextField(
                       controller: _usernameController,

@@ -1,19 +1,18 @@
 import 'package:musica/database/database_helper.dart';
+import 'package:musica/database/user_crud.dart';
 
 class SongCRUD {
   final DatabaseHelper _dbHelper;
   SongCRUD(this._dbHelper);
 
-
   Future<int> createSong(Map<String, dynamic> song) async {
     final db = await _dbHelper.database;
     final songWithFavorite = {
       ...song,
-      'is_favorite': 0, 
+      'is_favorite': 0,
     };
     return await db.insert('songs', songWithFavorite);
   }
-
 
   Future<List<Map<String, dynamic>>> getSongs() async {
     final db = await _dbHelper.database;
@@ -21,11 +20,21 @@ class SongCRUD {
   }
 
 
+  Future<bool> isSongInPlaylist(int playlistId, String songId) async {
+    final db = await _dbHelper.database;
+    final result = await db.query(
+      'playlist_songs',
+      where: 'playlist_id = ? AND song_id = ?',
+      whereArgs: [playlistId, songId],
+    );
+    return result.isNotEmpty;
+  }
+
+
   Future<List<Map<String, dynamic>>> getFavoriteSongs() async {
     final db = await _dbHelper.database;
     return await db.query('songs', where: 'is_favorite = ?', whereArgs: [1]);
   }
-
 
   Future<int> updateSong(int id, Map<String, dynamic> song) async {
     final db = await _dbHelper.database;
@@ -37,7 +46,6 @@ class SongCRUD {
     );
   }
 
-
   Future<int> deleteSong(int id) async {
     final db = await _dbHelper.database;
     return await db.delete(
@@ -46,7 +54,6 @@ class SongCRUD {
       whereArgs: [id],
     );
   }
-
 
   Future<void> addOrUpdateSong(
       Map<String, dynamic> song, bool isFavorite) async {
@@ -77,25 +84,27 @@ class SongCRUD {
     }
   }
 
-
-  Future<List<Map<String, dynamic>>> getPlaylists() async {
+  Future<List<Map<String, dynamic>>> getPlaylists(int userId) async {
     final db = await _dbHelper.database;
-    return await db.query('playlists');
+    return await db
+        .query('playlists', where: 'user_id = ?', whereArgs: [userId]);
   }
 
-
-  Future<int> createPlaylist(String userName, String name, String image) async {
+  Future<int> createPlaylist(
+      int userId, String userName, String name, String image) async {
     final db = await _dbHelper.database;
-
-    int playlistId = await db.insert(
-        'playlists', {'user_name': userName, 'name': name, 'image': image});
+    int playlistId = await db.insert('playlists', {
+      'user_id': userId,
+      'user_name': userName,
+      'name': name,
+      'image': image
+    });
     return playlistId;
   }
 
-
-Future<List<Map<String, dynamic>>> findSongsByPlaylist(int playlistId) async {
-  final db = await _dbHelper.database;
-  final result = await db.rawQuery('''
+  Future<List<Map<String, dynamic>>> findSongsByPlaylist(int playlistId) async {
+    final db = await _dbHelper.database;
+    final result = await db.rawQuery('''
     SELECT 
       songs.spotify_id, 
       songs.title, 
@@ -109,19 +118,64 @@ Future<List<Map<String, dynamic>>> findSongsByPlaylist(int playlistId) async {
     WHERE playlist_songs.playlist_id = ?
   ''', [playlistId]);
 
+    return List<Map<String, dynamic>>.from(result);
+  }
 
-  return List<Map<String, dynamic>>.from(result);
-}
+  void doluOynatmaListesiOlustur(
+      int userId, String tur, List<Map<String, dynamic>> songs) async {
+    final dbHelper = DatabaseHelper.instance;
+    final db = await _dbHelper.database;
+    final songCRUD = SongCRUD(dbHelper);
+    final userCRUD = UserCRUD(dbHelper);
 
+    final List<Map<String, dynamic>> users =
+        await userCRUD.getUsernameByUserId(userId);
+    final String userName = users.isNotEmpty
+        ? users.first['username'] as String
+        : 'Bilinmeyen Kullanıcı';
+    String playlistName = "Yeni $tur Playlistim";
+    String playlistImage = "assets/image/muzik_notasi1";
+    int playlistId = await songCRUD.createPlaylist(
+        userId, userName, playlistName, playlistImage);
+    for (var song in songs) {
+      final songId = song['id'];
+      final existingSong = await db.query(
+        'songs',
+        where: 'spotify_id = ?',
+        whereArgs: [songId],
+      );
+      if (existingSong.isEmpty) {
+        final newSong = {
+          'spotify_id': songId,
+          'title': song['name'],
+          'artist': song['artist'],
+          'album': song['album'],
+          'duration': song['duration'],
+          'image': song['image'],
+          'sarkiUrl': song['previewUrl'],
+          'is_favorite': song.containsKey('is_favorite')
+              ? (song['is_favorite'] ? 1 : 0)
+              : 0,
+        };
+        await db.insert('songs', newSong);
+      }
+      final result = await db.insert(
+          'playlist_songs', {'playlist_id': playlistId, 'song_id': songId});
+    }
+  }
 
 Future<void> addSongToPlaylist(int playlistId, Map<String, dynamic> song) async {
   final db = await _dbHelper.database;
   final songId = song['id'];
+
+  // Şarkının 'songs' tablosunda olup olmadığını kontrol et
   final existingSong = await db.query(
     'songs',
     where: 'spotify_id = ?',
     whereArgs: [songId],
   );
+
+  // Eğer şarkı 'songs' tablosunda yoksa, ekle
   if (existingSong.isEmpty) {
     final newSong = {
       'spotify_id': songId,
@@ -135,21 +189,31 @@ Future<void> addSongToPlaylist(int playlistId, Map<String, dynamic> song) async 
     };
     await db.insert('songs', newSong);
   }
-  final result = await db.insert(
-    'playlist_songs', {'playlist_id': playlistId, 'song_id': songId});
-  print("$result added to playlist_songs");
-}
 
-
-  Future<void> removeSongFromPlaylist(int playlistId, String songId) async {
-  final db = await _dbHelper.database;
-  await db.delete(
+  // Şarkının zaten çalma listesinde olup olmadığını kontrol et
+  final existingPlaylistSong = await db.query(
     'playlist_songs',
     where: 'playlist_id = ? AND song_id = ?',
     whereArgs: [playlistId, songId],
   );
+
+  // Eğer şarkı çalma listesinde yoksa, ekle
+  if (existingPlaylistSong.isEmpty) {
+    final result = await db.insert(
+      'playlist_songs', {'playlist_id': playlistId, 'song_id': songId});
+    print("$result added to playlist_songs");
+  }
 }
 
+
+  Future<void> removeSongFromPlaylist(int playlistId, String songId) async {
+    final db = await _dbHelper.database;
+    await db.delete(
+      'playlist_songs',
+      where: 'playlist_id = ? AND song_id = ?',
+      whereArgs: [playlistId, songId],
+    );
+  }
 
   Future<void> deletePlaylist(int playlistId) async {
     final db = await _dbHelper.database;
@@ -158,8 +222,7 @@ Future<void> addSongToPlaylist(int playlistId, Map<String, dynamic> song) async 
         where: 'playlist_id = ?', whereArgs: [playlistId]);
   }
 
-
-    Future<void> updatePlaylistName(int playlistId, String newName) async {
+  Future<void> updatePlaylistName(int playlistId, String newName) async {
     final db = await _dbHelper.database;
     await db.update(
       'playlists',
@@ -169,29 +232,34 @@ Future<void> addSongToPlaylist(int playlistId, Map<String, dynamic> song) async 
     );
   }
 
-
-  Future<void> addRecentPlayed(Map<String, dynamic> song, int userId) async {
-    final db = await _dbHelper.database;
+ Future<void> addRecentPlayed(Map<String, dynamic> song, int userId) async {
+  final db = await _dbHelper.database;
+  var trackId = song['id'] ?? song['spotify_id'];
+  var result = await db.query(
+    'recent_played',
+    where: 'user_id = ? AND track_id = ?',
+    whereArgs: [userId, trackId],
+  );
+  if (result.isEmpty) {
     await db.insert('recent_played', {
       'user_id': userId,
-      'track_id': song['id'],
-      'name': song['name'],
+      'track_id': trackId,
+      'name': song['name'] ?? song['title'],
       'artist': song['artist'],
       'image': song['image'],
       'duration': song['duration'],
       'previewUrl': song['previewUrl']
     });
   }
+}
 
 
   Future<List<Map<String, dynamic>>> getRecentPlayed(int userId) async {
     final db = await _dbHelper.database;
-    return await db.query(
-      'recent_played',
-      where: 'user_id = ?',
-      whereArgs: [userId],
-      orderBy: 'id DESC' // En son eklenenleri ilk sırada göster
-    );
+    return await db.query('recent_played',
+        where: 'user_id = ?',
+        whereArgs: [userId],
+        orderBy: 'id DESC' // En son eklenenleri ilk sırada göster
+        );
   }
 }
-

@@ -1,11 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:musica/alt_sayfalar/font.dart';
 import 'package:musica/ana_sayfa.dart';
 import 'package:musica/database/database_helper.dart';
 import 'package:musica/database/user_crud.dart';
-import 'package:musica/play_music_sayfasi.dart';
 import 'package:musica/profil_sayfasi.dart';
 
 class LoginScreen extends StatefulWidget {

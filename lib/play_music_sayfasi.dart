@@ -63,9 +63,9 @@ class _PlayMusicState extends State<PlayMusic> {
     _generator =
         await PaletteGenerator.fromImageProvider((NetworkImage(sarkiImage)));
     dominantColor =
-        _generator.dominantColor!.color ?? _generator.vibrantColor!.color;
+        _generator.dominantColor!.color;
     vibrantColor =
-        _generator.vibrantColor!.color ?? _generator.dominantColor!.color;
+        _generator.vibrantColor!.color;
 
     setState(() {
       bd = BoxDecoration(
@@ -320,7 +320,7 @@ class _PlayMusicState extends State<PlayMusic> {
     return toplamSure;
   }
 
-  Color renk1() => Color.fromARGB(255, 101, 3, 54);
+  Color renk1() => const Color.fromARGB(255, 101, 3, 54);
 }
 
 class Ileri extends StatelessWidget {

@@ -3,7 +3,6 @@ import 'package:musica/ana_sayfa.dart';
 import 'package:musica/database/database_helper.dart';
 import 'package:musica/database/song_crud.dart';
 import 'package:musica/database/user_crud.dart';
-import 'play_music_sayfasi.dart';
 
 class ProfilSayfasi extends StatefulWidget {
   final String name;
@@ -106,9 +105,13 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
 
               // Burada şarkı bilgilerini gösteren bir widget döndür
               return ListTile(
+                textColor: Colors.white,
                 title: Text(song['name']),
                 subtitle: Text(song['artist']),
                 leading: Image.network(song['image']),
+                trailing: IconButton(onPressed: (){
+                  
+                }, icon: const Icon(Icons.favorite)),
                 onTap: () {
                   // Burada müziği çalabilirsiniz
                 },

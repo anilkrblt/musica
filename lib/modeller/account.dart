@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:musica/ana_sayfa.dart';
-import 'package:musica/play_music_sayfasi.dart';
 import 'package:musica/profil_sayfasi.dart';
 
 class Giris extends StatefulWidget {

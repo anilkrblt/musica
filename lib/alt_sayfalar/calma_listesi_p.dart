@@ -1,12 +1,12 @@
 // ignore_for_file: non_constant_identifier_names
 
-
 import 'package:flutter/material.dart';
+import 'package:marquee/marquee.dart';
 import 'package:musica/ana_sayfa.dart';
 import 'package:musica/database/database_helper.dart';
 import 'package:musica/database/song_crud.dart';
+import 'package:musica/database/user_crud.dart';
 import 'package:musica/music_player.dart';
-import 'package:musica/play_music_sayfasi.dart';
 import 'package:musica/profil_sayfasi.dart';
 
 class CalmaListesi extends StatefulWidget {
@@ -24,7 +24,6 @@ class _CalmaListesiState extends State<CalmaListesi> {
   late int playlist_id;
   List<Map<String, dynamic>> _muzikler = [];
   late final AudioService _audioService = AudioService();
-
   @override
   void initState() {
     super.initState();
@@ -40,22 +39,35 @@ class _CalmaListesiState extends State<CalmaListesi> {
     setState(() {
       _muzikler = muzikler;
     });
-    _audioService.setPlaylist(muzikler
-        .map((sarki) => sarki['sarkiUrl'] as String?)
-        .where((url) => url != null)
-        .cast<String>()
-        .toList());
+    _audioService.setPlaylist(
+        muzikler
+            .map((sarki) => sarki['sarkiUrl'] as String?)
+            .where((url) => url != null)
+            .cast<String>()
+            .toList(),
+        muzikler);
   }
 
-  // Şarkıya tıklama fonksiyonu
   void onTrackTap(int index) {
-    _audioService.playTrack(index);
+    final songCRUD = SongCRUD(DatabaseHelper.instance);
+    final userId = CurrentUser().userId;
+    if (userId != null) {
+ 
+      songCRUD.addRecentPlayed(_audioService.playlistDetay[index], userId);
+    }
+    _audioService.playTrack(index).then((_) {
+      if (mounted) {
+        setState(() {});
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomSheet: _audioService.isMusicPlaying ? MusicPlayerControls(audioService: _audioService) : null,
+      bottomSheet: _audioService.isPlaying
+          ? MusicPlayerControls(audioService: _audioService)
+          : null,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text(
@@ -82,7 +94,7 @@ class _CalmaListesiState extends State<CalmaListesi> {
                   children: [
                     Text(
                       playlist_adi,
-                      style: const TextStyle(fontSize: 25),
+                      style: const TextStyle(fontSize: 25, color: Colors.white),
                     ),
                     Row(
                       children: [
@@ -117,7 +129,9 @@ class _CalmaListesiState extends State<CalmaListesi> {
                                           IconButton(
                                               onPressed: () {
                                                 if (_muzikler.isNotEmpty) {
-                                                  _muzikler.shuffle();
+                                                  _audioService.playlist
+                                                      .shuffle();
+
                                                   setState(() {});
                                                 }
                                               },
@@ -197,9 +211,7 @@ class _CalmaListesiState extends State<CalmaListesi> {
                               },
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 4), // Buton içi dolgu
-                                // Diğer stil ayarları...
+                                    horizontal: 8, vertical: 4),
                               ),
                               child: const Text("Şarkı Ekle"),
                             ),
@@ -214,11 +226,16 @@ class _CalmaListesiState extends State<CalmaListesi> {
   }
 
   Image calmaListeKapakResmi() {
-    String resimUrl = _muzikler[0]['image'];
-    
-   
-
-    return Image.network(resimUrl);
+    if (_muzikler.isNotEmpty) {
+      String resimUrl = _muzikler[0]['image'];
+      if (resimUrl.isNotEmpty) {
+        return Image.network(resimUrl);
+      } else {
+        return Image.asset("assets/image/muzik_notasi.png");
+      }
+    } else {
+      return Image.asset("assets/image/muzik_notasi.png");
+    }
   }
 
   ListView sarkiListele() {
@@ -233,12 +250,13 @@ class _CalmaListesiState extends State<CalmaListesi> {
                 style: TextStyle(color: beyaz(), fontSize: 20),
               ),
               title: Text(
-                _muzikler[index]['title'],
+                "${_muzikler[index]['title']}",
                 style: TextStyle(
                     color: beyaz(), fontSize: 24, fontWeight: FontWeight.bold),
               ),
               onTap: () {
-                _audioService.playTrack(index);
+                //_audioService.playTrack(index);
+                onTrackTap(index);
               },
               subtitle: Text(
                 "${_muzikler[index]['artist']} - ${_muzikler[index]['duration']}",

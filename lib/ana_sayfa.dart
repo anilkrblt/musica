@@ -3,15 +3,14 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:musica/alt_sayfalar/calma_listesi_p.dart';
 import 'package:musica/alt_sayfalar/favoriler_p.dart';
 import 'package:musica/database/database_helper.dart';
 import 'package:musica/database/song_crud.dart';
+import 'package:musica/database/user_crud.dart';
 import 'package:musica/modeller/music_tur_playlist.dart';
 import 'package:musica/modeller/song_model.dart';
-import 'package:musica/play_music_sayfasi.dart';
+import 'package:musica/music_player.dart';
 import 'package:musica/profil_sayfasi.dart';
 
 // ignore: depend_on_referenced_packages
@@ -26,6 +25,7 @@ class AnaSayfa extends StatefulWidget {
 class _AnaSayfaState extends State<AnaSayfa> {
   List<Song> songs = Song.songs;
   bool isPlaying = false;
+  late final AudioService _audioService = AudioService();
   final TextEditingController _searchController = TextEditingController();
 
   final PageController _pageController = PageController();
@@ -36,6 +36,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
       _currentPageIndex = index;
     });
   }
+
   void navigateToPage(int index) {
     _pageController.jumpToPage(index);
   }
@@ -43,33 +44,34 @@ class _AnaSayfaState extends State<AnaSayfa> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-         body: PageView(
+        body: PageView(
           controller: _pageController,
           children: [
-        Sayfam(
-          widget: widget,
-          searchController: _searchController,
-          songs: songs,
-          userName: widget.username,
-        ),
-        Favoriler(control: 0,),
-        ProfilSayfasi(
-          name: widget.username,
-        )
-      ],
+            Sayfam(
+              widget: widget,
+              searchController: _searchController,
+              songs: songs,
+              userName: widget.username,
+            ),
+            Favoriler(
+              control: 0,
+            ),
+            ProfilSayfasi(
+              name: widget.username,
+            )
+          ],
           onPageChanged: onPageChanged,
-      ),
+        ),
         bottomNavigationBar: BottomAppBar(
           color: renk3(),
-
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               IconButton(
                 padding: EdgeInsets.only(right: 50),
-                icon:  Icon(
-                  _currentPageIndex == 0 ?  Icons.home : Icons.home_outlined,
-                  size:  _currentPageIndex == 0 ?  35 : 30,
+                icon: Icon(
+                  _currentPageIndex == 0 ? Icons.home : Icons.home_outlined,
+                  size: _currentPageIndex == 0 ? 35 : 30,
                   color: beyaz(),
                 ),
                 onPressed: () {
@@ -77,10 +79,12 @@ class _AnaSayfaState extends State<AnaSayfa> {
                 },
               ),
               IconButton(
-                padding:  EdgeInsets.only(right: 50),
-                icon:  Icon(
-                  _currentPageIndex == 1 ? Icons.favorite: Icons.favorite_border,
-                  size:  _currentPageIndex == 1 ?  35 : 30,
+                padding: EdgeInsets.only(right: 50),
+                icon: Icon(
+                  _currentPageIndex == 1
+                      ? Icons.favorite
+                      : Icons.favorite_border,
+                  size: _currentPageIndex == 1 ? 35 : 30,
                   color: beyaz(),
                 ),
                 onPressed: () {
@@ -88,21 +92,18 @@ class _AnaSayfaState extends State<AnaSayfa> {
                 },
               ),
               IconButton(
-                icon:  Icon(
-                  _currentPageIndex == 2 ? Icons.person: Icons.person_outlined,
-                  size:  _currentPageIndex == 2 ?  35 : 30,
+                icon: Icon(
+                  _currentPageIndex == 2 ? Icons.person : Icons.person_outlined,
+                  size: _currentPageIndex == 2 ? 35 : 30,
                   color: beyaz(),
                 ),
                 onPressed: () {
                   navigateToPage(2);
                 },
               ),
-
             ],
-
           ),
-        )
-    );
+        ));
   }
 }
 
@@ -124,9 +125,9 @@ class Sayfam extends StatefulWidget {
   State<Sayfam> createState() => _SayfamState();
 }
 
-
 class _SayfamState extends State<Sayfam> {
   late String calmaListeAdi = '';
+  final userId = CurrentUser().userId;
   final TextEditingController _playlistNameController = TextEditingController();
   List<Map<String, dynamic>> _calmaListeleri = [];
 
@@ -134,7 +135,7 @@ class _SayfamState extends State<Sayfam> {
     final dbHelper = DatabaseHelper.instance;
     final songCRUD = SongCRUD(dbHelper);
     try {
-      final playlist = await songCRUD.getPlaylists();
+      final playlist = await songCRUD.getPlaylists(userId!);
       setState(() {
         _calmaListeleri = List<Map<String, dynamic>>.from(playlist);
       });
@@ -163,18 +164,16 @@ class _SayfamState extends State<Sayfam> {
             const SizedBox(height: 30),
             ElevatedButton(
               onPressed: () async {
+                //TODO
                 calmaListeAdi = _playlistNameController.text;
-                int playlistId = await songCRUD.createPlaylist(widget.userName,
-                    calmaListeAdi, "https://picsum.photos/200/300");
+                int playlistId = await songCRUD.createPlaylist(
+                    userId!,
+                    widget.userName,
+                    calmaListeAdi,
+                    "assets/image/muzik_notasi3");
 
                 setState(() {
-                  Map<String, dynamic> yeniCalmaListesi = {
-                    'id': playlistId,
-                    'userName': widget.userName,
-                    'name': calmaListeAdi,
-                    'resimUrl': 'https://picsum.photos/200/300',
-                  };
-                  _calmaListeleri.add(yeniCalmaListesi);
+                  _calmaListeleriniGetir();
                 });
 
                 Navigator.of(context).pop();
@@ -204,6 +203,7 @@ class _SayfamState extends State<Sayfam> {
 
   @override
   Widget build(BuildContext context) {
+        _calmaListeleriniGetir();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -217,7 +217,7 @@ class _SayfamState extends State<Sayfam> {
             },
           )
         ],
-       // title: const Center(child: Text('Musica')),
+        // title: const Center(child: Text('Musica')),
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
           child: InkWell(
@@ -236,13 +236,6 @@ class _SayfamState extends State<Sayfam> {
             ),
           ),
         ),
-        /* actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            color: Colors.white,
-            onPressed: () => Navigator.pushNamed(context, '/AramaSayfasi'),
-          ),
-        ],*/
         backgroundColor: renk3(),
       ),
       body: Container(
@@ -259,7 +252,6 @@ class _SayfamState extends State<Sayfam> {
                   margin: EdgeInsets.only(
                     right: 100,
                   ),
-                  //padding: EdgeInsets.only(top: 3),
                   child: ZamanMetni(
                     name: widget.widget.username,
                   )),
@@ -267,24 +259,23 @@ class _SayfamState extends State<Sayfam> {
             Expanded(
               flex: 3,
               child: Container(
-
-                  margin: EdgeInsets.only(bottom: 0, top:5),
+                  margin: EdgeInsets.only(bottom: 0, top: 5),
                   child: GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, '/AramaSayfasi');
                     },
                     child: AbsorbPointer(
                       absorbing:
-                      true, // AbsorbPointer'ı true olarak ayarlayarak dokunma etkisizleştirilir.
+                          true, // AbsorbPointer'ı true olarak ayarlayarak dokunma etkisizleştirilir.
                       child: Container(
                         child: TextField(
                           controller: widget._searchController,
-                          decoration:  InputDecoration(
+                          decoration: InputDecoration(
                             fillColor: beyaz(),
                             filled: true,
                             border: OutlineInputBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(20)),
+                                  BorderRadius.all(Radius.circular(20)),
                             ),
                             hintText: 'Müzik ya da sanatçı ara',
                             prefixIcon: Icon(Icons.search),
@@ -427,12 +418,24 @@ class _SayfamState extends State<Sayfam> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Çalma listelerim", style: TextStyle(fontSize: 20, color: beyaz(), fontWeight: FontWeight.w700),  ),
+                  Text(
+                    "Çalma listelerim",
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: beyaz(),
+                        fontWeight: FontWeight.w700),
+                  ),
                   TextButton(
                     onPressed: () {
                       calmaListesiOlustur();
                     },
-                    child: Text('Oluştur',  style: TextStyle(fontSize: 20, color: beyaz(), fontWeight: FontWeight.w900), ),
+                    child: Text(
+                      'Oluştur',
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: beyaz(),
+                          fontWeight: FontWeight.w900),
+                    ),
                   ),
                 ],
               ),
@@ -451,7 +454,6 @@ class _SayfamState extends State<Sayfam> {
           ],
         ),
       ),
-
     );
   }
 
@@ -488,9 +490,13 @@ class _SayfamState extends State<Sayfam> {
   }
 
   Image calmaListesiResmi() {
-    String resimUrl = "https://picsum.photos/200/${(Random().nextInt(100)+ 200)}";
-    String resimUrl2 = "https://e7.pngegg.com/pngimages/892/491/png-clipart-musical-note-music-musical-note-angle-rectangle.png";
- return Image.asset('assets/image/muzik_notasi.png');
+    String resimUrl =
+        "https://picsum.photos/200/${(Random().nextInt(100) + 200)}";
+    String resimUrl2 =
+        "https://e7.pngegg.com/pngimages/892/491/png-clipart-musical-note-music-musical-note-angle-rectangle.png";
+    return Tema().isDarkModeEnabled
+        ? Image.asset('assets/image/muzik_notasi4.png')
+        : Image.asset('assets/image/muzik_notasi1.png');
   }
 
   void _showPlaylistOptions(Map<String, dynamic> playlist) {
@@ -506,8 +512,6 @@ class _SayfamState extends State<Sayfam> {
               onPressed: () {
                 Navigator.of(context).pop();
                 _renamePlaylist(playlist);
-               
-               
               },
             ),
             TextButton(
@@ -555,7 +559,7 @@ class _SayfamState extends State<Sayfam> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Çalma listesi adı güncellendi')),
                   );
-                   _calmaListeleriniGetir();
+                  _calmaListeleriniGetir();
                 }
                 Navigator.of(context).pop();
               },
@@ -581,10 +585,7 @@ class _SayfamState extends State<Sayfam> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Çalma listesi başarıyla silindi')),
       );
-
-      // Çalma listelerini yeniden yükleme veya güncelleme işlemi
       _calmaListeleriniGetir();
-      // Örneğin, _loadPlaylists();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Çalma listesi silinirken bir hata oluştu: $e')),
@@ -598,59 +599,23 @@ Color renk2() => Tema().isDarkModeEnabled
     ? Color.fromARGB(255, 117, 23, 239)
     : Colors.white12;
 
-Color renk3() => Tema().isDarkModeEnabled
-    ? Color.fromARGB(255, 117, 23, 239)
-    : Colors.black;
+Color renk3() =>
+    Tema().isDarkModeEnabled ? Color.fromARGB(255, 117, 23, 239) : Colors.black;
 
 BoxDecoration genelTema() => Tema().isDarkModeEnabled
     ? BoxDecoration(
-  gradient: LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    colors: [
-      Color.fromARGB(255, 117, 23, 239), // En koyu renk
-      Color.fromARGB(255, 169, 158, 255),
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: const [
+            Color.fromARGB(255, 117, 23, 239), // En koyu renk
+            Color.fromARGB(255, 169, 158, 255),
 
-          /// Beyaz renk (geçiş sonu)
-        ],
-      ),
-    ): BoxDecoration(color: Colors.black);
-  
-    
-
-
-//search bar bu amk
-class NowPlayingBar extends StatelessWidget {
-  const NowPlayingBar({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        height: 50,
-        color: Colors.grey[900], // Veya tercih ettiğiniz bir renk
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(
-              icon: const Icon(Icons.play_arrow),
-              onPressed: () {
-                // Oynatma işlevselliği
-              },
-            ),
-            const Text("Şarkı Adı - Sanatçı Adı"), // Dinamik şarkı bilgileri
-            IconButton(
-              icon: const Icon(Icons.pause),
-              onPressed: () {
-                // Durdurma işlevselliği
-              },
-            ),
+            /// Beyaz renk (geçiş sonu)
           ],
         ),
-      ),
-    );
-  }
-}
+      )
+    : BoxDecoration(color: Colors.black);
 
 class ZamanMetni extends StatelessWidget {
   final String name;

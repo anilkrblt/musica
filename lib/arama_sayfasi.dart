@@ -24,15 +24,16 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
   final AudioPlayer audioPlayer = AudioPlayer();
   List<Map<String, dynamic>> _tracks = [];
   List<Map<String, dynamic>> _calmaListeleri = [];
+  final userId = CurrentUser().userId;
   List<String> aramaGecmisi = [];
   final FocusNode _focusNode = FocusNode();
   bool _isFocused = false;
-
+  late bool isInPlaylist;
   Future<void> _calmaListeleriniGetir() async {
     final dbHelper = DatabaseHelper.instance;
     final songCRUD = SongCRUD(dbHelper);
     try {
-      final playlist = await songCRUD.getPlaylists();
+      final playlist = await songCRUD.getPlaylists(userId!);
       setState(() {
         _calmaListeleri = List<Map<String, dynamic>>.from(playlist);
       });
@@ -109,7 +110,6 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
   }
 
   void _playPreview(String previewUrl, track) {
-    print("------------$_calmaListeleri");
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -177,6 +177,8 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
   }
 
   late Set<String> _favoriSarkilar = {};
+  late Set<String> yeniFav = {};
+  late Set<String> eskiFav = {};
 
   Future<void> _loadSearchHistory() async {
     final dbHelper = DatabaseHelper.instance;
@@ -227,12 +229,15 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
   Future<void> _loadFavoriSarkilar() async {
     final songCRUD = SongCRUD(DatabaseHelper.instance);
     final favoriSarkilar = await songCRUD.getFavoriteSongs();
-    print("Favori Şarkılar: $favoriSarkilar");
-
-    setState(() {
-      _favoriSarkilar =
-          favoriSarkilar.map((sarki) => sarki['spotify_id'].toString()).toSet();
-    });
+    yeniFav =
+        favoriSarkilar.map((sarki) => sarki['spotify_id'].toString()).toSet();
+    if (yeniFav != eskiFav) {
+      setState(() {
+        _favoriSarkilar = favoriSarkilar
+            .map((sarki) => sarki['spotify_id'].toString())
+            .toSet();
+      });
+    }
   }
 
   void _favoriDegistir(Map<String, dynamic> track) async {
@@ -256,7 +261,9 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
   void _calmaListesineEkle(Map<String, dynamic> song, index) async {
     final dbHelper = DatabaseHelper.instance;
     final songCRUD = SongCRUD(dbHelper);
-    final List<Map<String, dynamic>> playlists = await songCRUD.getPlaylists();
+    final List<Map<String, dynamic>> playlists =
+        await songCRUD.getPlaylists(userId!);
+
     if (playlists.isNotEmpty) {
       final int playlistId = playlists[index]['id'];
 
@@ -315,15 +322,13 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
           ),
         ),
       ),
-      body: Expanded(
-        child: Container(
-          decoration: genelTema(),
-          child: Column(
-            children: [
-              if (_isFocused) aramaGecmisiTamami(),
-              muzikleriListele(),
-            ],
-          ),
+      body: Container(
+        decoration: genelTema(),
+        child: Column(
+          children: [
+            if (_isFocused) aramaGecmisiTamami(),
+            muzikleriListele(),
+          ],
         ),
       ),
       bottomNavigationBar: BottomAppBar(
@@ -343,7 +348,7 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
               },
             ),
             IconButton(
-              padding:  EdgeInsets.only(right: 50),
+              padding: EdgeInsets.only(right: 50),
               icon: Icon(
                 Icons.favorite_border_outlined,
                 size: 30,
@@ -450,11 +455,7 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
                   );
                 },
                 onLongPress: () {
-                  if (track['previewUrl'] == null) {
-                    textYaz();
-                  } else {
-                    _playPreview(track['previewUrl'], track);
-                  }
+                  _playPreview(track['previewUrl'], track);
                 },
               ),
             ),
@@ -506,9 +507,5 @@ class _Arama_SayfasiState extends State<Arama_Sayfasi> {
             }),
       ),
     );
-  }
-
-  void textYaz() {
-    //buraya gerek olmayabilir
   }
 }

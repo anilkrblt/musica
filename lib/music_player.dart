@@ -1,44 +1,102 @@
+// ignore_for_file: unnecessary_this
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:marquee/marquee.dart';
+import 'package:musica/ana_sayfa.dart';
 
-class MusicPlayerControls extends StatelessWidget {
+class MusicPlayerControls extends StatefulWidget {
   final AudioService audioService;
 
-  const MusicPlayerControls({required this.audioService, Key? key}) : super(key: key);
+  const MusicPlayerControls({required this.audioService, Key? key})
+      : super(key: key);
 
+  @override
+  State<MusicPlayerControls> createState() => _MusicPlayerControlsState();
+}
+
+class _MusicPlayerControlsState extends State<MusicPlayerControls> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(10),
-      color: Colors.grey[200],
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      color: renk2(),
+      child: calanMuzik(),
+    );
+  }
+
+  Widget calanMuzik() {
+    return Card(
+      child: Row(
         children: [
-         
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.skip_previous),
-                onPressed: () => audioService.previousTrack(),
+          Flexible(
+            flex: 3,
+            child: ListTile(
+              title:
+                  "${widget.audioService.playlistDetay[widget.audioService.currentTrackIndex]}"
+                              .length <
+                          15
+                      ? Text(
+                          widget.audioService.playlistDetay[widget.audioService
+                              .currentTrackIndex]['title'], // Şarkı adı
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15),
+                        )
+                      : SizedBox(
+                          height: 60,
+                          child: Marquee(
+                            text: "${widget.audioService.playlistDetay[widget.audioService.currentTrackIndex]['title']}" ==
+                                    'null'
+                                ? "${widget.audioService.playlistDetay[widget.audioService.currentTrackIndex]['name']}"
+                                : "${widget.audioService.playlistDetay[widget.audioService.currentTrackIndex]['title']}",
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15),
+                            blankSpace: 30,
+                          ),
+                        ),
+              subtitle: Text(
+                '${widget.audioService.playlistDetay[widget.audioService.currentTrackIndex]['artist']}',
+                style: const TextStyle(color: Colors.black),
               ),
-              IconButton(
-                icon: Icon(audioService.isPlaying ? Icons.pause : Icons.play_arrow),
+              leading: Image.network(widget.audioService
+                      .playlistDetay[widget.audioService.currentTrackIndex]
+                  ['image']),
+            ),
+          ),
+          Flexible(
+              flex: 1,
+              child: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      widget.audioService.previousTrack();
+                    });
+                  },
+                  icon: const Icon(Icons.skip_previous))),
+          Flexible(
+              flex: 1,
+              child: IconButton(
                 onPressed: () {
-                  if (audioService.isPlaying) {
-                    audioService.pause();
+                  if (widget.audioService.isPlaying) {
+                    widget.audioService.pause();
                   } else {
-                    audioService.play(audioService.play("url") as String);
+                    widget.audioService.play(widget.audioService
+                        .playlist[widget.audioService.currentTrackIndex]);
                   }
                 },
-              ),
-             
-              IconButton(
-                icon: const Icon(Icons.skip_next),
-                onPressed: () => audioService.nextTrack(),
-              ),
-            ],
-          ),
+                icon: Icon(widget.audioService.isPlaying
+                    ? Icons.pause
+                    : Icons.play_arrow),
+              )),
+          Flexible(
+              flex: 1,
+              child: IconButton(
+                  onPressed: () => setState(() {
+                        widget.audioService.nextTrack();
+                      }),
+                  icon: const Icon(Icons.skip_next)))
         ],
       ),
     );
@@ -48,17 +106,19 @@ class MusicPlayerControls extends StatelessWidget {
 class AudioService {
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool _isPlaying = false;
- Duration _currentPosition = Duration.zero;
+  Duration _currentPosition = Duration.zero;
   Duration _totalDuration = Duration.zero;
-  bool get isMusicPlaying => _isPlaying && _audioPlayer.state != PlayerState.completed;
+  bool get isMusicPlaying =>
+      _isPlaying && _audioPlayer.state != PlayerState.completed;
 
-  List<String> _playlist = []; 
-  int _currentTrackIndex = 0; 
+  List<String> playlist = [];
+  List<Map<String, dynamic>> playlistDetay = [];
+  int currentTrackIndex = 0;
 
   static final AudioService _instance = AudioService._internal();
   factory AudioService() => _instance;
 
-    AudioService._internal() {
+  AudioService._internal() {
     _audioPlayer.onPlayerStateChanged.listen((state) {
       _isPlaying = state == PlayerState.playing;
     });
@@ -73,8 +133,6 @@ class AudioService {
 
     _audioPlayer.onPlayerComplete.listen((_) {
       nextTrack();
-      
-      
     });
   }
 
@@ -82,16 +140,24 @@ class AudioService {
   Duration get currentPosition => _currentPosition;
   Duration get totalDuration => _totalDuration;
 
-  void setPlaylist(List<String> playlist) {
-    _playlist = playlist;
-    _currentTrackIndex = 0; 
+  void setPlaylist(
+      List<String> newPlaylist, List<Map<String, dynamic>> newPlaylistDetay) {
+    this.playlist = newPlaylist;
+    this.playlistDetay = newPlaylistDetay;
+    currentTrackIndex = 0;
   }
 
   Future<void> playTrack(int index) async {
-
-    if (index >= 0 && index < _playlist.length) {
-      _currentTrackIndex = index; 
-      await play(_playlist[index]);
+    if (index >= 0 && index < playlist.length) {
+      print("$index///////////////////");
+      currentTrackIndex = index;
+      await play(playlist[index]);
+      // Şarkı oynatmaya başladığında _isPlaying'i güncelle
+      _audioPlayer.onPlayerStateChanged.listen((state) {
+        _isPlaying = state == PlayerState.playing;
+        // Burada bir Flutter hatası olabilir çünkü bu callback, widget'ın durumunu güncelleyebilir.
+        // Bu nedenle, bu callback içindeki kodu dikkatli kullanmalısınız.
+      });
     }
   }
 
@@ -112,15 +178,14 @@ class AudioService {
   }
 
   void nextTrack() {
-    if (_currentTrackIndex < _playlist.length - 1) {
-      playTrack(_currentTrackIndex + 1);
+    if (currentTrackIndex < playlist.length - 1) {
+      playTrack(currentTrackIndex + 1);
     }
   }
 
   void previousTrack() {
-    if (_currentTrackIndex > 0) {
-      playTrack(_currentTrackIndex - 1);
+    if (currentTrackIndex > 0) {
+      playTrack(currentTrackIndex - 1);
     }
   }
-
 }

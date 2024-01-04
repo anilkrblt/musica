@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musica/alt_sayfalar/ayarlar_p.dart';
-import 'package:musica/alt_sayfalar/calma_listesi_p.dart';
 import 'package:musica/alt_sayfalar/favoriler_p.dart';
-import 'package:musica/alt_sayfalar/font.dart';
 import 'package:musica/alt_sayfalar/son_dinlenenler_p.dart';
 import 'package:musica/alt_sayfalar/tum_sarkilar_p.dart';
 import 'package:musica/arama_sayfasi.dart';

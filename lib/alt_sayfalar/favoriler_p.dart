@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:musica/ana_sayfa.dart';
 import 'package:musica/database/song_crud.dart';
@@ -24,17 +26,19 @@ class _FavorilerState extends State<Favoriler> {
   }
 
   Future<void> _favoriSarkilariGetir() async {
-    final dbHelper = DatabaseHelper.instance;
-    final songCRUD = SongCRUD(dbHelper);
-    try {
-      final favoriler = await songCRUD.getFavoriteSongs();
-      setState(() {
-        _favoriSarkilar = favoriler;
-      });
-    } catch (e) {
-      print('Veritabanı hatası: $e');
-    }
+  final dbHelper = DatabaseHelper.instance;
+  final songCRUD = SongCRUD(dbHelper);
+  try {
+    final favoriler = await songCRUD.getFavoriteSongs();
+    if (!mounted) return; // Bu satırı ekleyin
+    setState(() {
+      _favoriSarkilar = favoriler;
+    });
+  } catch (e) {
+    print('Veritabanı hatası: $e');
   }
+}
+
 
   void _favoriKaldir(Map<String, dynamic> track) async {
     final songCRUD = SongCRUD(DatabaseHelper.instance);
@@ -84,80 +88,74 @@ class _FavorilerState extends State<Favoriler> {
                       _favoriKaldir(sarki);
                     },
                     
-                    background: Expanded(
-                      child: Container(
-                        alignment: Alignment.centerLeft,
-                        padding: const EdgeInsets.all(11),
-                        //decoration: genelTema(),
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Icon(
-                            Icons.delete,
-                            color: beyaz(),
-                            size: 30,
-                          ),
-                        ),
-                      ),
-                    ),
-                    secondaryBackground: Expanded(
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.all(11),
-                        //decoration: genelTema(),
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Icon(
-                            Icons.delete,
-                            color: beyaz(),
-                            size: 30,
-                          ),
-                        ),
-                      ),
-                    ),
-                    child: Expanded(
+                    background: Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.all(11),
+                      //decoration: genelTema(),
                       child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Card(
-                          shadowColor: Colors.black,
-                          elevation: 10,
-                          color: renk2(),
-                          child: ListTile(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => PlayMusic(
-                                      //çalışmazsa kontrol et
-                                          sarkiId: sarki['spotify_id'],
-                                          sarkiAd: sarki['title'],
-                                          sanatciAd: sarki['artist'],
-                                          sure: sarki['duration'].toString(),
-                                          sarkUrl: sarki['sarkiUrl'].toString(),
-                                          image: sarki['image'],
-                                        )),
-                              );
-                            },
-                            title: Text(
-                              sarki['title'] ?? 'Başlıksız',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17,
-                                  color: beyaz()),
-                            ),
-                            subtitle: Text(
-                              sarki['artist'] ?? 'Sanatçı Bilinmiyor',
-                              style: TextStyle(color: beyaz()),
-                            ),
-                            leading: sarki['image'] != null
-                                ? Image.network(sarki['image'])
-                                : const Icon(Icons.music_note),
-                            trailing: Text(
-                              _formatDuration(parseDuration(sarki['duration'])),
-                              style: TextStyle(
-                                  color: beyaz(),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14),
-                            ),
+                        padding: const EdgeInsets.all(15.0),
+                        child: Icon(
+                          Icons.delete,
+                          color: beyaz(),
+                          size: 30,
+                        ),
+                      ),
+                    ),
+                    secondaryBackground: Container(
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.all(11),
+                      //decoration: genelTema(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Icon(
+                          Icons.delete,
+                          color: beyaz(),
+                          size: 30,
+                        ),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Card(
+                        shadowColor: Colors.black,
+                        elevation: 10,
+                        color: renk2(),
+                        child: ListTile(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PlayMusic(
+                                    //çalışmazsa kontrol et
+                                        sarkiId: sarki['spotify_id'],
+                                        sarkiAd: sarki['title'],
+                                        sanatciAd: sarki['artist'],
+                                        sure: sarki['duration'].toString(),
+                                        sarkUrl: sarki['sarkiUrl'].toString(),
+                                        image: sarki['image'],
+                                      )),
+                            );
+                          },
+                          title: Text(
+                            sarki['title'] ?? 'Başlıksız',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17,
+                                color: beyaz()),
+                          ),
+                          subtitle: Text(
+                            sarki['artist'] ?? 'Sanatçı Bilinmiyor',
+                            style: TextStyle(color: beyaz()),
+                          ),
+                          leading: sarki['image'] != null
+                              ? Image.network(sarki['image'])
+                              : const Icon(Icons.music_note),
+                          trailing: Text(
+                            _formatDuration(parseDuration(sarki['duration'])),
+                            style: TextStyle(
+                                color: beyaz(),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14),
                           ),
                         ),
                       ),
