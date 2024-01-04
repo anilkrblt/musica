@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 import 'package:musica/ana_sayfa.dart';
+import 'package:musica/arama_sayfasi.dart';
 import 'package:musica/database/database_helper.dart';
 import 'package:musica/database/song_crud.dart';
 import 'package:musica/database/user_crud.dart';
@@ -10,10 +11,11 @@ import 'package:musica/music_player.dart';
 import 'package:musica/profil_sayfasi.dart';
 
 class CalmaListesi extends StatefulWidget {
+  final String name;
   final String calmaListeAdi;
   final int calmaListeId;
   const CalmaListesi(
-      {required this.calmaListeAdi, required this.calmaListeId, super.key});
+      {required this.name, required this.calmaListeAdi, required this.calmaListeId, super.key});
 
   @override
   State<CalmaListesi> createState() => _CalmaListesiState();
@@ -208,7 +210,7 @@ class _CalmaListesiState extends State<CalmaListesi> {
             Expanded(
               flex: 7,
               child: Container(
-                padding: const EdgeInsets.only(left: 10, right: 10),
+                padding:  EdgeInsets.only(left: 10, right: 10),
                 child: _muzikler.isNotEmpty
                     ? sarkiListele()
                     : Padding(
@@ -219,7 +221,12 @@ class _CalmaListesiState extends State<CalmaListesi> {
                             Text("Çalma listen boş", style: TextStyle(color: beyaz(), fontSize: 25)),
                               ElevatedButton(
                                 onPressed: () {
-                                  Navigator.pushNamed(context, '/AramaSayfasi');
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Arama_Sayfasi(username: widget.name)),
+
+                                  );
                                 },
                                 style: ElevatedButton.styleFrom(
 

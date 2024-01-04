@@ -496,6 +496,7 @@ class _SayfamState extends State<Sayfam> {
               context,
               MaterialPageRoute(
                   builder: (context) => CalmaListesi(
+                    name: widget.userName,
                         calmaListeAdi: title['name'],
                         calmaListeId: title['id'],
                       )),
