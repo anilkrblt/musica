@@ -63,46 +63,58 @@ class _AnaSayfaState extends State<AnaSayfa> {
           ],
           onPageChanged: onPageChanged,
         ),
-        bottomNavigationBar: BottomAppBar(
-          color: renk3(),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              IconButton(
-                padding: EdgeInsets.only(right: 50),
-                icon: Icon(
-                  _currentPageIndex == 0 ? Icons.home : Icons.home_outlined,
-                  size: _currentPageIndex == 0 ? 35 : 30,
-                  color: beyaz(),
-                ),
-                onPressed: () {
-                  navigateToPage(0);
-                },
-              ),
-              IconButton(
-                padding: EdgeInsets.only(right: 50),
-                icon: Icon(
-                  _currentPageIndex == 1
-                      ? Icons.favorite
-                      : Icons.favorite_border,
-                  size: _currentPageIndex == 1 ? 35 : 30,
-                  color: beyaz(),
-                ),
-                onPressed: () {
-                  navigateToPage(1);
-                },
-              ),
-              IconButton(
-                icon: Icon(
-                  _currentPageIndex == 2 ? Icons.person : Icons.person_outlined,
-                  size: _currentPageIndex == 2 ? 35 : 30,
-                  color: beyaz(),
-                ),
-                onPressed: () {
-                  navigateToPage(2);
-                },
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: Offset(0, 0),
               ),
             ],
+          ),
+          child: BottomAppBar(
+            color: renk3(),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                IconButton(
+                  padding: EdgeInsets.only(right: 50),
+                  icon: Icon(
+                    _currentPageIndex == 0 ? Icons.home : Icons.home_outlined,
+                    size: _currentPageIndex == 0 ? 35 : 30,
+                    color: beyaz(),
+                  ),
+                  onPressed: () {
+                    navigateToPage(0);
+                  },
+                ),
+                IconButton(
+                  padding: EdgeInsets.only(right: 50),
+                  icon: Icon(
+                    _currentPageIndex == 1
+                        ? Icons.favorite
+                        : Icons.favorite_border,
+                    size: _currentPageIndex == 1 ? 35 : 30,
+                    color: beyaz(),
+                  ),
+                  onPressed: () {
+                    navigateToPage(1);
+                  },
+                ),
+                IconButton(
+                  icon: Icon(
+                    _currentPageIndex == 2 ? Icons.person : Icons.person_outlined,
+                    size: _currentPageIndex == 2 ? 35 : 30,
+                    color: beyaz(),
+                  ),
+                  onPressed: () {
+                    navigateToPage(2);
+                  },
+                ),
+              ],
+            ),
           ),
         ));
   }
@@ -226,7 +238,7 @@ class _SayfamState extends State<Sayfam> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ProfilSayfasi(name: widget.userName,control: 1),
+                  builder: (context) => ProfilSayfasi(name: widget.userName,control: 2),
                 ),
               );
             },

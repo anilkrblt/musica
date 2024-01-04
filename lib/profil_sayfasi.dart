@@ -107,7 +107,7 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
             ),
           ),
         ),
-      bottomNavigationBar: widget.control==1
+      bottomNavigationBar: widget.control==2
           ?  BottomAppBar(
         color: renk3(),
         child: Row(
