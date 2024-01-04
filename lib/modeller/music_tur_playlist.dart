@@ -72,6 +72,7 @@ class _TurCalmaListesiState extends State<TurCalmaListesi> {
           ? MusicPlayerControls(audioService: _audioService)
           : null,
       appBar: AppBar(
+
         leading: IconButton(
           icon: Icon(
             Icons.keyboard_arrow_left,
@@ -87,7 +88,7 @@ class _TurCalmaListesiState extends State<TurCalmaListesi> {
             onPressed: () {
               _addPlaylist();
             },
-            icon: Icon(Icons.playlist_add),
+            icon: Icon(Icons.playlist_add, color: beyaz(), ),
             iconSize: 45,
           )
         ],
