@@ -24,11 +24,9 @@ class _TurCalmaListesiState extends State<TurCalmaListesi> {
   final userId = CurrentUser().userId;
   late final AudioService _audioService = AudioService();
   final spotifyService = SpotifyService();
-  late Set<String> _favoriSarkilar = {};
+
   Future<List<Map<String, dynamic>>>? tracksFuture;
-
-
-
+  late Set<String> _favoriSarkilar = {};
   void _favoriDegistir(Map<String, dynamic> track) async {
     final songCRUD = SongCRUD(DatabaseHelper.instance);
     final trackId = track['id'];

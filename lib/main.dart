@@ -24,7 +24,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        fontFamily: 'MyCustomFont',
+        fontFamily: 'NunitoSans',
       ),
       debugShowCheckedModeBanner: false,
       initialRoute: '/',

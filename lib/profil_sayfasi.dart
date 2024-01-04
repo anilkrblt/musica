@@ -15,11 +15,30 @@ class ProfilSayfasi extends StatefulWidget {
 class _ProfilSayfasiState extends State<ProfilSayfasi> {
   final songCRUD = SongCRUD(DatabaseHelper.instance);
   final userId = CurrentUser().userId;
+  late Set<String> _favoriSarkilar = {};
+  void _favoriDegistir(Map<String, dynamic> track) async {
+    final songCRUD = SongCRUD(DatabaseHelper.instance);
+    final trackId = track['id'];
+    setState(() {
+      if (_favoriSarkilar.contains(trackId)) {
+        _favoriSarkilar.remove(trackId);
+
+        // Şarkıyı favorilerden çıkar
+        songCRUD.addOrUpdateSong(track, false);
+      } else {
+        _favoriSarkilar.add(trackId);
+        // Şarkıyı favorilere ekle
+        songCRUD.addOrUpdateSong(track, true);
+        print('favorilere eklendi');
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: renk3(),
+          title: Text("Profilim", style: TextStyle(color: beyaz(), ),),
           leading: IconButton(
             icon: Icon(
               Icons.keyboard_arrow_left,
@@ -74,10 +93,10 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
                   ),
                 ),
                 const SizedBox(height: 25),
-                const Text(
+                 Text(
                   "Son Dinlenenler",
                   style: TextStyle(
-                      color: Colors.white,
+                      color: beyaz(),
                       fontSize: 25,
                       fontWeight: FontWeight.w500),
                 ),
@@ -106,12 +125,27 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
               // Burada şarkı bilgilerini gösteren bir widget döndür
               return ListTile(
                 textColor: Colors.white,
-                title: Text(song['name']),
-                subtitle: Text(song['artist']),
+                title: Text(song['name'], style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                subtitle: Text(song['artist'], style: TextStyle(fontSize: 18,)),
                 leading: Image.network(song['image']),
-                trailing: IconButton(onPressed: (){
-                  
-                }, icon: const Icon(Icons.favorite)),
+                trailing: IconButton(
+                  icon: Icon(
+                    _favoriSarkilar.contains(song['id'])
+                        ? Icons.favorite
+                        : Icons.favorite_border,
+                    color: _favoriSarkilar.contains(song['id'])
+                        ? beyaz()
+                        : beyaz(),
+                  ),
+                  onPressed: () {
+                    if (song.containsKey('id') && song['id'] != null) {
+                      _favoriDegistir(song);
+                    } else {
+                      // ignore: avoid_print
+                      print('Track data: $song');
+                    }
+                  },
+                ),
                 onTap: () {
                   // Burada müziği çalabilirsiniz
                 },

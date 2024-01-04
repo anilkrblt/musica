@@ -1,9 +1,26 @@
-// ignore_for_file: unnecessary_this
-
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:musica/ana_sayfa.dart';
+import 'package:musica/profil_sayfasi.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Music Player'),
+        ),
+        body: MusicPlayerControls(audioService: AudioService()),
+      ),
+    );
+  }
+}
 
 class MusicPlayerControls extends StatefulWidget {
   final AudioService audioService;
@@ -19,85 +36,108 @@ class _MusicPlayerControlsState extends State<MusicPlayerControls> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: renk2(),
+      color: renk3(), // Change this to your desired color
       child: calanMuzik(),
     );
   }
 
   Widget calanMuzik() {
-    return Card(
-      child: Row(
-        children: [
-          Flexible(
-            flex: 3,
-            child: ListTile(
-              title:
-                  "${widget.audioService.playlistDetay[widget.audioService.currentTrackIndex]}"
-                              .length <
-                          15
-                      ? Text(
-                          widget.audioService.playlistDetay[widget.audioService
-                              .currentTrackIndex]['title'], // Şarkı adı
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15),
-                        )
-                      : SizedBox(
-                          height: 60,
-                          child: Marquee(
-                            text: "${widget.audioService.playlistDetay[widget.audioService.currentTrackIndex]['title']}" ==
-                                    'null'
-                                ? "${widget.audioService.playlistDetay[widget.audioService.currentTrackIndex]['name']}"
-                                : "${widget.audioService.playlistDetay[widget.audioService.currentTrackIndex]['title']}",
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15),
-                            blankSpace: 30,
-                          ),
-                        ),
-              subtitle: Text(
-                '${widget.audioService.playlistDetay[widget.audioService.currentTrackIndex]['artist']}',
-                style: const TextStyle(color: Colors.black),
-              ),
-              leading: Image.network(widget.audioService
-                      .playlistDetay[widget.audioService.currentTrackIndex]
-                  ['image']),
-            ),
+    return Dismissible(
+      background: Container(
+        alignment: Alignment.centerLeft,
+        padding: const EdgeInsets.all(10),
+        //decoration: genelTema(),
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Icon(
+            Icons.skip_previous,
+            color: beyaz(),
+            size: 40,
           ),
-          Flexible(
-              flex: 1,
-              child: IconButton(
+        ),
+      ),
+      secondaryBackground: Container(
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.all(11),
+        //decoration: genelTema(),
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Icon(
+            Icons.skip_next,
+            color: beyaz(),
+            size: 40,
+          ),
+        ),
+      ),
+      key: Key(widget.audioService.currentTrackIndex.toString()),
+      onDismissed: (direction) {
+        setState(() {
+          if (direction == DismissDirection.startToEnd) {
+            // Swipe to the right
+            widget.audioService.previousTrack();
+          } else if (direction == DismissDirection.endToStart) {
+            // Swipe to the left
+            widget.audioService.nextTrack();
+          }
+        });
+      },
+      child: Card(
+        color: renk3(), // Change this to your desired color
+        child: Row(
+          children: [
+            Flexible(
+              flex: 10,
+              child: ListTile(
+                title: "${widget.audioService.playlistDetay[widget.audioService.currentTrackIndex]}".length < 15
+                    ? Text(
+                  widget.audioService.playlistDetay[widget.audioService.currentTrackIndex]['title'],
+                  style:  TextStyle(
+                      color: beyaz(),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15),
+                )
+                    : SizedBox(
+                  height: 60,
+                  child: Marquee(
+                    text: "${widget.audioService.playlistDetay[widget.audioService.currentTrackIndex]['title']}" == 'null'
+                        ? "${widget.audioService.playlistDetay[widget.audioService.currentTrackIndex]['name']}"
+                        : "${widget.audioService.playlistDetay[widget.audioService.currentTrackIndex]['title']}",
+                    style:  TextStyle(
+                        color: beyaz(),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15),
+                    blankSpace: 30,
+                  ),
+                ),
+                subtitle: Text(
+                  '${widget.audioService.playlistDetay[widget.audioService.currentTrackIndex]['artist']}',
+                  style: TextStyle(color: beyaz()),
+                ),
+                leading: Image.network(widget.audioService.playlistDetay[widget.audioService.currentTrackIndex]['image']),
+              ),
+            ),
+
+            Flexible(
+                flex: 1,
+                child: IconButton(
                   onPressed: () {
                     setState(() {
-                      widget.audioService.previousTrack();
+                      if (widget.audioService.isPlaying) {
+                        widget.audioService.pause();
+                      } else {
+                        widget.audioService.play(widget.audioService.playlist[widget.audioService.currentTrackIndex]);
+                      }
                     });
                   },
-                  icon: const Icon(Icons.skip_previous))),
-          Flexible(
-              flex: 1,
-              child: IconButton(
-                onPressed: () {
-                  if (widget.audioService.isPlaying) {
-                    widget.audioService.pause();
-                  } else {
-                    widget.audioService.play(widget.audioService
-                        .playlist[widget.audioService.currentTrackIndex]);
-                  }
-                },
-                icon: Icon(widget.audioService.isPlaying
-                    ? Icons.pause
-                    : Icons.play_arrow),
-              )),
-          Flexible(
-              flex: 1,
-              child: IconButton(
-                  onPressed: () => setState(() {
-                        widget.audioService.nextTrack();
-                      }),
-                  icon: const Icon(Icons.skip_next)))
-        ],
+                  icon: Icon(widget.audioService.isPlaying
+                      ? Icons.pause
+                      : Icons.play_arrow,
+                  color: beyaz(), size: 45,),
+                ),
+            ),
+           Flexible(child: Row(children: [],), flex: 2,)
+          ],
+        ),
       ),
     );
   }
@@ -149,15 +189,8 @@ class AudioService {
 
   Future<void> playTrack(int index) async {
     if (index >= 0 && index < playlist.length) {
-      print("$index///////////////////");
       currentTrackIndex = index;
       await play(playlist[index]);
-      // Şarkı oynatmaya başladığında _isPlaying'i güncelle
-      _audioPlayer.onPlayerStateChanged.listen((state) {
-        _isPlaying = state == PlayerState.playing;
-        // Burada bir Flutter hatası olabilir çünkü bu callback, widget'ın durumunu güncelleyebilir.
-        // Bu nedenle, bu callback içindeki kodu dikkatli kullanmalısınız.
-      });
     }
   }
 

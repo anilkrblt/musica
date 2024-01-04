@@ -70,9 +70,15 @@ class _CalmaListesiState extends State<CalmaListesi> {
           : null,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text(
-          'Çalma Listesi',
-          textAlign: TextAlign.end,
+        leading: IconButton(
+          icon: Icon(
+            Icons.keyboard_arrow_left,
+            color: beyaz(),
+            size: 38,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         backgroundColor: renk2(),
       ),
@@ -83,142 +89,152 @@ class _CalmaListesiState extends State<CalmaListesi> {
         child: Column(
           children: [
             Expanded(
-              flex: 4,
+              flex: 6,
               child: calmaListeKapakResmi(),
             ),
             Expanded(
               flex: 2,
               child: Container(
-                margin: const EdgeInsets.only(top: 5, bottom: 15),
+                // margin: EdgeInsets.only(top: 5, bottom: 5),
                 child: Column(
                   children: [
-                    Text(
-                      playlist_adi,
-                      style: const TextStyle(fontSize: 25, color: Colors.white),
+                    Container(
+                      child: Text(
+                        playlist_adi,
+                        style: const TextStyle(fontSize: 25, color: Colors.white),
+                      ),
+                      margin: EdgeInsets.only(bottom: 5),
                     ),
-                    Row(
-                      children: [
-                        Stack(
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(left: 150),
-                              child: ElevatedButton(
-                                  onPressed: () {},
-                                  style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                    ),
-                                  ),
-                                  child: Container(
-                                    padding: const EdgeInsets.only(
-                                        left: 20,
-                                        right: 20,
-                                        top: 10,
-                                        bottom: 10),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 12),
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            "  Karışık",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                color: renk2(),
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          IconButton(
-                                              onPressed: () {
-                                                if (_muzikler.isNotEmpty) {
-                                                  _audioService.playlist
-                                                      .shuffle();
-
-                                                  setState(() {});
-                                                }
-                                              },
-                                              icon: Icon(Icons.shuffle,
-                                                  color: renk2())),
-                                        ],
-                                      ),
-                                    ),
-                                  )),
-                            ),
-                            Positioned(
-                              left: 20,
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.only(left: 30, right: 30),
+                    Container(
+                      margin: EdgeInsets.only(left: 12),
+                      child: Row(
+                        // mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Stack(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(left: 150),
                                 child: ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      if (_muzikler.isNotEmpty) {
+                                        _audioService.playlist
+                                            .shuffle();
+
+                                        setState(() {});
+                                      }
+                                    },
                                     style: ElevatedButton.styleFrom(
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            BorderRadius.circular(20.0),
+                                        BorderRadius.circular(17.0),
                                       ),
-                                      backgroundColor:
-                                          renk2(), // Arka plan rengi
-                                      foregroundColor:
-                                          Colors.white // Yazı rengi,
-                                      ,
                                     ),
                                     child: Container(
-                                      padding: const EdgeInsets.only(
+                                      padding: EdgeInsets.only(
                                           left: 20,
                                           right: 20,
                                           top: 10,
                                           bottom: 10),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          const Text(
-                                            "Çal",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          IconButton(
-                                              onPressed: () {
-                                                _audioService.playTrack(0);
-                                              },
-                                              icon: const Icon(
-                                                Icons.play_arrow,
-                                              ))
-                                        ],
+                                      child: Padding(
+                                        padding:
+                                        const EdgeInsets.only(left: 12),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              "Karışık",
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: renk2(),
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Icon(
+                                              Icons.shuffle,
+                                              color: renk2(),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     )),
                               ),
-                            ),
-                          ],
-                        )
-                      ],
+                              Positioned(
+                                left: 20,
+                                child: Container(
+                                  padding: EdgeInsets.only(left: 30, right: 30),
+                                  child: ElevatedButton(
+                                      onPressed: () {_audioService.playTrack(0);},
+                                      style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(17.0),
+                                        ),
+                                        primary: renk2(), // Arka plan rengi
+                                        onPrimary: beyaz() // Yazı rengi,
+                                        ,
+                                      ),
+                                      child: Container(
+                                        padding: EdgeInsets.only(
+                                            left: 20,
+                                            right: 20,
+                                            top: 10,
+                                            bottom: 10),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Çal",
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Icon(
+                                              Icons.play_arrow,
+                                            )
+                                          ],
+                                        ),
+                                      )),
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
                     )
                   ],
                 ),
               ),
             ),
             Expanded(
-              flex: 5,
+              flex: 7,
               child: Container(
                 padding: const EdgeInsets.only(left: 10, right: 10),
                 child: _muzikler.isNotEmpty
                     ? sarkiListele()
-                    : Column(
-                        // Yatay padding ayarı
-                        children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/AramaSayfasi');
-                              },
-                              style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 4),
+                    : Padding(
+                      padding: EdgeInsets.only(top: 25),
+                      child: Column(
+                          // Yatay padding ayarı
+                          children: [
+                            Text("Çalma listen boş", style: TextStyle(color: beyaz(), fontSize: 25)),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(context, '/AramaSayfasi');
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 6, ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:   BorderRadius.circular(10),
+                                  )
+                                ),
+                                child: const Text("Şarkı Ekle"),
                               ),
-                              child: const Text("Şarkı Ekle"),
-                            ),
-                            Expanded(child: Container())
-                          ]),
+                              Expanded(child: Container())
+                            ]),
+                    ),
               ),
             ),
+
           ],
         ),
       ),
@@ -242,33 +258,30 @@ class _CalmaListesiState extends State<CalmaListesi> {
     return ListView.builder(
         itemCount: _muzikler.length,
         itemBuilder: (BuildContext context, int index) {
-          return Card(
-            color: renk2(),
-            child: ListTile(
-              leading: Text(
-                "${index + 1}",
-                style: TextStyle(color: beyaz(), fontSize: 20),
-              ),
-              title: Text(
-                "${_muzikler[index]['title']}",
-                style: TextStyle(
-                    color: beyaz(), fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              onTap: () {
-                //_audioService.playTrack(index);
-                onTrackTap(index);
-              },
-              subtitle: Text(
-                "${_muzikler[index]['artist']} - ${_muzikler[index]['duration']}",
-                style: TextStyle(color: beyaz(), fontSize: 18),
-              ),
-              trailing: IconButton(
-                  icon: Icon(Icons.delete_forever, color: beyaz()),
-                  onPressed: () {
-                    calmaListesindenKaldir(
-                        playlist_id, _muzikler[index]['spotify_id']);
-                  }),
+          return ListTile(
+            leading: Text(
+              "${index + 1}",
+              style: TextStyle(color: beyaz(), fontSize: 20),
             ),
+            title: Text(
+              "${_muzikler[index]['title']}",
+              style: TextStyle(
+                  color: beyaz(), fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            onTap: () {
+              //_audioService.playTrack(index);
+              onTrackTap(index);
+            },
+            subtitle: Text(
+              "${_muzikler[index]['artist']} - ${_muzikler[index]['duration']}",
+              style: TextStyle(color: beyaz(), fontSize: 18),
+            ),
+            trailing: IconButton(
+                icon: Icon(Icons.delete_forever, color: beyaz()),
+                onPressed: () {
+                  calmaListesindenKaldir(
+                      playlist_id, _muzikler[index]['spotify_id']);
+                }),
           );
         });
   }

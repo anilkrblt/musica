@@ -33,7 +33,7 @@ class _GirisState extends State<Giris> {
                     "Milyonlarca şarkı.\n      Tek adres.",
                     style: TextStyle(
                         color: beyaz(),
-                        fontSize: 35,
+                        fontSize: 40,
                         fontWeight: FontWeight.w900),
                   ),
                   margin: const EdgeInsets.only(top: 30),
