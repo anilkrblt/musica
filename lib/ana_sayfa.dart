@@ -58,6 +58,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
             ),
             ProfilSayfasi(
               name: widget.username,
+              control: 1,
             )
           ],
           onPageChanged: onPageChanged,
@@ -223,10 +224,11 @@ class _SayfamState extends State<Sayfam> {
           child: InkWell(
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          (ProfilSayfasi(name: widget.widget.username))));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProfilSayfasi(name: widget.userName,control: 1),
+                ),
+              );
             },
             child: const CircleAvatar(
               radius: 50,

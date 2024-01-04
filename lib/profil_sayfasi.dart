@@ -6,7 +6,8 @@ import 'package:musica/database/user_crud.dart';
 
 class ProfilSayfasi extends StatefulWidget {
   final String name;
-  const ProfilSayfasi({super.key, required this.name});
+  int control;
+   ProfilSayfasi({super.key, required this.name, required this.control});
 
   @override
   State<ProfilSayfasi> createState() => _ProfilSayfasiState();
@@ -105,7 +106,58 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
               ],
             ),
           ),
-        ));
+        ),
+      bottomNavigationBar: widget.control==1
+          ?  BottomAppBar(
+        color: renk3(),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            IconButton(
+              padding: const EdgeInsets.only(right: 50),
+              icon: const Icon(
+                Icons.home_outlined,
+                size: 30,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            IconButton(
+              padding: const EdgeInsets.only(right: 50),
+              icon: const Icon(
+                Icons.favorite_border,
+                size: 30,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfilSayfasi(name: widget.name,control: 1),
+                  ),
+                );
+              },
+            ),
+            IconButton(
+              icon: const Icon(
+                Icons.person,
+                size: 35,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, '/ProfilSayfasi');
+
+              },
+            ),
+          ],
+        ),
+      )
+          : null,
+
+    );
+
   }
 
   FutureBuilder<List<Map<String, dynamic>>> sonDinlenenSarkilariListele() {
@@ -139,10 +191,11 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
                   ),
                   onPressed: () {
                     if (song.containsKey('id') && song['id'] != null) {
-                      _favoriDegistir(song);
+                      _favoriDegistir(song); print("basıldı------");
                     } else {
                       // ignore: avoid_print
                       print('Track data: $song');
+                      print("xxxxxxxxxxxxxxxx");
                     }
                   },
                 ),

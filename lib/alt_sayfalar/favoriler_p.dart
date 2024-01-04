@@ -193,7 +193,7 @@ class _FavorilerState extends State<Favoriler> {
               padding: const EdgeInsets.only(right: 50),
               icon: const Icon(
                 Icons.favorite,
-                size: 30,
+                size: 35,
                 color: Colors.white,
               ),
               onPressed: () {
