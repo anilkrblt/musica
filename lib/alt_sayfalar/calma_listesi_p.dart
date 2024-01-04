@@ -101,11 +101,12 @@ class _CalmaListesiState extends State<CalmaListesi> {
                 child: Column(
                   children: [
                     Container(
+
                       child: Text(
                         playlist_adi,
-                        style: const TextStyle(fontSize: 25, color: Colors.white),
+                        style: TextStyle(fontSize: 30, color: beyaz(), fontWeight: FontWeight.w600),
                       ),
-                      margin: EdgeInsets.only(bottom: 5),
+                      margin: EdgeInsets.only(bottom: 5, top: 5),
                     ),
                     Container(
                       margin: EdgeInsets.only(left: 12),
