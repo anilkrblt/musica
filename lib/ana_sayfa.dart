@@ -278,8 +278,8 @@ class _SayfamState extends State<Sayfam> {
                   margin: EdgeInsets.only(
                     right: 100,
                   ),
-                  child: ZamanMetni(
-                    name: widget.widget.username,
+                  child: Text(
+                     ZamanMetni(name: widget.widget.username,).getGreeting(), style: TextStyle(fontSize: 35, color: beyaz(), fontWeight: FontWeight.bold),
                   )),
             ),
             Expanded(
