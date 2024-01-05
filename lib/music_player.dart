@@ -36,6 +36,7 @@ class _MusicPlayerControlsState extends State<MusicPlayerControls> {
   @override
   Widget build(BuildContext context) {
     return Container(
+
       color: renk3(), // Change this to your desired color
       child: calanMuzik(),
     );
@@ -45,7 +46,7 @@ class _MusicPlayerControlsState extends State<MusicPlayerControls> {
     return Dismissible(
       background: Container(
         alignment: Alignment.centerLeft,
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.only(bottom:4),
         //decoration: genelTema(),
         child: Padding(
           padding: const EdgeInsets.all(15.0),
@@ -57,16 +58,14 @@ class _MusicPlayerControlsState extends State<MusicPlayerControls> {
         ),
       ),
       secondaryBackground: Container(
+
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.all(11),
         //decoration: genelTema(),
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Icon(
-            Icons.skip_next,
-            color: beyaz(),
-            size: 40,
-          ),
+        child: Icon(
+          Icons.skip_next,
+          color: beyaz(),
+          size: 40,
         ),
       ),
       key: Key(widget.audioService.currentTrackIndex.toString()),
@@ -97,7 +96,7 @@ class _MusicPlayerControlsState extends State<MusicPlayerControls> {
                       fontSize: 15),
                 )
                     : SizedBox(
-                  height: 60,
+                  height: 35,
                   child: Marquee(
                     text: "${widget.audioService.playlistDetay[widget.audioService.currentTrackIndex]['title']}" == 'null'
                         ? "${widget.audioService.playlistDetay[widget.audioService.currentTrackIndex]['name']}"
@@ -105,13 +104,13 @@ class _MusicPlayerControlsState extends State<MusicPlayerControls> {
                     style:  TextStyle(
                         color: beyaz(),
                         fontWeight: FontWeight.bold,
-                        fontSize: 15),
+                        fontSize: 20),
                     blankSpace: 30,
                   ),
                 ),
                 subtitle: Text(
                   '${widget.audioService.playlistDetay[widget.audioService.currentTrackIndex]['artist']}',
-                  style: TextStyle(color: beyaz()),
+                  style: TextStyle(color: beyaz(), fontSize: 15),
                 ),
                 leading: Image.network(widget.audioService.playlistDetay[widget.audioService.currentTrackIndex]['image']),
               ),
