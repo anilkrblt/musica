@@ -16,6 +16,18 @@ class _GirisState extends State<Giris> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: renk3(),
+        actions:  [
+          Container(
+            margin: EdgeInsets.only(right: 10, ),
+            child: Switch(
+            value: Tema().isDarkModeEnabled,
+            onChanged: (value) {
+              setState(() {
+                Tema().isDarkModeEnabled = value;
+              });
+            },
+                    ),
+          ),]
       ),
       body: Container(
         decoration: genelTema(),
