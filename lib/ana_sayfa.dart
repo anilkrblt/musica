@@ -223,14 +223,24 @@ class _SayfamState extends State<Sayfam> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         actions: [
-          Switch(
-            value: Tema().isDarkModeEnabled,
-            onChanged: (value) {
+
+          Tema().isDarkModeEnabled
+              ? IconButton(
+            icon: Icon(Icons.wb_sunny, color: beyaz()), // Gece modu açıkken gözüken ikon
+            onPressed: () {
               setState(() {
-                Tema().isDarkModeEnabled = value;
+                Tema().isDarkModeEnabled = false;
               });
             },
           )
+              : IconButton(
+            icon: Icon(Icons.nightlight_round, color: beyaz()), // Gece modu kapalıyken gözüken ikon
+            onPressed: () {
+              setState(() {
+                Tema().isDarkModeEnabled = true;
+              });
+            },
+          ),
         ],
         // title: const Center(child: Text('Musica')),
         leading: Padding(

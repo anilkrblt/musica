@@ -19,14 +19,24 @@ class _GirisState extends State<Giris> {
         actions:  [
           Container(
             margin: EdgeInsets.only(right: 10, ),
-            child: Switch(
-            value: Tema().isDarkModeEnabled,
-            onChanged: (value) {
-              setState(() {
-                Tema().isDarkModeEnabled = value;
-              });
-            },
-                    ),
+            child:
+            Tema().isDarkModeEnabled
+                ? IconButton(
+              icon: Icon(Icons.wb_sunny, color: beyaz()), // Gece modu açıkken gözüken ikon
+              onPressed: () {
+                setState(() {
+                  Tema().isDarkModeEnabled = false;
+                });
+              },
+            )
+                : IconButton(
+              icon: Icon(Icons.nightlight_round, color: beyaz()), // Gece modu kapalıyken gözüken ikon
+              onPressed: () {
+                setState(() {
+                  Tema().isDarkModeEnabled = true;
+                });
+              },
+            ),
           ),]
       ),
       body: Container(
