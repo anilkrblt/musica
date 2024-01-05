@@ -5,6 +5,7 @@ import 'package:marquee/marquee.dart';
 import 'package:musica/database/database_helper.dart';
 import 'package:musica/database/song_crud.dart';
 import 'package:musica/database/user_crud.dart';
+import 'package:musica/profil_sayfasi.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:musica/ana_sayfa.dart';
@@ -135,7 +136,7 @@ class _PlayMusicState extends State<PlayMusic> {
         leading: IconButton(
           icon: Icon(
             Icons.keyboard_arrow_left,
-            color: renk2(),
+            color: beyaz(),
             size: 38,
           ),
           onPressed: () {
@@ -147,7 +148,7 @@ class _PlayMusicState extends State<PlayMusic> {
           IconButton(
             icon: Icon(
               Icons.share,
-              color: renk1(),
+              color: beyaz(),
               size: 30,
             ),
             onPressed: () {},
