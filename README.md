@@ -1,4 +1,6 @@
-<h1>musica<h1>
+
+
+<h1>musica</h1>
 <h3>Spotify api'si kullanılarak yapılmış Spotify'dan daha iyi, harika bir müzik dinleme uygulaması</h3>
  
 <img width="355" height="744" alt="image" src="https://github.com/user-attachments/assets/de7209fb-731e-40d7-b2fd-6540b13ab6c6" />
